@@ -21,6 +21,30 @@
 	<ItemGroup>
 	  <EmbeddedResource Remove="Classes\FileScanner.Utils.resx" />
 	</ItemGroup>
+	
+	<ItemGroup>
+		<Compile Update="Classes\FileScanner.ProcessFindAndCopyFiles.cs">
+			<DependentUpon>FileScanner.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Classes\FileScanner.ProcessNamespaces.cs">
+			<DependentUpon>FileScanner.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Classes\FileScanner.ProcessOtherFiles.cs">
+			<DependentUpon>FileScanner.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Classes\FileScanner.ProcessScanFiles.cs">
+			<DependentUpon>FileScanner.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Classes\FileScanner.ProcessTranslate.cs">
+			<DependentUpon>FileScanner.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Classes\FileScanner.ProcessUsingPackages.cs">
+			<DependentUpon>FileScanner.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Classes\FileScanner.ProcessUtils.cs">
+			<DependentUpon>FileScanner.cs</DependentUpon>
+		</Compile>
+	</ItemGroup>
 
 	<ItemGroup>
 		<Content Include="Icon(8).ico" />
