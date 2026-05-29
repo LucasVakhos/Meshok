@@ -18,17 +18,17 @@ namespace AppCleaner
         private void InitializeComponent()
         {
             components = new Container();
+            EditorButtonImageOptions editorButtonImageOptions1 = new EditorButtonImageOptions();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject4 = new DevExpress.Utils.SerializableAppearanceObject();
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(FileScanner));
             EditorButtonImageOptions editorButtonImageOptions2 = new EditorButtonImageOptions();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject5 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(FileScanner));
-            EditorButtonImageOptions editorButtonImageOptions3 = new EditorButtonImageOptions();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject9 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject10 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject11 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject12 = new DevExpress.Utils.SerializableAppearanceObject();
             layoutControl = new DevExpress.XtraDataLayout.DataLayoutControl();
             cboPlaceFolder = new DevExpress.XtraEditors.ComboBoxEdit();
             cboSelectToDo = new DevExpress.XtraEditors.ComboBoxEdit();
@@ -75,6 +75,8 @@ namespace AppCleaner
             layoutControlItem5 = new DevExpress.XtraLayout.LayoutControlItem();
             bsFileScanner = new BindingSource(components);
             openFileDlg = new OpenFileDialog();
+            btnSave = new DevExpress.XtraEditors.SimpleButton();
+            layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             ((ISupportInitialize)layoutControl).BeginInit();
             layoutControl.SuspendLayout();
             ((ISupportInitialize)cboPlaceFolder.Properties).BeginInit();
@@ -118,6 +120,7 @@ namespace AppCleaner
             ((ISupportInitialize)layoutControlItem4).BeginInit();
             ((ISupportInitialize)layoutControlItem5).BeginInit();
             ((ISupportInitialize)bsFileScanner).BeginInit();
+            ((ISupportInitialize)layoutControlItem1).BeginInit();
             SuspendLayout();
             // 
             // layoutControl
@@ -136,6 +139,7 @@ namespace AppCleaner
             layoutControl.Controls.Add(txtFind);
             layoutControl.Controls.Add(txtReplace);
             layoutControl.Controls.Add(cboNET);
+            layoutControl.Controls.Add(btnSave);
             layoutControl.Dock = DockStyle.Fill;
             layoutControl.Location = new Point(0, 0);
             layoutControl.Name = "layoutControl";
@@ -151,10 +155,9 @@ namespace AppCleaner
             cboPlaceFolder.Location = new Point(162, 67);
             cboPlaceFolder.Name = "cboPlaceFolder";
             cboPlaceFolder.Properties.AutoHeight = false;
-            cboPlaceFolder.Properties.Buttons.AddRange(new EditorButton[] { new EditorButton(ButtonPredefines.Combo), new EditorButton(ButtonPredefines.Ellipsis, "", 15, true, true, false, editorButtonImageOptions2, new DevExpress.Utils.KeyShortcut(Keys.None), serializableAppearanceObject5, serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, "", null, null, DevExpress.Utils.ToolTipAnchor.Default) });
+            cboPlaceFolder.Properties.Buttons.AddRange(new EditorButton[] { new EditorButton(ButtonPredefines.Combo), new EditorButton(ButtonPredefines.Ellipsis, "", 15, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "", null, null, DevExpress.Utils.ToolTipAnchor.Default) });
             cboPlaceFolder.Properties.Name = "searchFolder";
             cboPlaceFolder.Properties.NullText = "Установите папку куда копировать найденное...";
-            cboPlaceFolder.Properties.TextEditStyle = TextEditStyles.Standard;
             cboPlaceFolder.Properties.ButtonClick += searchFolder_BtnClick;
             cboPlaceFolder.Size = new Size(602, 20);
             cboPlaceFolder.StyleController = layoutControl;
@@ -236,10 +239,9 @@ namespace AppCleaner
             cboSearchFolder.Location = new Point(162, 43);
             cboSearchFolder.Name = "cboSearchFolder";
             cboSearchFolder.Properties.AutoHeight = false;
-            cboSearchFolder.Properties.Buttons.AddRange(new EditorButton[] { new EditorButton(ButtonPredefines.Combo), new EditorButton(ButtonPredefines.Ellipsis, "", 15, true, true, false, editorButtonImageOptions3, new DevExpress.Utils.KeyShortcut(Keys.None), serializableAppearanceObject9, serializableAppearanceObject10, serializableAppearanceObject11, serializableAppearanceObject12, "", null, null, DevExpress.Utils.ToolTipAnchor.Default) });
+            cboSearchFolder.Properties.Buttons.AddRange(new EditorButton[] { new EditorButton(ButtonPredefines.Combo), new EditorButton(ButtonPredefines.Ellipsis, "", 15, true, true, false, editorButtonImageOptions2, new DevExpress.Utils.KeyShortcut(Keys.None), serializableAppearanceObject5, serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, "", null, null, DevExpress.Utils.ToolTipAnchor.Default) });
             cboSearchFolder.Properties.Name = "searchFolder";
             cboSearchFolder.Properties.NullText = "Установите папку для сканирования...";
-            cboSearchFolder.Properties.TextEditStyle = TextEditStyles.Standard;
             cboSearchFolder.Properties.ButtonClick += searchFolder_BtnClick;
             cboSearchFolder.Size = new Size(602, 20);
             cboSearchFolder.StyleController = layoutControl;
@@ -258,7 +260,7 @@ namespace AppCleaner
             foundFolders.Properties.Appearance.Options.UseForeColor = true;
             foundFolders.Properties.NullText = "Информация о сканировании...";
             foundFolders.Properties.ReadOnly = true;
-            foundFolders.Size = new Size(227, 20);
+            foundFolders.Size = new Size(218, 20);
             foundFolders.StyleController = layoutControl;
             foundFolders.TabIndex = 1;
             foundFolders.TabStop = false;
@@ -274,7 +276,7 @@ namespace AppCleaner
             foundFiles.Properties.Appearance.Options.UseForeColor = true;
             foundFiles.Properties.NullText = "Информация о сканировании...";
             foundFiles.Properties.ReadOnly = true;
-            foundFiles.Size = new Size(227, 20);
+            foundFiles.Size = new Size(218, 20);
             foundFiles.StyleController = layoutControl;
             foundFiles.TabIndex = 11;
             // 
@@ -542,7 +544,7 @@ namespace AppCleaner
             // 
             // grpInformation
             // 
-            grpInformation.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { lcLogMemo, lcFoundFiles, lcFoundFolders, emptySpaceItem1, simpleSeparator1 });
+            grpInformation.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { lcLogMemo, lcFoundFiles, lcFoundFolders, simpleSeparator1, layoutControlItem1, emptySpaceItem1 });
             grpInformation.Location = new Point(0, 278);
             grpInformation.Name = "grpInformation";
             grpInformation.Size = new Size(773, 209);
@@ -569,7 +571,7 @@ namespace AppCleaner
             lcFoundFiles.CustomizationFormText = "lcFoundFiles";
             lcFoundFiles.Location = new Point(0, 137);
             lcFoundFiles.Name = "lcFoundFiles";
-            lcFoundFiles.Size = new Size(374, 24);
+            lcFoundFiles.Size = new Size(365, 24);
             lcFoundFiles.Text = "Просмотрено файлов";
             lcFoundFiles.TextSize = new Size(131, 13);
             // 
@@ -579,15 +581,15 @@ namespace AppCleaner
             lcFoundFolders.CustomizationFormText = "lcFoundFolders";
             lcFoundFolders.Location = new Point(0, 161);
             lcFoundFolders.Name = "lcFoundFolders";
-            lcFoundFolders.Size = new Size(374, 24);
+            lcFoundFolders.Size = new Size(365, 24);
             lcFoundFolders.Text = "Просмотрено папок:";
             lcFoundFolders.TextSize = new Size(131, 13);
             // 
             // emptySpaceItem1
             // 
-            emptySpaceItem1.Location = new Point(374, 137);
+            emptySpaceItem1.Location = new Point(365, 137);
             emptySpaceItem1.Name = "emptySpaceItem1";
-            emptySpaceItem1.Size = new Size(375, 48);
+            emptySpaceItem1.Size = new Size(262, 48);
             // 
             // simpleSeparator1
             // 
@@ -631,6 +633,27 @@ namespace AppCleaner
             // openFileDlg
             // 
             openFileDlg.Filter = "Project Files(*.csproj)|*.csproj";
+            // 
+            // btnSave
+            // 
+            btnSave.Location = new Point(646, 434);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(118, 22);
+            btnSave.StyleController = layoutControl;
+            btnSave.TabIndex = 12;
+            btnSave.Text = "Сохранритиь лог";
+            btnSave.Click += btnSave_Click;
+            // 
+            // layoutControlItem1
+            // 
+            layoutControlItem1.Control = btnSave;
+            layoutControlItem1.Location = new Point(627, 137);
+            layoutControlItem1.MaxSize = new Size(122, 26);
+            layoutControlItem1.MinSize = new Size(122, 26);
+            layoutControlItem1.Name = "layoutControlItem1";
+            layoutControlItem1.Size = new Size(122, 48);
+            layoutControlItem1.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
+            layoutControlItem1.TextVisible = false;
             // 
             // FileScanner
             // 
@@ -680,9 +703,9 @@ namespace AppCleaner
             ((ISupportInitialize)layoutControlItem4).EndInit();
             ((ISupportInitialize)layoutControlItem5).EndInit();
             ((ISupportInitialize)bsFileScanner).EndInit();
+            ((ISupportInitialize)layoutControlItem1).EndInit();
             ResumeLayout(false);
         }
-
         #endregion
         private string GetDebuggerDisplay()
         {
@@ -710,7 +733,6 @@ namespace AppCleaner
         private DevExpress.XtraLayout.LayoutControlItem lcCancel;
         private DevExpress.XtraLayout.LayoutControlItem lcBegin;
         private DevExpress.XtraLayout.LayoutControlItem lcPlaceFolder;
-
         private DevExpress.XtraEditors.ProgressBarControl progressBar;
         private DevExpress.XtraEditors.ComboBoxEdit cboSearchFolder;
         private DevExpress.XtraEditors.TextEdit foundFiles;
@@ -736,5 +758,7 @@ namespace AppCleaner
         private DevExpress.XtraLayout.LayoutControlGroup lgFindReplace;
         private DevExpress.XtraEditors.ComboBoxEdit cboNET;
         private DevExpress.XtraLayout.LayoutControlItem lcNET_Version;
+        private DevExpress.XtraEditors.SimpleButton btnSave;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem1;
     }
 }

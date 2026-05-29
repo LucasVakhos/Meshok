@@ -1,6 +1,5 @@
 ﻿using System.Text;
 namespace GH.Components;
-
 public static class FilePathExtensions
 {
     /// <summary>

@@ -275,7 +275,6 @@ namespace GH.Components
                     if (actions.Count > 0)
                         ActionsCreateHelper.CreateRibbonPageGroup(categoy, actions, editPage, ribbonFrame.RibbonControl.Manager);
                 }
-                ;
                 ribbonControl.EndInit();
             }
         }

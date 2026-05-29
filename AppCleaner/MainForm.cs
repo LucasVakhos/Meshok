@@ -18,19 +18,14 @@ namespace AppCleaner
             };
             this.Controls.Add(fileScanner);
         }
-
-        private readonly string _iniFilePath =
-            Path.Combine(Application.StartupPath, "FileScanner.ini");
-
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            this.LoadState(_iniFilePath);
+            this.LoadState();
         }
-
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            this.SaveState(_iniFilePath);
+            this.SaveState();
             base.OnFormClosing(e);
         }
     }

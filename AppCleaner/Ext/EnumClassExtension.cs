@@ -21,7 +21,6 @@ namespace AppCleaner
             where TAttribute : Attribute
         {
             var field = value.GetType().GetField(value.ToString());
-
             return field?
                 .GetCustomAttributes(typeof(TAttribute), false)
                 .Cast<TAttribute>()

@@ -1,18 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Configuration;
-using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.Json;
+
 namespace AppCleaner;
 
-[AttributeUsage(AttributeTargets.Property)]
-public sealed class SavedAttribute : Attribute
-{
-}
-public sealed class FileScannerStore : INotifyPropertyChanged
+public sealed class ScannerSetting : INotifyPropertyChanged
 {
     private string _findText = string.Empty;
     private string _replaceText = string.Empty;
@@ -29,19 +23,35 @@ public sealed class FileScannerStore : INotifyPropertyChanged
     private bool _beginEnabled;
     private bool _cancelEnabled;
     private bool _isWorking;
-    private ConcurrentDictionary<string, int> _totalFolders = new ConcurrentDictionary<string, int>();
+    private readonly ConcurrentDictionary<string, int> _totalFolders = new();
     private string _sampleProject = string.Empty;
     private ComboNetItems _netVersion;
     private List<string> _pathes = new();
 
-    public FileScannerStore()
+    public ScannerSetting()
     {
         _findText =
             ConfigurationManager.AppSettings["MaskFindSymbolText"]
             ?? Environment.GetEnvironmentVariable("APP_MASK_TOKEN")
             ?? string.Empty;
     }
+
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    [Saved]
+    public string FindText
+    {
+        get => _findText;
+        set => SetField(ref _findText, value ?? string.Empty);
+    }
+
+    [Saved]
+    public string ReplaceText
+    {
+        get => _replaceText;
+        set => SetField(ref _replaceText, value ?? string.Empty);
+    }
+
     [Saved]
     public List<string> Pathes
     {
@@ -50,18 +60,7 @@ public sealed class FileScannerStore : INotifyPropertyChanged
     }
 
     [Saved]
-    public string FindText
-    {
-        get => _findText;
-        set => SetField(ref _findText, value ?? string.Empty);
-    }
-    [Saved]
-    public string ReplaceText
-    {
-        get => _replaceText;
-        set => SetField(ref _replaceText, value ?? string.Empty);
-    }
-    [Saved]
+    [Pathes]
     public string SearchFolder
     {
         get => _searchFolder;
@@ -71,7 +70,9 @@ public sealed class FileScannerStore : INotifyPropertyChanged
                 RefreshCommandStates();
         }
     }
+
     [Saved]
+    [Pathes]
     public string PlaceFolder
     {
         get => _placeFolder;
@@ -81,7 +82,9 @@ public sealed class FileScannerStore : INotifyPropertyChanged
                 RefreshCommandStates();
         }
     }
+
     [Saved]
+    [Pathes]
     public string ProjectFile
     {
         get => _projectFile;
@@ -91,7 +94,9 @@ public sealed class FileScannerStore : INotifyPropertyChanged
                 RefreshCommandStates();
         }
     }
+
     [Saved]
+    [Pathes]
     public string SampleProjectFile
     {
         get => _sampleProject;
@@ -101,12 +106,14 @@ public sealed class FileScannerStore : INotifyPropertyChanged
                 RefreshCommandStates();
         }
     }
+
     [Saved]
     public string SearchPattern
     {
         get => _searchPattern;
         set => SetField(ref _searchPattern, value ?? "*.cs");
     }
+
     [Saved]
     public int SelectedActionIndex
     {
@@ -117,6 +124,7 @@ public sealed class FileScannerStore : INotifyPropertyChanged
                 RefreshCommandStates();
         }
     }
+
     [Saved]
     public int DryRunIndex
     {
@@ -127,6 +135,7 @@ public sealed class FileScannerStore : INotifyPropertyChanged
                 OnPropertyChanged(nameof(DryRun));
         }
     }
+
     [Saved]
     public ComboNetItems NETVersion
     {
@@ -135,49 +144,61 @@ public sealed class FileScannerStore : INotifyPropertyChanged
     }
 
     public bool DryRun => DryRunIndex == 0;
+
     public string LogText
     {
         get => _logText;
-        private set => SetField(ref _logText, value);
+        private set
+        {
+            if (SetField(ref _logText, value))
+                OnPropertyChanged(nameof(SaveEnabled));
+        }
     }
+
     public int TotalFiles
     {
         get => _totalFiles;
         set => SetField(ref _totalFiles, value);
     }
-    public int TotalFolders
-    {
-        get => _totalFolders.Count;
-    }
+
+    public int TotalFolders => _totalFolders.Count;
+
     public int ProgressValue
     {
         get => _progressValue;
         set => SetField(ref _progressValue, Math.Min(Math.Max(0, value), ProgressMaximum));
     }
+
     public int ProgressMaximum
     {
         get => _progressMaximum;
         set
         {
             value = Math.Max(1, value);
+
             if (_progressMaximum == value)
                 return;
+
             _progressMaximum = value;
             OnPropertyChanged(nameof(ProgressMaximum));
+
             if (_progressValue > _progressMaximum)
                 ProgressValue = _progressMaximum;
         }
     }
+
     public bool BeginEnabled
     {
         get => _beginEnabled;
         private set => SetField(ref _beginEnabled, value);
     }
+
     public bool CancelEnabled
     {
         get => _cancelEnabled;
         private set => SetField(ref _cancelEnabled, value);
     }
+
     public bool IsWorking
     {
         get => _isWorking;
@@ -188,206 +209,72 @@ public sealed class FileScannerStore : INotifyPropertyChanged
         }
     }
 
+    public bool SaveEnabled => !string.IsNullOrEmpty(LogText);
+
     public void SetProgressMaximum(int value)
     {
         ProgressMaximum = value;
         ProgressValue = 0;
     }
+
     public void AddToLog(string message)
     {
         LogText += $"[{DateTime.Now:HH:mm:ss}] {message}{Environment.NewLine}";
     }
+
     public void RefreshCommandStates()
     {
         var action = SelectedActionIndex < 0
             ? default
             : (ComboToDoItems)SelectedActionIndex;
+
         BeginEnabled = !IsWorking && action switch
         {
             ComboToDoItems.DeleteNonProjectFiles =>
                 !string.IsNullOrWhiteSpace(ProjectFile),
+
             ComboToDoItems.SyncProjectFileWithSample =>
                 !string.IsNullOrWhiteSpace(ProjectFile) &&
                 !string.IsNullOrWhiteSpace(SampleProjectFile),
+
             ComboToDoItems.FindValueOrClassAddScaveToProject =>
                 !string.IsNullOrWhiteSpace(SearchFolder) &&
                 !string.IsNullOrWhiteSpace(PlaceFolder),
+
             _ =>
                 !string.IsNullOrWhiteSpace(SearchFolder)
         };
+
         CancelEnabled = IsWorking;
     }
-    public void SaveToIni(string filePath)
+
+    public void SaveToIni()
     {
-        var ini = new IniFile(filePath);
+        AddPathesFromMarkedProperties();
 
-        foreach (var property in GetSavedProperties())
-        {
-            var value = property.GetValue(this);
-            ini.Write("FileScannerStore", property.Name, ConvertToIniString(value));
-        }
-
-        ini.Save();
+        var ini = new IniFile();
+        ini.SaveObject(this);
     }
-    public void LoadFromIni(string filePath)
+
+    public void LoadFromIni()
     {
-        var ini = new IniFile(filePath);
-
-        foreach (var property in GetSavedProperties())
-        {
-            var text = ini.Read("FileScannerStore", property.Name);
-
-            if (string.IsNullOrEmpty(text))
-                continue;
-
-            try
-            {
-                var value = ConvertFromString(text, property.PropertyType);
-                property.SetValue(this, value);
-            }
-            catch
-            {
-            }
-        }
-
+        var ini = new IniFile();
+        ini.LoadObject(this);
         RefreshCommandStates();
     }
-    private static IEnumerable<PropertyInfo> GetSavedProperties()
-    {
-        return typeof(FileScannerStore)
-            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-            .Where(x => x.CanRead && x.CanWrite)
-            .Where(x => x.GetCustomAttribute<SavedAttribute>() is not null)
-            .Where(x => IsSupportedIniType(x.PropertyType));
-    }
-    private static bool IsSupportedIniType(Type type)
-    {
-        type = Nullable.GetUnderlyingType(type) ?? type;
-        return type == typeof(string)
-            || type == typeof(int)
-            || type == typeof(bool)
-            || type == typeof(long)
-            || type == typeof(double)
-            || type == typeof(decimal)
-            || type == typeof(List<string>)
-            || type.IsEnum;
-    }
-    private static string ConvertToIniString(object? value)
-    {
-        return value switch
-        {
-            null => string.Empty,
-            List<string> list => JsonSerializer.Serialize(NormalizePathes(list)),
-            IFormattable formattable => formattable.ToString(null, CultureInfo.InvariantCulture),
-            _ => value.ToString() ?? string.Empty
-        };
-    }
-    private static object? ConvertFromString(string text, Type targetType)
-    {
-        var nullableType = Nullable.GetUnderlyingType(targetType);
-        var realType = nullableType ?? targetType;
-        if (nullableType != null && string.IsNullOrWhiteSpace(text))
-            return null;
-        if (realType == typeof(string))
-            return text;
-        if (realType == typeof(List<string>))
-            return ParseStringList(text);
-        if (realType.IsEnum)
-        {
-            if (Enum.TryParse(realType, text, true, out var enumValue))
-                return enumValue;
 
-            if (int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var enumIndex))
-                return Enum.ToObject(realType, enumIndex);
-
-            return Activator.CreateInstance(realType);
-        }
-        if (realType == typeof(bool))
-            return bool.Parse(text);
-        return Convert.ChangeType(text, realType, CultureInfo.InvariantCulture);
-    }
-    private static List<string> ParseStringList(string text)
-    {
-        if (string.IsNullOrWhiteSpace(text))
-            return new List<string>();
-
-        try
-        {
-            var list = JsonSerializer.Deserialize<List<string>>(text);
-            return NormalizePathes(list);
-        }
-        catch
-        {
-            // Поддержка старого формата, если раньше список сохранялся через |.
-            return NormalizePathes(text.Split('|', StringSplitOptions.RemoveEmptyEntries));
-        }
-    }
-    private static List<string> NormalizePathes(IEnumerable<string>? pathes)
-    {
-        return pathes?
-            .Where(x => !string.IsNullOrWhiteSpace(x))
-            .Select(x => x.Trim())
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList()
-            ?? new List<string>();
-    }
-    private static string EscapeIni(string value)
-    {
-        return value
-            .Replace("\\", "\\\\")
-            .Replace("\r", "\\r")
-            .Replace("\n", "\\n")
-            .Replace("=", "\\=");
-    }
-    private static string UnescapeIni(string value)
-    {
-        var sb = new StringBuilder();
-        for (var i = 0; i < value.Length; i++)
-        {
-            if (value[i] != '\\' || i == value.Length - 1)
-            {
-                sb.Append(value[i]);
-                continue;
-            }
-            var next = value[++i];
-            sb.Append(next switch
-            {
-                'r' => '\r',
-                'n' => '\n',
-                '=' => '=',
-                '\\' => '\\',
-                _ => next
-            });
-        }
-        return sb.ToString();
-    }
-    private void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-    private bool SetField<T>(
-        ref T field,
-        T value,
-        [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value))
-            return false;
-        field = value;
-        OnPropertyChanged(propertyName!);
-        return true;
-    }
     public void IncFiles()
     {
         Interlocked.Increment(ref _totalFiles);
         OnPropertyChanged(nameof(TotalFiles));
     }
+
     public void IncFolders(string folder)
     {
         if (_totalFolders.TryAdd(folder, 0))
-        {
             OnPropertyChanged(nameof(TotalFolders));
-        }
     }
+
     public void Reset()
     {
         _logText = string.Empty;
@@ -395,13 +282,20 @@ public sealed class FileScannerStore : INotifyPropertyChanged
         _progressMaximum = 100;
         _totalFiles = 0;
         _totalFolders.Clear();
+
+        OnPropertyChanged(nameof(LogText));
+        OnPropertyChanged(nameof(SaveEnabled));
+        OnPropertyChanged(nameof(ProgressValue));
+        OnPropertyChanged(nameof(ProgressMaximum));
+        OnPropertyChanged(nameof(TotalFiles));
+        OnPropertyChanged(nameof(TotalFolders));
     }
+
     internal void IncProgress()
     {
         Interlocked.Increment(ref _progressValue);
         OnPropertyChanged(nameof(ProgressValue));
     }
-
 
     internal void AddPathes(string? editValue)
     {
@@ -415,5 +309,52 @@ public sealed class FileScannerStore : INotifyPropertyChanged
             _pathes.Add(editValue);
             OnPropertyChanged(nameof(Pathes));
         }
+    }
+
+    private void AddPathesFromMarkedProperties()
+    {
+        foreach (var property in GetPathProperties(GetType()))
+        {
+            var value = property.GetValue(this)?.ToString();
+
+            if (!string.IsNullOrWhiteSpace(value))
+                AddPathes(value);
+        }
+    }
+
+    private static IEnumerable<PropertyInfo> GetPathProperties(Type type)
+    {
+        return type
+            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+            .Where(x => x.CanRead)
+            .Where(x => x.GetCustomAttribute<PathesAttribute>() is not null);
+    }
+
+    private static List<string> NormalizePathes(IEnumerable<string>? pathes)
+    {
+        return pathes?
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Select(x => x.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList()
+            ?? new List<string>();
+    }
+
+    private void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private bool SetField<T>(
+        ref T field,
+        T value,
+        [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value))
+            return false;
+
+        field = value;
+        OnPropertyChanged(propertyName!);
+        return true;
     }
 }

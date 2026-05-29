@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 namespace GH.Components;
-
 public static class ComponentExtension
 {
     // Вычисляем режим дизайна динамически

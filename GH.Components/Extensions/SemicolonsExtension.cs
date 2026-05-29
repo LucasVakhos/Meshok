@@ -1,6 +1,5 @@
 ﻿using System.Text.RegularExpressions;
 namespace GH.Components;
-
 public static class SemicolonsExtension
 {
     // Компилированный regex для производительности
