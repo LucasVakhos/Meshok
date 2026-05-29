@@ -2,7 +2,7 @@
 #nullable disable
 namespace AppCleaner
 {
-    public enum ComboItemsTypes
+    public enum ComboToDoItems
     {
         [ComboItem(Name = "Удалить пустые строки...")]
         DeleteEmpty,

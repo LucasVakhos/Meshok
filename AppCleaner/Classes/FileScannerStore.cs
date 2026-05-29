@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
 namespace AppCleaner;
 
 [AttributeUsage(AttributeTargets.Property)]
@@ -29,7 +30,9 @@ public sealed class FileScannerStore : INotifyPropertyChanged
     private bool _cancelEnabled;
     private bool _isWorking;
     private ConcurrentDictionary<string, int> _totalFolders = new ConcurrentDictionary<string, int>();
-    private string _sampleProject;
+    private string _sampleProject = string.Empty;
+    private ComboNetItems _netVersion;
+    private List<string> _pathes = new();
 
     public FileScannerStore()
     {
@@ -39,6 +42,13 @@ public sealed class FileScannerStore : INotifyPropertyChanged
             ?? string.Empty;
     }
     public event PropertyChangedEventHandler? PropertyChanged;
+    [Saved]
+    public List<string> Pathes
+    {
+        get => _pathes;
+        set => SetField(ref _pathes, NormalizePathes(value));
+    }
+
     [Saved]
     public string FindText
     {
@@ -117,6 +127,13 @@ public sealed class FileScannerStore : INotifyPropertyChanged
                 OnPropertyChanged(nameof(DryRun));
         }
     }
+    [Saved]
+    public ComboNetItems NETVersion
+    {
+        get => _netVersion;
+        set => SetField(ref _netVersion, value);
+    }
+
     public bool DryRun => DryRunIndex == 0;
     public string LogText
     {
@@ -170,6 +187,7 @@ public sealed class FileScannerStore : INotifyPropertyChanged
                 RefreshCommandStates();
         }
     }
+
     public void SetProgressMaximum(int value)
     {
         ProgressMaximum = value;
@@ -183,15 +201,15 @@ public sealed class FileScannerStore : INotifyPropertyChanged
     {
         var action = SelectedActionIndex < 0
             ? default
-            : (ComboItemsTypes)SelectedActionIndex;
+            : (ComboToDoItems)SelectedActionIndex;
         BeginEnabled = !IsWorking && action switch
         {
-            ComboItemsTypes.DeleteNonProjectFiles =>
+            ComboToDoItems.DeleteNonProjectFiles =>
                 !string.IsNullOrWhiteSpace(ProjectFile),
-            ComboItemsTypes.SyncProjectFileWithSample =>
+            ComboToDoItems.SyncProjectFileWithSample =>
                 !string.IsNullOrWhiteSpace(ProjectFile) &&
                 !string.IsNullOrWhiteSpace(SampleProjectFile),
-            ComboItemsTypes.FindValueOrClassAddScaveToProject =>
+            ComboToDoItems.FindValueOrClassAddScaveToProject =>
                 !string.IsNullOrWhiteSpace(SearchFolder) &&
                 !string.IsNullOrWhiteSpace(PlaceFolder),
             _ =>
@@ -206,7 +224,7 @@ public sealed class FileScannerStore : INotifyPropertyChanged
         foreach (var property in GetSavedProperties())
         {
             var value = property.GetValue(this);
-            ini.Write("FileScannerStore", property.Name, value);
+            ini.Write("FileScannerStore", property.Name, ConvertToIniString(value));
         }
 
         ini.Save();
@@ -251,7 +269,18 @@ public sealed class FileScannerStore : INotifyPropertyChanged
             || type == typeof(long)
             || type == typeof(double)
             || type == typeof(decimal)
+            || type == typeof(List<string>)
             || type.IsEnum;
+    }
+    private static string ConvertToIniString(object? value)
+    {
+        return value switch
+        {
+            null => string.Empty,
+            List<string> list => JsonSerializer.Serialize(NormalizePathes(list)),
+            IFormattable formattable => formattable.ToString(null, CultureInfo.InvariantCulture),
+            _ => value.ToString() ?? string.Empty
+        };
     }
     private static object? ConvertFromString(string text, Type targetType)
     {
@@ -261,11 +290,46 @@ public sealed class FileScannerStore : INotifyPropertyChanged
             return null;
         if (realType == typeof(string))
             return text;
+        if (realType == typeof(List<string>))
+            return ParseStringList(text);
         if (realType.IsEnum)
-            return Enum.Parse(realType, text);
+        {
+            if (Enum.TryParse(realType, text, true, out var enumValue))
+                return enumValue;
+
+            if (int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var enumIndex))
+                return Enum.ToObject(realType, enumIndex);
+
+            return Activator.CreateInstance(realType);
+        }
         if (realType == typeof(bool))
             return bool.Parse(text);
         return Convert.ChangeType(text, realType, CultureInfo.InvariantCulture);
+    }
+    private static List<string> ParseStringList(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return new List<string>();
+
+        try
+        {
+            var list = JsonSerializer.Deserialize<List<string>>(text);
+            return NormalizePathes(list);
+        }
+        catch
+        {
+            // Поддержка старого формата, если раньше список сохранялся через |.
+            return NormalizePathes(text.Split('|', StringSplitOptions.RemoveEmptyEntries));
+        }
+    }
+    private static List<string> NormalizePathes(IEnumerable<string>? pathes)
+    {
+        return pathes?
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Select(x => x.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList()
+            ?? new List<string>();
     }
     private static string EscapeIni(string value)
     {
@@ -338,13 +402,18 @@ public sealed class FileScannerStore : INotifyPropertyChanged
         OnPropertyChanged(nameof(ProgressValue));
     }
 
-    internal static void LoadMainFormState(MainForm mainForm, string iniFilePath)
-    {
-        throw new NotImplementedException();
-    }
 
-    internal static void SaveMainFormState(MainForm mainForm, string iniFilePath)
+    internal void AddPathes(string? editValue)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrWhiteSpace(editValue))
+            return;
+
+        editValue = editValue.Trim();
+
+        if (!_pathes.Contains(editValue, StringComparer.OrdinalIgnoreCase))
+        {
+            _pathes.Add(editValue);
+            OnPropertyChanged(nameof(Pathes));
+        }
     }
 }

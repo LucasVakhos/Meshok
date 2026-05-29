@@ -211,7 +211,7 @@ namespace AppCleaner
                     return false;
                 }
                 CreateBackup(filePath);
-                if (ItemsType is ComboItemsTypes.DeleteEmpty or ComboItemsTypes.DeleteRegionRows)
+                if (TodoType is ComboToDoItems.DeleteEmpty or ComboToDoItems.DeleteRegionRows)
                     File.WriteAllLines(filePath, lines.Where(line => line.Length > 0), encoding);
                 else
                     File.WriteAllLines(filePath, lines, encoding);
@@ -236,11 +236,11 @@ namespace AppCleaner
         {
             if (line is null)
                 return new LineProcessResult(string.Empty, false);
-            return ItemsType switch
+            return TodoType switch
             {
-                ComboItemsTypes.DeleteEmpty => ProcessDeleteEmpty(line),
-                ComboItemsTypes.DeleteRegionRows => ProcessDeleteRegionRows(line),
-                ComboItemsTypes.FindAndReplace => ProcessFindAndReplace(line),
+                ComboToDoItems.DeleteEmpty => ProcessDeleteEmpty(line),
+                ComboToDoItems.DeleteRegionRows => ProcessDeleteRegionRows(line),
+                ComboToDoItems.FindAndReplace => ProcessFindAndReplace(line),
                 _ => new LineProcessResult(line, false)
             };
         }

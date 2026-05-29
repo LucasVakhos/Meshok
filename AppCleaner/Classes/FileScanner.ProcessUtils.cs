@@ -12,13 +12,13 @@ public partial class FileScanner
 
     private bool ValidateSelected()
     {
-        return ItemsType switch
+        return TodoType switch
         {
-            ComboItemsTypes.DeleteNonProjectFiles => ValidateProjectFile(),
-            ComboItemsTypes.SyncProjectFileWithSample => ValidateSyncProjectFileWithSample(),
-            ComboItemsTypes.ConvertOldCsprojToSdkStyle => ValidateConvertOldCsprojToSdkStyle(),
-            ComboItemsTypes.FindValueOrClassAddScaveToProject => ValidateFindAddToProject(),
-            ComboItemsTypes.FindAndReplace => ValidateFolder() && ValidateFindText(),
+            ComboToDoItems.DeleteNonProjectFiles => ValidateProjectFile(),
+            ComboToDoItems.SyncProjectFileWithSample => ValidateSyncProjectFileWithSample(),
+            ComboToDoItems.ConvertOldCsprojToSdkStyle => ValidateConvertOldCsprojToSdkStyle(),
+            ComboToDoItems.FindValueOrClassAddScaveToProject => ValidateFindAddToProject(),
+            ComboToDoItems.FindAndReplace => ValidateFolder() && ValidateFindText(),
             _ => ValidateFolder()
         };
     }
@@ -506,7 +506,7 @@ public partial class FileScanner
         if (!string.IsNullOrWhiteSpace(_store.FindText))
             return;
 
-        var field = typeof(ComboItemsTypes).GetField(selectedAction.ToString());
+        var field = typeof(ComboToDoItems).GetField(selectedAction.ToString());
 
         if (field is null)
             return;
