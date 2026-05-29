@@ -233,7 +233,6 @@ public partial class FileScanner : XtraUserControl
             ComboToDoItems.ConvertOldCsprojToSdkStyle
                 => Task.Run(() => ConvertOldCsprojToSdkStyle(
                     _store.ProjectFile,
-                    _store.SampleProjectFile,
                     _store.NETVersion), cancellationToken),
             ComboToDoItems.TranslateEnglishToRussian
                 => Task.Run(() => TranslateEnglishInFolderAsync(cancellationToken), cancellationToken),
@@ -357,7 +356,9 @@ public partial class FileScanner : XtraUserControl
     {
         bool useFileDialog =
             TodoType == ComboToDoItems.DeleteNonProjectFiles ||
-            TodoType == ComboToDoItems.SyncProjectFileWithSample;
+            TodoType == ComboToDoItems.SyncProjectFileWithSample ||
+            TodoType == ComboToDoItems.ConvertOldCsprojToSdkStyle;
+        
         if (useFileDialog)
         {
             return openFileDlg.ShowDialog() == DialogResult.OK
@@ -407,7 +408,6 @@ public partial class FileScanner : XtraUserControl
             case ComboToDoItems.SyncProjectFileWithSample:
             case ComboToDoItems.ConvertOldCsprojToSdkStyle:
                 _store.ProjectFile = searchValue;
-                _store.SampleProjectFile = placeValue;
                 break;
             case ComboToDoItems.FindValueOrClassAddScaveToProject:
                 _store.SearchFolder = searchValue;
@@ -446,7 +446,7 @@ public partial class FileScanner : XtraUserControl
         SetVisibility(lcDRY_RUN, TodoType is ComboToDoItems.ClearNameSpace or ComboToDoItems.DeleteNonProjectFiles);
         SetVisibility(lcFind, isFindReplace || isFindAdd);
         SetVisibility(lcReplace, isFindReplace);
-        SetVisibility(lcPlaceFolder, isFindAdd || isSync || isConvert);
+        SetVisibility(lcPlaceFolder, isFindAdd || isSync);
         cboSearchFolder.Properties.NullValuePrompt = isProjectMode
             ? "Установите файл проекта для сравнения..."
             : "Установите папку для сканирования...";

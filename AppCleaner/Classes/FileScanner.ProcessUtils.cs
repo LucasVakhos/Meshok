@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 using SysAttr = System.Attribute;
 namespace AppCleaner;
+
 public partial class FileScanner
 {
     #region Validation
@@ -57,12 +58,6 @@ public partial class FileScanner
             !File.Exists(_store.ProjectFile))
         {
             AddToLog("Ошибка: старый .csproj не найден.");
-            return false;
-        }
-        if (string.IsNullOrWhiteSpace(_store.SampleProjectFile) ||
-            !_store.SampleProjectFile.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase))
-        {
-            AddToLog("Ошибка: укажите путь для нового .csproj.");
             return false;
         }
         return true;
@@ -195,15 +190,24 @@ public partial class FileScanner
     }
     #endregion
     #region Project convert
-    private static void ConvertOldCsprojToSdkStyle(
-    string oldCsprojPath,
-    string newCsprojPath,
-    ComboNetItems netVersion)
+    private void ConvertOldCsprojToSdkStyle(string csprojPath, ComboNetItems netVersion)
     {
-        var oldDoc = XDocument.Load(oldCsprojPath, LoadOptions.PreserveWhitespace);
+        if (string.IsNullOrWhiteSpace(csprojPath))
+            throw new ArgumentException("Не указан файл проекта.", nameof(csprojPath));
+
+        if (!File.Exists(csprojPath))
+            throw new FileNotFoundException("Файл проекта не найден.", csprojPath);
+
+        string backupPath = GetBackupFilePath(csprojPath);
+
+        File.Copy(csprojPath, backupPath, overwrite: false);
+        AddToLog($"Создан backup: {backupPath}");
+
+        var oldDoc = XDocument.Load(backupPath, LoadOptions.PreserveWhitespace);
         XNamespace oldNs = oldDoc.Root?.Name.Namespace ?? XNamespace.None;
 
         string targetFramework = netVersion.ToTargetFramework();
+        AddToLog($"TargetFramework: {targetFramework}");
 
         var newDoc = new XDocument(
             new XDeclaration("1.0", "utf-8", null),
@@ -223,20 +227,49 @@ public partial class FileScanner
         AddEmbeddedResourceUpdates(oldDoc, newDoc, oldNs);
         AddPackageReferences(oldDoc, newDoc, oldNs);
 
-        newDoc.Save(newCsprojPath);
+        newDoc.Save(csprojPath);
+
+        AddToLog($"Создан SDK-style проект: {csprojPath}");
+    }
+    private static string GetBackupFilePath(string filePath)
+    {
+        string backupPath = filePath + ".bak";
+
+        if (!File.Exists(backupPath))
+            return backupPath;
+
+        for (int i = 1; i < 10_000; i++)
+        {
+            backupPath = $"{filePath}.{i}.bak";
+
+            if (!File.Exists(backupPath))
+                return backupPath;
+        }
+
+        throw new IOException("Не удалось создать имя backup-файла.");
     }
     private static void AddCompileUpdates(XDocument oldDoc, XDocument newDoc, XNamespace oldNs)
     {
         var itemGroup = new XElement("ItemGroup");
+
         foreach (var compile in oldDoc.Descendants(oldNs + "Compile"))
         {
             var include = compile.Attribute("Include")?.Value;
-            if (string.IsNullOrWhiteSpace(include))
+            var updateValue = compile.Attribute("Update")?.Value;
+
+            var path = !string.IsNullOrWhiteSpace(updateValue)
+                ? updateValue
+                : include;
+
+            if (string.IsNullOrWhiteSpace(path))
                 continue;
-            if (!include.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+
+            if (!path.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
                 continue;
+
             var update = new XElement("Compile",
-                new XAttribute("Update", include));
+                new XAttribute("Update", path));
+
             foreach (var child in compile.Elements())
             {
                 update.Add(new XElement(
@@ -244,24 +277,36 @@ public partial class FileScanner
                     child.Attributes(),
                     child.Nodes()));
             }
-            if (update.HasElements)
+
+            if (compile.Attribute("Update") is not null || update.HasElements)
                 itemGroup.Add(update);
         }
+
         if (itemGroup.HasElements)
             newDoc.Root!.Add(itemGroup);
     }
     private static void AddEmbeddedResourceUpdates(XDocument oldDoc, XDocument newDoc, XNamespace oldNs)
     {
         var itemGroup = new XElement("ItemGroup");
+
         foreach (var res in oldDoc.Descendants(oldNs + "EmbeddedResource"))
         {
             var include = res.Attribute("Include")?.Value;
-            if (string.IsNullOrWhiteSpace(include))
+            var updateValue = res.Attribute("Update")?.Value;
+
+            var path = !string.IsNullOrWhiteSpace(updateValue)
+                ? updateValue
+                : include;
+
+            if (string.IsNullOrWhiteSpace(path))
                 continue;
-            if (!include.EndsWith(".resx", StringComparison.OrdinalIgnoreCase))
+
+            if (!path.EndsWith(".resx", StringComparison.OrdinalIgnoreCase))
                 continue;
+
             var update = new XElement("EmbeddedResource",
-                new XAttribute("Update", include));
+                new XAttribute("Update", path));
+
             foreach (var child in res.Elements())
             {
                 update.Add(new XElement(
@@ -269,9 +314,11 @@ public partial class FileScanner
                     child.Attributes(),
                     child.Nodes()));
             }
-            if (update.HasElements)
+
+            if (res.Attribute("Update") is not null || update.HasElements)
                 itemGroup.Add(update);
         }
+
         if (itemGroup.HasElements)
             newDoc.Root!.Add(itemGroup);
     }

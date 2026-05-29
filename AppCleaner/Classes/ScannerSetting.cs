@@ -25,7 +25,7 @@ public sealed class ScannerSetting : INotifyPropertyChanged
     private bool _isWorking;
     private readonly ConcurrentDictionary<string, int> _totalFolders = new();
     private string _sampleProject = string.Empty;
-    private ComboNetItems _netVersion;
+    private ComboNetItems _netVersion = ComboNetItems.net80;
     private List<string> _pathes = new();
 
     public ScannerSetting()
@@ -260,9 +260,12 @@ public sealed class ScannerSetting : INotifyPropertyChanged
     {
         var ini = new IniFile();
         ini.LoadObject(this);
+
+        if (!Enum.IsDefined(typeof(ComboNetItems), NETVersion))
+            NETVersion = ComboNetItems.net80;
+
         RefreshCommandStates();
     }
-
     public void IncFiles()
     {
         Interlocked.Increment(ref _totalFiles);
