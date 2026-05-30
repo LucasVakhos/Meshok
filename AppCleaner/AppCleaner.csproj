@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
@@ -15,13 +16,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Content Remove="C:\Users\Admin\.nuget\packages\edgesharp.core\0.9.0\contentFiles\any\net5.0\WebView2Loader.dll" />
 		<Content Remove="C:\Users\user\.nuget\packages\edgesharp.core\0.9.0\contentFiles\any\net5.0\WebView2Loader.dll" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Remove="Classes\FileScanner.Utils.resx" />
+		<EmbeddedResource Remove="Classes\FileScanner.Utils.resx" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<Compile Update="Classes\FileScanner.ProcessFindAndCopyFiles.cs">
 			<DependentUpon>FileScanner.cs</DependentUpon>
@@ -76,5 +78,32 @@
 			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
 	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="App.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<Target Name="CopyFilesToLibs" AfterTargets="Build">
+		<ItemGroup>
+			<DllFiles Include="$(OutputPath)*.dll"
+					  Exclude="$(OutputPath)$(AssemblyName).dll" />
+		</ItemGroup>
+		<Message Text="Найденные DLL для перемещения: @(DllFiles)" Importance="high" />
+		<MakeDir Directories="$(OutputPath)Libs" />
+		<Move SourceFiles="@(DllFiles)" DestinationFolder="$(OutputPath)Libs" />
+
+		<PropertyGroup>
+			<PowerShellCommand>
+				$exclude = @('libs', 'ru', 'runtimes');
+				Get-ChildItem '$(OutputPath)' -Directory |
+				Where-Object { $exclude -notcontains $_.Name } |
+				Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+			</PowerShellCommand>
+		</PropertyGroup>
+		<Exec Command="powershell -Command &quot;$(PowerShellCommand)&quot;" />
+	</Target>
+
+
 
 </Project>

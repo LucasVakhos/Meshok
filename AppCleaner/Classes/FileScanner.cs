@@ -34,11 +34,12 @@ public partial class FileScanner : XtraUserControl
     private readonly System.Windows.Forms.Timer _uiTimer = new();
     private CancellationTokenSource? _operationCts;
     private bool _suppressFolderEditValueChanged;
+    private bool _suppressNetEditValueChanged;
     private readonly List<ComboToDoItems> _todoItems = new();
+    private readonly List<ComboNetItems> _netItems = new();
     private ComboToDoItems TodoType => _todoType;
     private ComboToDoItems _todoType;
-    private ComboNetItems NETType => _netType;
-    private ComboNetItems _netType;
+    
     public FileScanner()
     {
         InitializeComponent();
@@ -55,10 +56,7 @@ public partial class FileScanner : XtraUserControl
         openFileDlg.InitialDirectory = _store.SearchFolder;
         openFolderDlg.InitialDirectory = _store.SearchFolder;
         SetSelectedTodoFromStore();
-        cboNET.SelectedIndex = Enum.IsDefined(typeof(ComboNetItems), _store.NETVersion)
-            ? (int)_store.NETVersion
-            : 0;
-        _netType = _store.NETVersion;
+        SetSelectedNetFromStore();
         RefreshPathComboBoxes();
         SetupLayouts();
         SyncPathEditorFromStore();
@@ -102,6 +100,7 @@ public partial class FileScanner : XtraUserControl
     private void InitializeComboBoxes()
     {
         RefreshPathComboBoxes();
+
         cboSearchExt.Properties.Items.Clear();
         cboSearchExt.Properties.Items.AddRange(FilePatterns.AllPatterns);
 
@@ -117,13 +116,56 @@ public partial class FileScanner : XtraUserControl
         }
 
         SetSelectedTodoFromStore();
+
         cboNET.Properties.Items.Clear();
-        foreach (ComboNetItems item in Enum.GetValues(typeof(ComboNetItems)))
+        _netItems.Clear();
+
+        foreach (var item in Enum.GetValues<ComboNetItems>())
+        {
+            _netItems.Add(item);
             cboNET.Properties.Items.Add(GetDisplayName(item));
-        cboNET.SelectedIndex = 0;
-        _netType = cboNET.SelectedIndex < 0
-            ? default
-            : (ComboNetItems)cboNET.SelectedIndex;
+        }
+
+        SetSelectedNetFromStore();
+    }
+
+    private ComboNetItems GetNetBySelectedIndex()
+    {
+        int index = cboNET.SelectedIndex;
+
+        return index >= 0 && index < _netItems.Count
+            ? _netItems[index]
+            : default;
+    }
+
+    private void SetSelectedNetFromStore()
+    {
+        var net = Enum.IsDefined(typeof(ComboNetItems), _store.NETVersion)
+            ? _store.NETVersion
+            : ComboNetItems.net80;
+
+        int index = _netItems.IndexOf(net);
+
+        if (index < 0)
+        {
+            index = 0;
+            net = _netItems.Count > 0
+                ? _netItems[index]
+                : ComboNetItems.net80;
+        }
+
+        _suppressNetEditValueChanged = true;
+
+        try
+        {
+            cboNET.SelectedIndex = index;
+            cboNET.EditValue = cboNET.Properties.Items[index];
+            _store.NETVersion = net;
+        }
+        finally
+        {
+            _suppressNetEditValueChanged = false;
+        }
     }
     private void RefreshPathComboBoxes()
     {
@@ -343,14 +385,22 @@ public partial class FileScanner : XtraUserControl
         SelectPath(sender as ButtonEdit);
     }
     #endregion
+    
     #region UI helpers
     private void SelectPath(ButtonEdit selector)
     {
         if (selector == null)
             return;
+
         string? selectedPath = ShowPathDialog();
-        if (!string.IsNullOrWhiteSpace(selectedPath))
-            selector.EditValue = selectedPath;
+
+        if (string.IsNullOrWhiteSpace(selectedPath))
+            return;
+
+        selector.EditValue = selectedPath;
+
+        UpdatePathsFromEditor();
+        _store.RefreshCommandStates();
     }
     private string? ShowPathDialog()
     {
@@ -521,10 +571,10 @@ public partial class FileScanner : XtraUserControl
     }
     private void cboNET_SelectedIndexChanged(object sender, EventArgs e)
     {
-        _store.NETVersion = cboNET.SelectedIndex < 0
-            ? default
-            : (ComboNetItems)cboNET.SelectedIndex;
-        _netType = _store.NETVersion;
+        if (_suppressNetEditValueChanged)
+            return;
+
+        _store.NETVersion = GetNetBySelectedIndex();
     }
     private string GetLogFileName()
     {

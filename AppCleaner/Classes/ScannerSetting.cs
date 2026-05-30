@@ -233,6 +233,9 @@ public sealed class ScannerSetting : INotifyPropertyChanged
             ComboToDoItems.DeleteNonProjectFiles =>
                 !string.IsNullOrWhiteSpace(ProjectFile),
 
+            ComboToDoItems.ConvertOldCsprojToSdkStyle =>
+                !string.IsNullOrWhiteSpace(ProjectFile),
+
             ComboToDoItems.SyncProjectFileWithSample =>
                 !string.IsNullOrWhiteSpace(ProjectFile) &&
                 !string.IsNullOrWhiteSpace(SampleProjectFile),
