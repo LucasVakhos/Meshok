@@ -238,32 +238,24 @@ namespace AppCleaner
                 .Replace("\r\n", "\n")
                 .Replace('\r', '\n')
                 .Split('\n');
-
             var result = new List<string>();
-
             foreach (var line in lines)
             {
                 bool isEmpty = string.IsNullOrWhiteSpace(line);
-
                 if (isEmpty)
                 {
                     if (result.Count == 0)
                         continue;
-
                     var previous = result[^1].Trim();
-
                     // После { пустую строку не оставляем
                     if (previous == "{")
                         continue;
-
                     // Более одной пустой строки подряд не оставляем
                     if (string.IsNullOrWhiteSpace(result[^1]))
                         continue;
-
                     result.Add(string.Empty);
                     continue;
                 }
-
                 // Перед } пустую строку не оставляем
                 if (line.Trim() == "}" &&
                     result.Count > 0 &&
@@ -271,16 +263,13 @@ namespace AppCleaner
                 {
                     result.RemoveAt(result.Count - 1);
                 }
-
                 result.Add(line);
             }
-
             while (result.Count > 0 &&
                    string.IsNullOrWhiteSpace(result[^1]))
             {
                 result.RemoveAt(result.Count - 1);
             }
-
             return string.Join(Environment.NewLine, result);
         }
         private LineProcessResult ProcessLine(string? line)

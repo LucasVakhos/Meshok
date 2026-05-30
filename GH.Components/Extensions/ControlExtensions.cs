@@ -1,4 +1,7 @@
-﻿public static class ControlExtensions
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+public static class ControlExtensions
 {
     /// <summary>
     /// Рекурсивно ищет первый подходящий для фокуса контрол внутри parent.
@@ -66,5 +69,26 @@
             ctrl.BeginInvoke(new Action(() => ctrl.Text = text));
         else
             ctrl.Text = text;
+    }
+    [return: MaybeNull]
+    public static T GetChildControl<T>(this Control parent, string name) where T : Control
+    {
+        var result = parent.Controls.Find(name, true).FirstOrDefault() as T;
+        if (result == null)
+            throw new InvalidOperationException($"Control with name '{name}' not found.");
+        return result;
+    }
+
+    [return: MaybeNull]
+    public static T FindControlInParents<T>(this Control control) where T : Control
+    {
+        var parent = control.Parent;
+        while (parent != null)
+        {
+            if (parent is T found)
+                return found;
+            parent = parent.Parent;
+        }
+        return null;
     }
 }

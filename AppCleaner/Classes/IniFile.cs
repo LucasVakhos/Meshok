@@ -33,7 +33,6 @@ public sealed class IniFile
         Load();
     }
 
-
     public string Read(string section, string key, string defaultValue = "")
     {
         return _sections.TryGetValue(section, out var values) &&
@@ -62,6 +61,13 @@ public sealed class IniFile
         foreach (var property in GetSavedProperties(obj.GetType()))
         {
             var value = property.GetValue(obj);
+
+            if (value is Dictionary<ComboToDoItems, ActionSettings> settings)
+            {
+                SaveActionSettings(property.Name, settings);
+                continue;
+            }
+
             Write(section, property.Name, value);
         }
 
@@ -76,6 +82,12 @@ public sealed class IniFile
 
         foreach (var property in GetSavedProperties(obj.GetType()))
         {
+            if (property.GetValue(obj) is Dictionary<ComboToDoItems, ActionSettings> settings)
+            {
+                LoadActionSettings(property.Name, settings);
+                continue;
+            }
+
             var text = Read(section, property.Name);
 
             if (string.IsNullOrEmpty(text))
@@ -94,6 +106,31 @@ public sealed class IniFile
             {
                 // Некорректное значение в ini не должно ломать запуск приложения.
             }
+        }
+    }
+
+    private void SaveActionSettings(string propertyName, Dictionary<ComboToDoItems, ActionSettings> settings)
+    {
+        foreach (var pair in settings)
+        {
+            string section = $"{propertyName}.{pair.Key}";
+
+            Write(section, nameof(ActionSettings.SearchValue), pair.Value.SearchValue);
+            Write(section, nameof(ActionSettings.PlaceValue), pair.Value.PlaceValue);
+        }
+    }
+
+    private void LoadActionSettings(string propertyName, Dictionary<ComboToDoItems, ActionSettings> settings)
+    {
+        foreach (var pair in settings)
+        {
+            string section = $"{propertyName}.{pair.Key}";
+
+            pair.Value.SearchValue =
+                NormalizePathSeparators(Read(section, nameof(ActionSettings.SearchValue)));
+
+            pair.Value.PlaceValue =
+                NormalizePathSeparators(Read(section, nameof(ActionSettings.PlaceValue)));
         }
     }
 
@@ -139,6 +176,7 @@ public sealed class IniFile
             }
 
             var parts = line.Split('=', 2);
+
             if (parts.Length != 2)
                 continue;
 
@@ -156,7 +194,7 @@ public sealed class IniFile
     {
         return type
             .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-            .Where(x => x.CanRead && x.CanWrite)
+            .Where(x => x.CanRead)
             .Where(x => x.GetCustomAttribute<SavedAttribute>() is not null)
             .Where(x => IsSupportedIniType(x.PropertyType));
     }
@@ -165,14 +203,31 @@ public sealed class IniFile
     {
         type = Nullable.GetUnderlyingType(type) ?? type;
 
-        return type == typeof(string)
+        if (type == typeof(string)
             || type == typeof(int)
             || type == typeof(bool)
             || type == typeof(long)
             || type == typeof(double)
             || type == typeof(decimal)
             || type == typeof(List<string>)
-            || type.IsEnum;
+            || type.IsEnum)
+            return true;
+
+        return IsActionSettingsDictionary(type);
+    }
+
+    private static bool IsActionSettingsDictionary(Type type)
+    {
+        if (!type.IsGenericType)
+            return false;
+
+        if (type.GetGenericTypeDefinition() != typeof(Dictionary<,>))
+            return false;
+
+        var args = type.GetGenericArguments();
+
+        return args[0] == typeof(ComboToDoItems)
+            && args[1] == typeof(ActionSettings);
     }
 
     private static string ConvertToIniString(object? value)
@@ -222,7 +277,6 @@ public sealed class IniFile
         if (string.IsNullOrWhiteSpace(text))
             return new List<string>();
 
-        // Поддержка старого JSON-формата: ["E:\\\\Path"]
         if (text.TrimStart().StartsWith("["))
         {
             try
@@ -254,7 +308,8 @@ public sealed class IniFile
         return property.Name.Contains("Path", StringComparison.OrdinalIgnoreCase)
             || property.Name.Contains("Folder", StringComparison.OrdinalIgnoreCase)
             || property.Name.Contains("File", StringComparison.OrdinalIgnoreCase)
-            || property.Name.Contains("Directory", StringComparison.OrdinalIgnoreCase);
+            || property.Name.Contains("Directory", StringComparison.OrdinalIgnoreCase)
+            || property.Name.Contains("Value", StringComparison.OrdinalIgnoreCase);
     }
 
     private static string NormalizePathSeparators(string value)
@@ -262,8 +317,6 @@ public sealed class IniFile
         if (string.IsNullOrWhiteSpace(value))
             return string.Empty;
 
-        // Приводим старый INI-формат E:\\Dir к нормальному E:\Dir.
-        // UNC-префикс \\Server сохраняем.
         bool isUnc = value.StartsWith(@"\\");
 
         while (value.Contains(@"\\"))
@@ -277,9 +330,6 @@ public sealed class IniFile
 
     public static string Escape(string value)
     {
-        // Важно: обратный слэш не экранируем, чтобы пути сохранялись как E:\Dir,
-        // а не как E:\\Dir. Символ '=' тоже не экранируем, потому что чтение
-        // делается через Split('=', 2), и значение может содержать '='.
         return value
             .Replace("%", "%25")
             .Replace("\r", "%0D")

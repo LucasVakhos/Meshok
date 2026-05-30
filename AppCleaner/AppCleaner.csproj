@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0-windows</TargetFramework>
@@ -13,39 +12,79 @@
 		<ApplicationIcon>Icon(8).ico</ApplicationIcon>
 		<NuGetAuditMode>direct</NuGetAuditMode>
 		<AssemblyVersion>1.0.0.1</AssemblyVersion>
+		<!-- Отключаем неявное включение EmbeddedResource и Compile -->
+		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="Forms\**" />
+	  <None Remove="Properties\**" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Content Remove="C:\Users\Admin\.nuget\packages\edgesharp.core\0.9.0\contentFiles\any\net5.0\WebView2Loader.dll" />
 		<Content Remove="C:\Users\user\.nuget\packages\edgesharp.core\0.9.0\contentFiles\any\net5.0\WebView2Loader.dll" />
 	</ItemGroup>
 
+	<!-- Явное включение всех EmbeddedResource -->
 	<ItemGroup>
-		<EmbeddedResource Remove="Classes\FileScanner.Utils.resx" />
+		<EmbeddedResource Include="Classes\FileScanner.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>FileScanner.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+		<EmbeddedResource Include="MainForm.resx" />
+		<!-- Добавьте остальные .resx-файлы по необходимости -->
+		<!-- ... остальные .resx-файлы -->
 	</ItemGroup>
 
+	<!-- Явное включение всех Compile -->
 	<ItemGroup>
-		<Compile Update="Classes\FileScanner.ProcessFindAndCopyFiles.cs">
+		<Compile Include="Classes\FilePatterns.cs" />
+		<Compile Include="Classes\FileScanner.cs" />
+		<Compile Include="Classes\FileScanner.Designer.cs" />
+		<Compile Include="Classes\FileScanner.ProcessFindAndCopyFiles.cs">
 			<DependentUpon>FileScanner.cs</DependentUpon>
 		</Compile>
-		<Compile Update="Classes\FileScanner.ProcessNamespaces.cs">
+		<Compile Include="Classes\FileScanner.ProcessNamespaces.cs">
 			<DependentUpon>FileScanner.cs</DependentUpon>
 		</Compile>
-		<Compile Update="Classes\FileScanner.ProcessOtherFiles.cs">
+		<Compile Include="Classes\FileScanner.ProcessOtherFiles.cs">
 			<DependentUpon>FileScanner.cs</DependentUpon>
 		</Compile>
-		<Compile Update="Classes\FileScanner.ProcessScanFiles.cs">
+		<Compile Include="Classes\FileScanner.ProcessScanFiles.cs">
 			<DependentUpon>FileScanner.cs</DependentUpon>
 		</Compile>
-		<Compile Update="Classes\FileScanner.ProcessTranslate.cs">
+		<Compile Include="Classes\FileScanner.ProcessTranslate.cs">
 			<DependentUpon>FileScanner.cs</DependentUpon>
 		</Compile>
-		<Compile Update="Classes\FileScanner.ProcessUsingPackages.cs">
+		<Compile Include="Classes\FileScanner.ProcessUsingPackages.cs">
 			<DependentUpon>FileScanner.cs</DependentUpon>
 		</Compile>
-		<Compile Update="Classes\FileScanner.ProcessUtils.cs">
+		<Compile Include="Classes\FileScanner.ProcessUtils.cs">
 			<DependentUpon>FileScanner.cs</DependentUpon>
 		</Compile>
+		<Compile Include="Classes\IniFile.cs" />
+		<Compile Include="Classes\MainFormState.cs" />
+		<Compile Include="Classes\ScannerSetting.cs" />
+		<Compile Include="Ext\ComboItemAttribute.cs" />
+		<Compile Include="Ext\ComboNetItems.cs" />
+		<Compile Include="Ext\ComboNetItemsExtensions.cs" />
+		<Compile Include="Ext\ComboToDoItems.cs" />
+		<Compile Include="Ext\ComponentExtension.cs" />
+		<Compile Include="Ext\ControlExtensions.cs" />
+		<Compile Include="Ext\CountersHelpers.cs" />
+		<Compile Include="Ext\EnumClassExtension.cs" />
+		<Compile Include="Ext\FilePathExtensions.cs" />
+		<Compile Include="Ext\FormIniExtension.cs" />
+		<Compile Include="Ext\PathesAttribute.cs" />
+		<Compile Include="Ext\RussianStringValidator.cs" />
+		<Compile Include="Ext\StringHelpers.cs" />
+		<Compile Include="MainForm.cs" />
+		<Compile Include="MainForm.Designer.cs" />
+		<!-- Добавьте остальные .cs-файлы по необходимости -->
+		<Compile Include="Program.cs" />
+		<!-- ... остальные .cs-файлы -->
 	</ItemGroup>
 
 	<ItemGroup>
@@ -65,45 +104,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Update="Properties\Resources.Designer.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>Resources.resx</DependentUpon>
-		</Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Update="Properties\Resources.resx">
-			<Generator>ResXFileCodeGenerator</Generator>
-			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Update="App.config">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 	<Target Name="CopyFilesToLibs" AfterTargets="Build">
+		<!-- временно
 		<ItemGroup>
-			<DllFiles Include="$(OutputPath)*.dll"
-					  Exclude="$(OutputPath)$(AssemblyName).dll" />
+			<DllFiles Include="$(OutputPath)*.dll" Exclude="$(OutputPath)$(AssemblyName).dll" />
 		</ItemGroup>
 		<Message Text="Найденные DLL для перемещения: @(DllFiles)" Importance="high" />
 		<MakeDir Directories="$(OutputPath)Libs" />
 		<Move SourceFiles="@(DllFiles)" DestinationFolder="$(OutputPath)Libs" />
+		<Exec Command="powershell -Command &quot;$exclude = @('libs', 'ru', 'runtimes'); Get-ChildItem '$(OutputPath)' -Directory | Where-Object { $exclude -notcontains $_.Name } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue&quot;" />
+	 -->
 
-		<PropertyGroup>
-			<PowerShellCommand>
-				$exclude = @('libs', 'ru', 'runtimes');
-				Get-ChildItem '$(OutputPath)' -Directory |
-				Where-Object { $exclude -notcontains $_.Name } |
-				Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
-			</PowerShellCommand>
-		</PropertyGroup>
-		<Exec Command="powershell -Command &quot;$(PowerShellCommand)&quot;" />
+		<Exec Command="powershell -Command &quot;$exclude = @('ru', 'runtimes'); Get-ChildItem '$(OutputPath)' -Directory | Where-Object { $exclude -notcontains $_.Name } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue&quot;" />
 	</Target>
-
-
-
 </Project>

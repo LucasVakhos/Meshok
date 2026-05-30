@@ -3,7 +3,7 @@ namespace AppCleaner
 {
     public partial class MainForm : XtraForm
     {
-        private FileScanner fileScanner;
+        private FileScanner? fileScanner;
         public MainForm()
         {
             InitializeComponent();

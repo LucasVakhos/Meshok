@@ -2,13 +2,13 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using SysAttr = System.Attribute;
 namespace AppCleaner;
-
 public partial class FileScanner
 {
     #region Validation
@@ -195,66 +195,48 @@ public partial class FileScanner
     #endregion
 
     #region Project convert
-
     private void ConvertOldCsprojToSdkStyle(string csprojPath, ComboNetItems netVersion)
     {
         if (string.IsNullOrWhiteSpace(csprojPath))
             throw new ArgumentException("Не указан файл проекта.", nameof(csprojPath));
-
         if (!File.Exists(csprojPath))
             throw new FileNotFoundException("Файл проекта не найден.", csprojPath);
-
         string backupPath = GetBackupFilePath(csprojPath);
-
         File.Copy(csprojPath, backupPath, overwrite: false);
         AddToLog($"Создан backup: {backupPath}");
-
         var oldDoc = XDocument.Load(backupPath, LoadOptions.PreserveWhitespace);
         XNamespace oldNs = oldDoc.Root?.Name.Namespace ?? XNamespace.None;
-
         string targetFramework = netVersion.ToTargetFramework();
         AddToLog($"TargetFramework: {targetFramework}");
-
         bool isSdkStyle = oldDoc.Root?.Attribute("Sdk") != null;
-
         var newDoc = isSdkStyle
             ? ConvertExistingSdkStyleProject(oldDoc, oldNs, targetFramework)
             : ConvertLegacyProjectToSdkStyle(oldDoc, oldNs, targetFramework);
-
         EnsureAppConfigWithLibsProbing(csprojPath);
         EnsureAppConfigCopyToOutput(newDoc);
         EnsureAfterBuildTarget(newDoc);
-
         newDoc.Save(csprojPath);
-
         AddToLog($"Создан SDK-style проект: {csprojPath}");
     }
-
     private static XDocument ConvertExistingSdkStyleProject(XDocument oldDoc, XNamespace oldNs, string targetFramework)
     {
         var newDoc = new XDocument(oldDoc);
-
         var mainGroup = newDoc.Root!
             .Elements(oldNs + "PropertyGroup")
             .FirstOrDefault(x => x.Attribute("Condition") == null);
-
         if (mainGroup == null)
         {
             mainGroup = new XElement("PropertyGroup");
             newDoc.Root!.AddFirst(mainGroup);
         }
-
         SetOrAddElement(mainGroup, "TargetFramework", targetFramework);
         SetOrAddElement(mainGroup, "UseWindowsForms", "true");
         SetOrAddElement(mainGroup, "ImplicitUsings", "enable");
-
         RemoveElement(mainGroup, "EnableDefaultCompileItems");
         RemoveElement(mainGroup, "EnableDefaultEmbeddedResourceItems");
         RemoveElement(mainGroup, "EnableDefaultNoneItems");
-
         return newDoc;
     }
-
     private static XDocument ConvertLegacyProjectToSdkStyle(XDocument oldDoc, XNamespace oldNs, string targetFramework)
     {
         var newDoc = new XDocument(
@@ -265,12 +247,9 @@ public partial class FileScanner
                 CreateConfigurationPropertyGroup(oldDoc, oldNs, "Debug|AnyCPU")
             )
         );
-
         CopyItemGroups(oldDoc, newDoc, oldNs);
-
         return newDoc;
     }
-
     private static XElement CreateLegacyMainPropertyGroup(XDocument oldDoc, XNamespace oldNs, string targetFramework)
     {
         return new XElement("PropertyGroup",
@@ -286,7 +265,6 @@ public partial class FileScanner
             new XElement("EnableDefaultNoneItems", "false")
         );
     }
-
     private static XElement CreateConfigurationPropertyGroup(XDocument oldDoc, XNamespace oldNs, string configuration)
     {
         var oldGroup = oldDoc.Root!
@@ -297,33 +275,25 @@ public partial class FileScanner
                 return !string.IsNullOrWhiteSpace(condition)
                     && condition.Contains(configuration, StringComparison.OrdinalIgnoreCase);
             });
-
         var newGroup = new XElement("PropertyGroup",
             new XAttribute("Condition", $" '$(Configuration)|$(Platform)' == '{configuration}' "));
-
         if (oldGroup == null)
             return newGroup;
-
         foreach (var element in oldGroup.Elements())
             newGroup.Add(CloneWithoutNamespace(element));
-
         return newGroup;
     }
-
     private static void CopyItemGroups(XDocument oldDoc, XDocument newDoc, XNamespace oldNs)
     {
         foreach (var oldItemGroup in oldDoc.Root!.Elements(oldNs + "ItemGroup"))
         {
             var newItemGroup = new XElement("ItemGroup");
-
             foreach (var item in oldItemGroup.Elements())
                 newItemGroup.Add(CloneWithoutNamespace(item));
-
             if (newItemGroup.HasElements)
                 newDoc.Root!.Add(newItemGroup);
         }
     }
-
     private static XElement CloneWithoutNamespace(XElement source)
     {
         return new XElement(
@@ -334,7 +304,6 @@ public partial class FileScanner
                     ? CloneWithoutNamespace(element)
                     : x));
     }
-
     private static void EnsureAppConfigCopyToOutput(XDocument newDoc)
     {
         bool exists = newDoc.Root!
@@ -343,17 +312,14 @@ public partial class FileScanner
                 x.Attribute("Update")?.Value,
                 "App.config",
                 StringComparison.OrdinalIgnoreCase));
-
         if (exists)
             return;
-
         newDoc.Root!.Add(
             new XElement("ItemGroup",
                 new XElement("None",
                     new XAttribute("Update", "App.config"),
                     new XElement("CopyToOutputDirectory", "PreserveNewest"))));
     }
-
     private static void EnsureAfterBuildTarget(XDocument newDoc)
     {
         newDoc.Root!
@@ -363,67 +329,83 @@ public partial class FileScanner
                 "AfterBuild",
                 StringComparison.OrdinalIgnoreCase))
             .Remove();
-
         AddAfterBuildTarget(newDoc);
     }
-
     private static void AddAfterBuildTarget(XDocument newDoc)
     {
+        //newDoc.Root!.Add(
+        //    new XElement("Target",
+        //        new XAttribute("Name", "MoveDependenciesToLibs"),
+        //        new XAttribute("AfterTargets", "Build"),
+        //        new XElement("ItemGroup",
+        //            new XElement("MoveToLibFolder",
+        //                new XAttribute("Include", "$(OutputPath)*.dll;$(OutputPath)*.xml"),
+        //                new XAttribute("Exclude",
+        //                    "$(TargetPath);" +
+        //                    "$(OutputPath)$(AssemblyName).dll;" +
+        //                    "$(OutputPath)$(AssemblyName).xml"))),
+        //        new XElement("MakeDir",
+        //            new XAttribute("Directories", "$(OutputPath)libs")),
+        //        new XElement("Move",
+        //            new XAttribute("SourceFiles", "@(MoveToLibFolder)"),
+        //            new XAttribute("DestinationFolder", "$(OutputPath)libs"),
+        //            new XAttribute("OverwriteReadOnlyFiles", "true")),
+        //        new XElement("ItemGroup",
+        //            new XElement("FilesToDelete",
+        //                new XAttribute("Include", "$(OutputPath)**\\*.*"),
+        //                new XAttribute("Exclude",
+        //                    "$(OutputPath)*.exe;" +
+        //                    "$(OutputPath)$(AssemblyName).dll;" +
+        //                    "$(OutputPath)$(AssemblyName).pdb;" +
+        //                    "$(OutputPath)$(AssemblyName).deps.json;" +
+        //                    "$(OutputPath)$(AssemblyName).runtimeconfig.json;" +
+        //                    "$(OutputPath)$(AssemblyName).exe.config;" +
+        //                    "$(OutputPath)App.config;" +
+        //                    "$(OutputPath)libs\\**\\*.*;" +
+        //                    "$(OutputPath)ru\\**\\*.*;" +
+        //                    "$(OutputPath)b\\**\\*.*;" +
+        //                    "$(OutputPath)runtimes\\**\\*.*"))),
+        //        new XElement("Delete",
+        //            new XAttribute("Files", "@(FilesToDelete)"))
+        //    ));
+
         newDoc.Root!.Add(
             new XElement("Target",
-                new XAttribute("Name", "MoveDependenciesToLibs"),
+                new XAttribute("Name", "CopyFilesToLibs"),
                 new XAttribute("AfterTargets", "Build"),
 
-                new XElement("ItemGroup",
-                    new XElement("MoveToLibFolder",
-                        new XAttribute("Include", "$(OutputPath)*.dll;$(OutputPath)*.xml"),
-                        new XAttribute("Exclude",
-                            "$(TargetPath);" +
-                            "$(OutputPath)$(AssemblyName).dll;" +
-                            "$(OutputPath)$(AssemblyName).xml"))),
+                new XComment(@"
+ временно
 
-                new XElement("MakeDir",
-                    new XAttribute("Directories", "$(OutputPath)libs")),
+ <ItemGroup>
+     <DllFiles Include=""$(OutputPath)*.dll"" Exclude=""$(OutputPath)$(AssemblyName).dll"" />
+ </ItemGroup>
 
-                new XElement("Move",
-                    new XAttribute("SourceFiles", "@(MoveToLibFolder)"),
-                    new XAttribute("DestinationFolder", "$(OutputPath)libs"),
-                    new XAttribute("OverwriteReadOnlyFiles", "true")),
+ <Message Text=""Найденные DLL для перемещения: @(DllFiles)"" Importance=""high"" />
 
-                new XElement("ItemGroup",
-                    new XElement("FilesToDelete",
-                        new XAttribute("Include", "$(OutputPath)**\\*.*"),
-                        new XAttribute("Exclude",
-                            "$(OutputPath)*.exe;" +
-                            "$(OutputPath)$(AssemblyName).dll;" +
-                            "$(OutputPath)$(AssemblyName).pdb;" +
-                            "$(OutputPath)$(AssemblyName).deps.json;" +
-                            "$(OutputPath)$(AssemblyName).runtimeconfig.json;" +
-                            "$(OutputPath)$(AssemblyName).exe.config;" +
-                            "$(OutputPath)App.config;" +
-                            "$(OutputPath)libs\\**\\*.*;" +
-                            "$(OutputPath)ru\\**\\*.*;" +
-                            "$(OutputPath)b\\**\\*.*;" +
-                            "$(OutputPath)runtimes\\**\\*.*"))),
+ <MakeDir Directories=""$(OutputPath)Libs"" />
 
-                new XElement("Delete",
-                    new XAttribute("Files", "@(FilesToDelete)"))
-            ));
+ <Move SourceFiles=""@(DllFiles)"" DestinationFolder=""$(OutputPath)Libs"" />
+
+ <Exec Command=""powershell -Command ""$exclude = @('libs', 'ru', 'runtimes'); Get-ChildItem '$(OutputPath)' -Directory | Where-Object { $exclude -notcontains $_.Name } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue"""" />
+"),
+
+                new XElement("Exec",
+                    new XAttribute(
+                        "Command",
+                        "powershell -Command &quot;$exclude = @('ru', 'runtimes'); Get-ChildItem '$(OutputPath)' -Directory | Where-Object { $exclude -notcontains $_.Name } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue&quot;"))
+            )
+        );
     }
-
     private static void EnsureAppConfigWithLibsProbing(string csprojPath)
     {
         string projectDir = Path.GetDirectoryName(csprojPath)
             ?? throw new InvalidOperationException("Не удалось определить каталог проекта.");
-
         string appConfigPath = Path.Combine(projectDir, "App.config");
-
         XDocument doc = File.Exists(appConfigPath)
             ? XDocument.Load(appConfigPath, LoadOptions.PreserveWhitespace)
             : new XDocument(new XDeclaration("1.0", "utf-8", null), new XElement("configuration"));
-
         XElement configuration;
-
         if (doc.Root == null)
         {
             configuration = new XElement("configuration");
@@ -438,27 +420,20 @@ public partial class FileScanner
             configuration = new XElement("configuration", doc.Root);
             doc.Root.ReplaceWith(configuration);
         }
-
         var runtime = configuration.Element("runtime");
-
         if (runtime == null)
         {
             runtime = new XElement("runtime");
             configuration.Add(runtime);
         }
-
         XNamespace asmNs = "urn:schemas-microsoft-com:asm.v1";
-
         var assemblyBinding = runtime.Elements(asmNs + "assemblyBinding").FirstOrDefault();
-
         if (assemblyBinding == null)
         {
             assemblyBinding = new XElement(asmNs + "assemblyBinding");
             runtime.Add(assemblyBinding);
         }
-
         var probing = assemblyBinding.Element(asmNs + "probing");
-
         if (probing == null)
         {
             assemblyBinding.Add(new XElement(
@@ -469,46 +444,35 @@ public partial class FileScanner
         {
             probing.SetAttributeValue("privatePath", "libs");
         }
-
         doc.Save(appConfigPath);
     }
-
     private static void SetOrAddElement(XElement parent, string elementName, string value)
     {
         var element = parent.Element(elementName);
-
         if (element == null)
         {
             parent.Add(new XElement(elementName, value));
             return;
         }
-
         element.Value = value;
     }
-
     private static void RemoveElement(XElement parent, string elementName)
     {
         parent.Elements(elementName).Remove();
     }
-
     private static string GetBackupFilePath(string filePath)
     {
         string backupPath = filePath + ".bak";
-
         if (!File.Exists(backupPath))
             return backupPath;
-
         for (int i = 1; i < 10_000; i++)
         {
             backupPath = $"{filePath}.{i}.bak";
-
             if (!File.Exists(backupPath))
                 return backupPath;
         }
-
         throw new IOException("Не удалось создать имя backup-файла.");
     }
-
     private static string GetValue(XDocument doc, XNamespace ns, string elementName, string defaultValue)
     {
         return doc.Descendants(ns + elementName)
@@ -517,7 +481,6 @@ public partial class FileScanner
                   ?.Trim()
                ?? defaultValue;
     }
-
     #endregion
 
     #region Compile helpers
@@ -615,11 +578,12 @@ public partial class FileScanner
     }
     private static string NormalizeRelativePath(string path)
     {
-        return (path ?? string.Empty)
-            .Replace('/', Path.DirectorySeparatorChar)
-            .Replace('\\', Path.DirectorySeparatorChar)
-            .TrimStart(Path.DirectorySeparatorChar)
-            .Trim();
+        if (string.IsNullOrEmpty(path))
+            return string.Empty;
+        path = path.Replace('\\', '/');
+        if (path.StartsWith("/"))
+            path = path.TrimStart('/');
+        return path;
     }
     #endregion
 

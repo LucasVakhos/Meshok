@@ -1,4 +1,5 @@
-#nullable disable
+#nullable enable
+using System.Diagnostics.CodeAnalysis;
 namespace AppCleaner
 {
     public static class EnumClassExtension
@@ -25,6 +26,21 @@ namespace AppCleaner
                 .GetCustomAttributes(typeof(TAttribute), false)
                 .Cast<TAttribute>()
                 .FirstOrDefault();
+        }
+        public static TValue GetEnumValueByDescription<TEnum, TValue>(
+            this TEnum enumValue,
+            Func<TEnum, string> descriptionSelector)
+        {
+            var type = typeof(TEnum);
+            if (!type.IsEnum)
+                throw new ArgumentException("TEnum must be an enumerated type");
+            var enumValues = Enum.GetValues(type);
+            foreach (var value in enumValues)
+            {
+                if (value.ToString() == enumValue.ToString())
+                    return (TValue)value;
+            }
+            return default;
         }
     }
 }

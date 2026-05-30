@@ -6,9 +6,7 @@ using DevExpress.XtraLayout;
 using DevExpress.XtraLayout.Utils;
 using System.Diagnostics;
 using System.Text;
-
 namespace AppCleaner;
-
 public partial class FileScanner : XtraUserControl
 {
     private const int UiUpdateIntervalMs = 500;
@@ -30,6 +28,7 @@ public partial class FileScanner : XtraUserControl
         "appsettings.json",
         "web.config"
     };
+
     private readonly ScannerSetting _store = new();
     private readonly System.Windows.Forms.Timer _uiTimer = new();
     private CancellationTokenSource? _operationCts;
@@ -39,6 +38,7 @@ public partial class FileScanner : XtraUserControl
     private readonly List<ComboNetItems> _netItems = new();
     private ComboToDoItems TodoType => _todoType;
     private ComboToDoItems _todoType;
+
     
     public FileScanner()
     {
@@ -58,8 +58,17 @@ public partial class FileScanner : XtraUserControl
         SetSelectedTodoFromStore();
         SetSelectedNetFromStore();
         RefreshPathComboBoxes();
+
+        cboSelectToDo.SelectedIndex = _store.SelectedActionIndex;
+
+        _todoType = GetTodoBySelectedIndex();
+
+        UpdatePathFilters(_todoType);
+
         SetupLayouts();
         SyncPathEditorFromStore();
+        _store.RefreshCommandStates();
+
         RefreshUi();
     }
     private void InitializeBindings()
@@ -100,13 +109,10 @@ public partial class FileScanner : XtraUserControl
     private void InitializeComboBoxes()
     {
         RefreshPathComboBoxes();
-
         cboSearchExt.Properties.Items.Clear();
         cboSearchExt.Properties.Items.AddRange(FilePatterns.AllPatterns);
-
         cboSelectToDo.Properties.Items.Clear();
         _todoItems.Clear();
-
         foreach (var item in Enum.GetValues<ComboToDoItems>()
                      .OrderBy(x => x.GetAttribute<ComboItemAttribute>()?.Name ?? x.ToString()))
         {
@@ -114,38 +120,29 @@ public partial class FileScanner : XtraUserControl
             cboSelectToDo.Properties.Items.Add(
                 item.GetAttribute<ComboItemAttribute>()?.Name ?? item.ToString());
         }
-
         SetSelectedTodoFromStore();
-
         cboNET.Properties.Items.Clear();
         _netItems.Clear();
-
         foreach (var item in Enum.GetValues<ComboNetItems>())
         {
             _netItems.Add(item);
             cboNET.Properties.Items.Add(GetDisplayName(item));
         }
-
         SetSelectedNetFromStore();
     }
-
     private ComboNetItems GetNetBySelectedIndex()
     {
         int index = cboNET.SelectedIndex;
-
         return index >= 0 && index < _netItems.Count
             ? _netItems[index]
             : default;
     }
-
     private void SetSelectedNetFromStore()
     {
         var net = Enum.IsDefined(typeof(ComboNetItems), _store.NETVersion)
             ? _store.NETVersion
             : ComboNetItems.net80;
-
         int index = _netItems.IndexOf(net);
-
         if (index < 0)
         {
             index = 0;
@@ -153,9 +150,7 @@ public partial class FileScanner : XtraUserControl
                 ? _netItems[index]
                 : ComboNetItems.net80;
         }
-
         _suppressNetEditValueChanged = true;
-
         try
         {
             cboNET.SelectedIndex = index;
@@ -285,26 +280,21 @@ public partial class FileScanner : XtraUserControl
     {
         return TodoType;
     }
-
     private ComboToDoItems GetTodoBySelectedIndex()
     {
         int index = cboSelectToDo.SelectedIndex;
-
         return index >= 0 && index < _todoItems.Count
             ? _todoItems[index]
             : default;
     }
-
     private void SetSelectedTodoFromStore()
     {
         var todo = Enum.IsDefined(typeof(ComboToDoItems), _store.SelectedActionIndex)
             ? (ComboToDoItems)_store.SelectedActionIndex
             : default;
-
         int index = _todoItems.IndexOf(todo);
         if (index < 0)
             index = 0;
-
         cboSelectToDo.SelectedIndex = index;
         _todoType = GetTodoBySelectedIndex();
         _store.SelectedActionIndex = (int)_todoType;
@@ -334,15 +324,58 @@ public partial class FileScanner : XtraUserControl
     {
         _store.SearchPattern = cboSearchExt.EditValue?.ToString() ?? "*.cs";
     }
+
+    #region UpdatePathFilters
+
     private void cboSelectToDo_SelectedIndexChanged(object sender, EventArgs e)
     {
         _todoType = GetTodoBySelectedIndex();
+
         _store.SelectedActionIndex = (int)_todoType;
+
+        UpdatePathFilters(_todoType);
 
         SetupLayouts();
         SyncPathEditorFromStore();
         _store.RefreshCommandStates();
     }
+
+    private void UpdatePathFilters(ComboToDoItems action)
+    {
+        FillCombo(cboSearchFolder, _store.GetPathes(action, true));
+        FillCombo(cboPlaceFolder, _store.GetPathes(action, false));
+
+        cboSearchFolder.Text = _store.GetSearchValue(action) ?? string.Empty;
+        cboPlaceFolder.Text = _store.GetPlaceValue(action) ?? string.Empty;
+    }
+
+    private static void FillCombo(ComboBoxEdit combo, string[] items)
+    {
+        combo.Properties.Items.BeginUpdate();
+
+        try
+        {
+            combo.Properties.Items.Clear();
+            combo.Properties.Items.AddRange(items.Cast<object>().ToArray());
+        }
+        finally
+        {
+            combo.Properties.Items.EndUpdate();
+        }
+    }
+    private void cboSearchFolder_EditValueChanged(object sender, EventArgs e)
+    {
+        _store.SetSearchValue(_todoType, cboSearchFolder.Text);
+    }
+
+    private void cboPlaceFolder_EditValueChanged(object sender, EventArgs e)
+    {
+        _store.SetPlaceValue(_todoType, cboPlaceFolder.Text);
+    }
+
+    
+    #endregion
+
     private void cboDRY_RUN_EditValueChanged(object sender, EventArgs e)
     {
         _store.DryRunIndex = cboDRY_RUN.SelectedIndex;
@@ -385,20 +418,14 @@ public partial class FileScanner : XtraUserControl
         SelectPath(sender as ButtonEdit);
     }
     #endregion
-    
     #region UI helpers
-    private void SelectPath(ButtonEdit selector)
+    void SelectPath(ButtonEdit selector)
     {
-        if (selector == null)
-            return;
-
+        if (selector == null) throw new ArgumentNullException(nameof(selector));
         string? selectedPath = ShowPathDialog();
-
         if (string.IsNullOrWhiteSpace(selectedPath))
             return;
-
         selector.EditValue = selectedPath;
-
         UpdatePathsFromEditor();
         _store.RefreshCommandStates();
     }
@@ -408,7 +435,6 @@ public partial class FileScanner : XtraUserControl
             TodoType == ComboToDoItems.DeleteNonProjectFiles ||
             TodoType == ComboToDoItems.SyncProjectFileWithSample ||
             TodoType == ComboToDoItems.ConvertOldCsprojToSdkStyle;
-        
         if (useFileDialog)
         {
             return openFileDlg.ShowDialog() == DialogResult.OK
@@ -573,16 +599,13 @@ public partial class FileScanner : XtraUserControl
     {
         if (_suppressNetEditValueChanged)
             return;
-
         _store.NETVersion = GetNetBySelectedIndex();
     }
     private string GetLogFileName()
     {
         string name = TodoType.ToString();
-
         foreach (var ch in Path.GetInvalidFileNameChars())
             name = name.Replace(ch, '_');
-
         return $"{name}.log";
     }
     private void btnSave_Click(object sender, EventArgs e)
@@ -596,15 +619,12 @@ public partial class FileScanner : XtraUserControl
             DefaultExt = "log",
             AddExtension = true
         };
-
         if (dlg.ShowDialog() != DialogResult.OK)
             return;
-
         File.WriteAllText(
             dlg.FileName,
             logMemo.Text,
             Encoding.UTF8);
-
         Process.Start(new ProcessStartInfo
         {
             FileName = "devenv.exe",
