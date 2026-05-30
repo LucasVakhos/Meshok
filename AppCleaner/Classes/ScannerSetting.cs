@@ -4,23 +4,9 @@ using System.Configuration;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 namespace AppCleaner;
-
-public enum PathFilterType
-{
-    Folder,
-    Project
-}
-public sealed class ActionSettings
-{
-    public PathFilterType SearchPathType { get; init; }
-    public PathFilterType PlacePathType { get; init; }
-    [Saved]
-    public string? SearchValue { get; set; }
-    [Saved]
-    public string? PlaceValue { get; set; }  
-}
 public sealed class ScannerSetting : INotifyPropertyChanged
 {
+    [Saved]
     public Dictionary<ComboToDoItems, ActionSettings> ActionSettings { get; } = new()
     {
         [ComboToDoItems.DeleteEmpty] = new() { SearchPathType = PathFilterType.Folder, PlacePathType = PathFilterType.Folder },
@@ -59,25 +45,6 @@ public sealed class ScannerSetting : INotifyPropertyChanged
             .ToArray();
     }
 
-    public string? GetSearchValue(ComboToDoItems action)
-    {
-        return GetActionSettings(action).SearchValue;
-    }
-
-    public string? GetPlaceValue(ComboToDoItems action)
-    {
-        return GetActionSettings(action).PlaceValue;
-    }
-
-    public void SetSearchValue(ComboToDoItems action, string? value)
-    {
-        GetActionSettings(action).SearchValue = value;
-    }
-
-    public void SetPlaceValue(ComboToDoItems action, string? value)
-    {
-        GetActionSettings(action).PlaceValue = value;
-    }
     private string _findText = string.Empty;
     private string _replaceText = string.Empty;
     private string _searchFolder = string.Empty;
@@ -288,17 +255,18 @@ public sealed class ScannerSetting : INotifyPropertyChanged
     public void SaveToIni()
     {
         AddPathesFromMarkedProperties();
+
         var ini = new IniFile();
         ini.SaveObject(this);
-        //ini.SaveActionSettings(ActionSettings);
     }
     public void LoadFromIni()
     {
         var ini = new IniFile();
         ini.LoadObject(this);
-        //ini.LoadActionSettings(ActionSettings);
+
         if (!Enum.IsDefined(typeof(ComboNetItems), NETVersion))
             NETVersion = ComboNetItems.net80;
+
         RefreshCommandStates();
     }
     public void IncFiles()
@@ -370,6 +338,37 @@ public sealed class ScannerSetting : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    public string? GetSearchValue(ComboToDoItems action)
+    {
+        return GetActionSettings(action).SearchValue;
+    }
+
+    public string? GetPlaceValue(ComboToDoItems action)
+    {
+        return GetActionSettings(action).PlaceValue;
+    }
+
+    public void SetSearchValue(ComboToDoItems action, string? value)
+    {
+        GetActionSettings(action).SearchValue = value;
+    }
+
+    public void SetPlaceValue(ComboToDoItems action, string? value)
+    {
+        GetActionSettings(action).PlaceValue = value;
+    }
+
+    public void SetCurrentActionValues(ComboToDoItems action, string? searchValue, string? placeValue)
+    {
+        var settings = GetActionSettings(action);
+
+        settings.SearchValue = searchValue ?? string.Empty;
+        settings.PlaceValue = placeValue ?? string.Empty;
+
+        AddPathes(searchValue);
+        AddPathes(placeValue);
+    }
     private bool SetField<T>(
         ref T field,
         T value,
@@ -380,28 +379,5 @@ public sealed class ScannerSetting : INotifyPropertyChanged
         field = value;
         OnPropertyChanged(propertyName!);
         return true;
-    }
-    public PathFilterType GetSearchPathType(ComboToDoItems action)
-    {
-        return action switch
-        {
-            ComboToDoItems.DeleteNonProjectFiles => PathFilterType.Project,
-            ComboToDoItems.SyncProjectFileWithSample => PathFilterType.Project,
-            ComboToDoItems.ConvertOldCsprojToSdkStyle => PathFilterType.Project,
-            ComboToDoItems.CollectUsingPackages => PathFilterType.Project,
-            ComboToDoItems.CollectAllNameSpaces => PathFilterType.Project,
-            ComboToDoItems.ClearNameSpace => PathFilterType.Project,
-            _ => PathFilterType.Folder
-        };
-    }
-
-    public PathFilterType GetPlacePathType(ComboToDoItems action)
-    {
-        return action switch
-        {
-            ComboToDoItems.SyncProjectFileWithSample => PathFilterType.Project,
-            ComboToDoItems.ConvertOldCsprojToSdkStyle => PathFilterType.Project,
-            _ => PathFilterType.Folder
-        };
-    }
+    }    
 }

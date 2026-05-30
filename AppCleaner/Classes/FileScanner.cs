@@ -186,6 +186,8 @@ public partial class FileScanner : XtraUserControl
         if (!ValidateSelected())
             return;
         SaveCurrentUiStateToStore();
+
+        _store.SetCurrentActionValues(_todoType, cboSearchFolder.Text, cboPlaceFolder.Text);
         _store.SaveToIni();
         BeginOperation();
         try
@@ -348,7 +350,6 @@ public partial class FileScanner : XtraUserControl
         cboSearchFolder.Text = _store.GetSearchValue(action) ?? string.Empty;
         cboPlaceFolder.Text = _store.GetPlaceValue(action) ?? string.Empty;
     }
-
     private static void FillCombo(ComboBoxEdit combo, string[] items)
     {
         combo.Properties.Items.BeginUpdate();
@@ -366,14 +367,16 @@ public partial class FileScanner : XtraUserControl
     private void cboSearchFolder_EditValueChanged(object sender, EventArgs e)
     {
         _store.SetSearchValue(_todoType, cboSearchFolder.Text);
+        _store.AddPathes(cboSearchFolder.Text);
+        _store.RefreshCommandStates();
     }
 
     private void cboPlaceFolder_EditValueChanged(object sender, EventArgs e)
     {
         _store.SetPlaceValue(_todoType, cboPlaceFolder.Text);
-    }
-
-    
+        _store.AddPathes(cboPlaceFolder.Text);
+        _store.RefreshCommandStates();
+    }   
     #endregion
 
     private void cboDRY_RUN_EditValueChanged(object sender, EventArgs e)
@@ -632,4 +635,5 @@ public partial class FileScanner : XtraUserControl
             UseShellExecute = true
         });
     }
+
 }

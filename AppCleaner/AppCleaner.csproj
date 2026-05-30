@@ -40,6 +40,7 @@
 
 	<!-- Явное включение всех Compile -->
 	<ItemGroup>
+		<Compile Include="Classes\ActionSettings.cs" />
 		<Compile Include="Classes\FilePatterns.cs" />
 		<Compile Include="Classes\FileScanner.cs" />
 		<Compile Include="Classes\FileScanner.Designer.cs" />
@@ -66,6 +67,7 @@
 		</Compile>
 		<Compile Include="Classes\IniFile.cs" />
 		<Compile Include="Classes\MainFormState.cs" />
+		<Compile Include="Classes\PathFilterType.cs" />
 		<Compile Include="Classes\ScannerSetting.cs" />
 		<Compile Include="Ext\ComboItemAttribute.cs" />
 		<Compile Include="Ext\ComboNetItems.cs" />

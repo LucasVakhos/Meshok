@@ -108,7 +108,7 @@ public sealed class IniFile
         }
     }
 
-    private void SaveActionSettings(string propertyName, Dictionary<ComboToDoItems, ActionSettings> settings)
+    public void SaveActionSettings(string propertyName, Dictionary<ComboToDoItems, ActionSettings> settings)
     {
         foreach (var pair in settings)
         {
@@ -119,7 +119,7 @@ public sealed class IniFile
         }
     }
 
-    private void LoadActionSettings(string propertyName, Dictionary<ComboToDoItems, ActionSettings> settings)
+    public void LoadActionSettings(string propertyName, Dictionary<ComboToDoItems, ActionSettings> settings)
     {
         foreach (var pair in settings)
         {
@@ -342,4 +342,5 @@ public sealed class IniFile
             .Replace("%0A", "\n", StringComparison.OrdinalIgnoreCase)
             .Replace("%25", "%", StringComparison.OrdinalIgnoreCase);
     }
+
 }
