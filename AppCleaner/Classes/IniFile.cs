@@ -19,8 +19,7 @@ public sealed class IniFile
 
     private readonly string _filePath;
 
-    private readonly Dictionary<string, Dictionary<string, string>> _sections =
-        new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, Dictionary<string, string>> _sections = new(StringComparer.OrdinalIgnoreCase);
 
     public IniFile()
         : this(DefaultFilePath)
