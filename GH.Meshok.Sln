@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "A.Cleaner", "A.Cleaner", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GH.Components.Old", "F:\C-Sharp\GH.Controls\Controls\GH.Components.Old.csproj", "{03AF1818-71D1-40E0-A3C8-89A695C1BE7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailsChecker.Lib", "EmailsCheker\EmailChecker.Lib\EmailsChecker.Lib.csproj", "{4F0411AD-0926-401C-C0FC-8A926902A42B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MehokBrowser", "MehokBrowser\MehokBrowser.csproj", "{6AD9B0A5-75DD-CF57-C49C-C7C1270CC97F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsMaker", "NewsMaker\NewsMaker.csproj", "{AA3962AF-1C48-46E0-A1A8-B7B05FE2609E}"
@@ -39,10 +37,6 @@ Global
 		{03AF1818-71D1-40E0-A3C8-89A695C1BE7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03AF1818-71D1-40E0-A3C8-89A695C1BE7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03AF1818-71D1-40E0-A3C8-89A695C1BE7C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4F0411AD-0926-401C-C0FC-8A926902A42B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F0411AD-0926-401C-C0FC-8A926902A42B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F0411AD-0926-401C-C0FC-8A926902A42B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F0411AD-0926-401C-C0FC-8A926902A42B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6AD9B0A5-75DD-CF57-C49C-C7C1270CC97F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6AD9B0A5-75DD-CF57-C49C-C7C1270CC97F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AD9B0A5-75DD-CF57-C49C-C7C1270CC97F}.Release|Any CPU.ActiveCfg = Release|Any CPU
