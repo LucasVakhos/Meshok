@@ -20,7 +20,9 @@ public sealed class ScannerSetting : INotifyPropertyChanged
         [ComboToDoItems.DeleteNonProjectFiles] = new() { SearchPathType = PathFilterType.Project, PlacePathType = PathFilterType.Folder },
         [ComboToDoItems.SyncProjectFileWithSample] = new() { SearchPathType = PathFilterType.Project, PlacePathType = PathFilterType.Project },
         [ComboToDoItems.ConvertOldCsprojToSdkStyle] = new() { SearchPathType = PathFilterType.Project, PlacePathType = PathFilterType.Project },
-        [ComboToDoItems.TranslateEnglishToRussian] = new() { SearchPathType = PathFilterType.Folder, PlacePathType = PathFilterType.Folder }
+        [ComboToDoItems.TranslateEnToRu] = new() { SearchPathType = PathFilterType.Folder, PlacePathType = PathFilterType.Folder },
+        [ComboToDoItems.NormalizeMethodSignatures] = new() { SearchPathType = PathFilterType.Folder, PlacePathType = PathFilterType.Folder },
+        [ComboToDoItems.RestoreCSharpFilesFromBak] = new() { SearchPathType = PathFilterType.Folder, PlacePathType = PathFilterType.Folder },
     };
 
     public ActionSettings GetActionSettings(ComboToDoItems action)

@@ -273,8 +273,12 @@ public partial class FileScanner : XtraUserControl
                 => Task.Run(() => ConvertOldCsprojToSdkStyle(
                     _store.ProjectFile,
                     _store.NETVersion), cancellationToken),
-            ComboToDoItems.TranslateEnglishToRussian
-                => Task.Run(() => TranslateEnglishInFolderAsync(cancellationToken), cancellationToken),
+            ComboToDoItems.TranslateEnToRu
+                => Task.Run(() => TranslateEnToRuFolderAsync(cancellationToken), cancellationToken),
+            ComboToDoItems.NormalizeMethodSignatures
+                => Task.Run(() => NormalizeMethodSignaturesFolderAsync(cancellationToken), cancellationToken),
+            ComboToDoItems.RestoreCSharpFilesFromBak
+            => Task.Run(() => RestoreCSharpFilesFromBakFolderAsync(cancellationToken), cancellationToken),
             _ => Task.CompletedTask
         };
     }

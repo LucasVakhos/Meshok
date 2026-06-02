@@ -18,8 +18,8 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 	<ItemGroup>
-	  <None Remove="Forms\**" />
-	  <None Remove="Properties\**" />
+		<None Remove="Forms\**" />
+		<None Remove="Properties\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -50,7 +50,13 @@
 		<Compile Include="Classes\FileScanner.ProcessNamespaces.cs">
 			<DependentUpon>FileScanner.cs</DependentUpon>
 		</Compile>
+		<Compile Include="Classes\FileScanner.ProcessNormalizeMethods.cs">
+			<DependentUpon>FileScanner.cs</DependentUpon>
+		</Compile>
 		<Compile Include="Classes\FileScanner.ProcessOtherFiles.cs">
+			<DependentUpon>FileScanner.cs</DependentUpon>
+		</Compile>
+		<Compile Include="Classes\FileScanner.ProcessRestoreBackup.cs">
 			<DependentUpon>FileScanner.cs</DependentUpon>
 		</Compile>
 		<Compile Include="Classes\FileScanner.ProcessScanFiles.cs">

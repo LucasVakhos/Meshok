@@ -27,6 +27,10 @@ namespace AppCleaner
         [ComboItem(Name = "Конвертировать старый csproj в SDK-style...", SearchLabel = "Старый Project:", PlaceLabel = "Новый Project:")]
         ConvertOldCsprojToSdkStyle,
         [ComboItem(Name = "Перевести английский текст на русский в файлах проекта (включая комментарии)...")]
-        TranslateEnglishToRussian,
+        TranslateEnToRu,
+        [ComboItem(Name = "Нормализовать сигнатуры методов...")]
+        NormalizeMethodSignatures,
+        [ComboItem(Name = "Восстановление файлов CSharp из Bak...")]
+        RestoreCSharpFilesFromBak,
     }
 }
