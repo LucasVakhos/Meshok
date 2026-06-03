@@ -7,13 +7,13 @@ namespace GH.Components
     public partial class NavFrame
     {
         private bool _isBase = false;
-        [GH.ComponentsProperty, Browsable(false)]
+        [GHProperty, Browsable(false)]
         public bool IsBase => _isBase;
         private BarButtonItem _barButton;
         public BarButtonItem BarButton { get => _barButton; set => _barButton = value; }
         private RibbonStatusBar _statusBar;
         FrameHolder Holder => FrameHolder.Holder;
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         public RibbonStatusBar StatusBar { get => _statusBar; set => _statusBar = value; }
         public override void SelectFrame()
         {

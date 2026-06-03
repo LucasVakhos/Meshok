@@ -32,5 +32,7 @@ namespace AppCleaner
         NormalizeMethodSignatures,
         [ComboItem(Name = "Восстановление файлов CSharp из Bak...")]
         RestoreCSharpFilesFromBak,
+        [ComboItem(Name = "Восстановление using в указанном проекте...", SearchLabel = "Recovery project:", PlaceLabel = "Sample project:")]
+        RestoreMissingUsings
     }
 }

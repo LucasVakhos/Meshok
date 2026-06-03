@@ -18,6 +18,7 @@ public partial class FileScanner
         {
             ComboToDoItems.DeleteNonProjectFiles => ValidateProjectFile(),
             ComboToDoItems.SyncProjectFileWithSample => ValidateSyncProjectFileWithSample(),
+            ComboToDoItems.RestoreMissingUsings => ValidateSyncProjectFileWithSample(),
             ComboToDoItems.ConvertOldCsprojToSdkStyle => ValidateConvertOldCsprojToSdkStyle(),
             ComboToDoItems.FindValueOrClassAddScaveToProject => ValidateFindAddToProject(),
             ComboToDoItems.FindAndReplace => ValidateFolder() && ValidateFindText(),

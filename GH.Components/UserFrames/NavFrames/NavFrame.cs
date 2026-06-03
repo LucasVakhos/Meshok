@@ -7,7 +7,7 @@ namespace GH.Components
     public partial class NavFrame : SavedFrame, INavBarGroupFrame
     {
         protected NavBarGroup _group;
-        [GH.ComponentsProperty, Browsable(false)]
+        [GHProperty, Browsable(false)]
         public virtual NavBarGroup Group
         {
             get

@@ -1,4 +1,10 @@
-﻿namespace GH.Components
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+
+namespace GH.Components
 {
     public class VersionHelper : IComparable<Version>
     {

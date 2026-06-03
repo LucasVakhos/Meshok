@@ -1,4 +1,6 @@
-﻿namespace GH.Components
+﻿using System;
+
+namespace GH.Components
 {
     public class NotImplemented : NotImplementedException
     {

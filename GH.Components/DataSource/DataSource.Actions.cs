@@ -9,13 +9,13 @@ namespace GH.Components
     {
         private IList<NavBarItem> _navbaritems = null;
         private bool _supportDataActions = true;
-        [GH.ComponentsProperty, DefaultValue(true), Description("Ставьте (SupportDataActions=false) если не нужно поддерживать ActionList")]
+        [GHProperty, DefaultValue(true), Description("Ставьте (SupportDataActions=false) если не нужно поддерживать ActionList")]
         public bool SupportDataActions { get => _supportDataActions; set => _supportDataActions = value; }
         private bool _supportPopupMenu = true;
         private bool? _cansearch;
-        [GH.ComponentsProperty, DefaultValue(true), Description("Ставьте (SupportPopupMenu=false) если не нужно поддерживать ActionList")]
+        [GHProperty, DefaultValue(true), Description("Ставьте (SupportPopupMenu=false) если не нужно поддерживать ActionList")]
         public bool SupportPopupMenu { get => _supportPopupMenu; set => _supportPopupMenu = value; }
-        [GH.ComponentsProperty, DefaultValue(false)]
+        [GHProperty, DefaultValue(false)]
         public bool CreateAdditionalActions { get; set; } = false;
         private bool InitActions()
         {
@@ -361,11 +361,11 @@ namespace GH.Components
             }
             return (bool)_cansearch;
         }
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event CreateAdditional OnAdditionalActionCreate;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EventHandler OnAdditionalActionExecute;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EventHandler OnAdditionalActionUpdate;
     }
 }

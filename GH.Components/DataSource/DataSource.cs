@@ -55,17 +55,17 @@ namespace GH.Components
             }
         }
         private bool _isLocalDataSet = false;
-        [GH.ComponentsProperty, DefaultValue(false), Description("Ставьте (IsLocalDataSet=true) если не нужно получать данные из другого источника а не из базы данных")]
+        [GHProperty, DefaultValue(false), Description("Ставьте (IsLocalDataSet=true) если не нужно получать данные из другого источника а не из базы данных")]
         public bool IsLocalDataSet { get => _isLocalDataSet; set => _isLocalDataSet = value; }
         private bool _onlyOneRecordInDataSet = false;
-        [GH.ComponentsProperty, DefaultValue(false), Description("Ставьте (OnlyOneRecordInDataSet=true) если нужно отображать только одну запись")]
+        [GHProperty, DefaultValue(false), Description("Ставьте (OnlyOneRecordInDataSet=true) если нужно отображать только одну запись")]
         public bool OnlyOneRecordInDataSet
         {
             get { return _onlyOneRecordInDataSet; }
             set { _onlyOneRecordInDataSet = value; }
         }
         DataSource _masterDataSource;
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         [Editor(typeof(DataSourceListEditor), typeof(UITypeEditor))]
         public DataSource MasterDataSource
         {
@@ -85,7 +85,7 @@ namespace GH.Components
                 }
             }
         }
-        [GH.ComponentsProperty, DefaultValue(true)]
+        [GHProperty, DefaultValue(true)]
         public bool AllowSaveCancel
         {
             get => _allowSaveCancel;
@@ -95,33 +95,33 @@ namespace GH.Components
             }
         }
         private GridColumn _colQty;
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         public GridColumn ColQty { get => _colQty; set => _colQty = value; }
         DetailsList _detailSources = new DetailsList();
         private bool _needFocusGrid = true;
-        [GH.ComponentsProperty, DefaultValue(true), Description("Устанавливать фокус на сетку")]
+        [GHProperty, DefaultValue(true), Description("Устанавливать фокус на сетку")]
         public bool NeedFocusGrid { get => _needFocusGrid; set => _needFocusGrid = value; }
         private bool _needLoadingAnimate = true;
-        [GH.ComponentsProperty, DefaultValue(true), Description("Анимировать загрузку")]
+        [GHProperty, DefaultValue(true), Description("Анимировать загрузку")]
         public bool NeedLoadingAnimate { get => _needLoadingAnimate; set => _needLoadingAnimate = value; }
         private bool _immediatePostInsert = false;
-        [GH.ComponentsProperty, DefaultValue(false), Description("Немедленно Post после Insert")]
+        [GHProperty, DefaultValue(false), Description("Немедленно Post после Insert")]
         public bool ImmediatePostInsert { get => _immediatePostInsert; set => _immediatePostInsert = value; }
         private bool _askForDelete = true;
-        [GH.ComponentsProperty, DefaultValue(true), Description("Задать вопрос при удалении")]
+        [GHProperty, DefaultValue(true), Description("Задать вопрос при удалении")]
         public bool AskForDelete { get => _askForDelete; set => _askForDelete = value; }
         private bool _deleteAsUpdate;
-        [GH.ComponentsProperty, DefaultValue(false), Description("Обновить вместо удаления")]
+        [GHProperty, DefaultValue(false), Description("Обновить вместо удаления")]
         public bool DeleteAsUpdate { get => _deleteAsUpdate; set => _deleteAsUpdate = value; }
         private bool _refreshAfterPost = true;
-        [GH.ComponentsProperty, DefaultValue(true), Description("Обновить вместо удаления")]
+        [GHProperty, DefaultValue(true), Description("Обновить вместо удаления")]
         public bool RefreshAfterPost { get => _refreshAfterPost; set => _refreshAfterPost = value; }
         internal EditGrants _editGrants = new EditGrants(false, false, false);
         private bool _allowEdit = true;
         private bool _allowRemove = true;
-        [GH.ComponentsProperty, DefaultValue(false)]
+        [GHProperty, DefaultValue(false)]
         public bool ReadOnly { get => _readOnly; set => _readOnly = value; }
-        [GH.ComponentsProperty, DefaultValue(true)]
+        [GHProperty, DefaultValue(true)]
         public bool AllowInsert
         {
             get => _allowNew;
@@ -130,7 +130,7 @@ namespace GH.Components
                 _allowNew = value;
             }
         }
-        [GH.ComponentsProperty, DefaultValue(true)]
+        [GHProperty, DefaultValue(true)]
         public bool AllowUdate
         {
             get => _allowEdit;
@@ -139,7 +139,7 @@ namespace GH.Components
                 _allowEdit = value;
             }
         }
-        [GH.ComponentsProperty, DefaultValue(true)]
+        [GHProperty, DefaultValue(true)]
         public bool AllowDelete
         {
             get => _allowRemove;
@@ -171,7 +171,7 @@ namespace GH.Components
         [Browsable(false)]
         public bool SkipPageSupport => _disablePagesReasons.Count > 0;
         private Control _owner;
-        [GH.ComponentsProperty, Browsable(true), DefaultValue(null)]
+        [GHProperty, Browsable(true), DefaultValue(null)]
         public Control Owner
         {
             get
@@ -188,7 +188,7 @@ namespace GH.Components
             }
         }
         private GridControl _grid;
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         public GridControl Grid
         {
             get => _grid;
@@ -293,20 +293,20 @@ namespace GH.Components
             }
         }
         private ActionList _actionList;
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         public ActionList ActionList { get => _actionList; set => _actionList = value; }
         private ButtonsPanel _buttonsPanel = null;
-        [GH.ComponentsProperty, Browsable(false)]
+        [GHProperty, Browsable(false)]
         public ButtonsPanel ButtonsPanel => _buttonsPanel;
         private PageSupport _pageSupport;
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [GH.ComponentsProperty]
+        [GHProperty]
         public PageSupport PageSupport => _pageSupport;
         internal bool SupportPages => _pageSupport.Supported;
         private DataState _editState = DataState.Browsing;
         private DocSupport _docSupport;
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [GH.ComponentsProperty]
+        [GHProperty]
         public DocSupport DocSupport => _docSupport;
         [Browsable(false)]
         public DataState EditState { get => _editState; }
@@ -1230,57 +1230,57 @@ namespace GH.Components
         {
             CloseOpen();
         }
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EventHandler BeforeOpen;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event OpenHandler OnOpen;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EventHandler AfterOpen;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EventHandler BeforePost;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EventHandler OnPost;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EventHandler AfterPost;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EventHandler OnCancel;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EventHandler AfterCancel;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EventHandler AfterCloseOpenDocument;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event CloseActionUpdateHandler CloseActionUpdate;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event ActionUpdateHandler OnUpdateInnerAction;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event GetActionCaptionHandler GetActionCaption;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event ExportArgumenstHandler GetExportArguments;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EditGrantHandler GetEditGrants;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EventHandler OnDelete;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EventHandler AfterDelete;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EventHandler AfterInsert;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event GetRepository GetRepository;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event GetWhereParamsHandler GetWhereParams;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event EventHandler OnEditBegin;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event CanEditHandler CanEdit;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event ActionWithoutParams OnRefresh;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event ReadOnlyEventHandler CheckControlsReadOnly;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event OnGetSqlString GetSqlString;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event ValidateHandler ValidateControl;
-        [GH.ComponentsEvents]
+        [GHEvents]
         public event YesNoTextHandler GetYesNoText;
     }
 }

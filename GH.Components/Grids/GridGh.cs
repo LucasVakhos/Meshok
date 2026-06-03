@@ -40,7 +40,7 @@ namespace GH.Components
         {
             base.EndInit();
         }
-        [GH.ComponentsProperty, DefaultValue(true)]
+        [GHProperty, DefaultValue(true)]
         public bool SaveLayout { get => _saveLayout; set => _saveLayout = value; }
         public void LoadControls()
         {

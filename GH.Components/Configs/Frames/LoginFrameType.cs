@@ -8,7 +8,7 @@ namespace GH.Components
         private TConfig _config;
         private IList<TUser> _users = null;
         protected virtual IList<TUser> Users { get => _users; set => _users = value; }
-        [GH.ComponentsProperty]
+        [GHProperty]
         public LoginInputType LoginInputType { get; set; }
         public LoginFrameType()
         {

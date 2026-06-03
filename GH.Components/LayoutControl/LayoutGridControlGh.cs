@@ -16,10 +16,10 @@ namespace GH.Components
         }
         [Description("A data-aware control that displays data in one of several views, enables editing data, provides data filtering, sorting, grouping and summary calculation features.")]
         //[Designer("DevExpress.XtraGrid.Design.GridControlDesigner, DevExpress.XtraGrid.v17.2.Design", typeof(IDesigner))]
-        [GH.ComponentsProperty]
+        [GHProperty]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public GridGh Grid => gridGh;
-        [GH.ComponentsProperty]
+        [GHProperty]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public ViewGh GridView => viewGh;
         public override void BeginInit()

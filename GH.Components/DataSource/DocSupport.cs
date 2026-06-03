@@ -6,7 +6,7 @@ namespace GH.Components
     public class DocSupport
     {
         private DataSource _owner;
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         [RefreshProperties(RefreshProperties.Repaint)]
         [Editor(typeof(FieldBoolListEditor), typeof(UITypeEditor))]
         public string CloseOpenField
@@ -21,7 +21,7 @@ namespace GH.Components
                 _owner._closeOpenField = value;
             }
         }
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         [RefreshProperties(RefreshProperties.Repaint)]
         [Editor(typeof(FieldIntListEditor), typeof(UITypeEditor))]
         public string CountField
@@ -36,7 +36,7 @@ namespace GH.Components
                 _owner._countField = value;
             }
         }
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         [RefreshProperties(RefreshProperties.Repaint)]
         [Editor(typeof(FieldIntListEditor), typeof(UITypeEditor))]
         public string StatusField
@@ -51,7 +51,7 @@ namespace GH.Components
                 _owner._statusField = value;
             }
         }
-        [GH.ComponentsProperty, DefaultValue(0)]
+        [GHProperty, DefaultValue(0)]
         [RefreshProperties(RefreshProperties.Repaint)]
         public int StatusOpened
         {
@@ -65,7 +65,7 @@ namespace GH.Components
                     _owner._statusClosed = _owner._statusOpened + 1;
             }
         }
-        [GH.ComponentsProperty, DefaultValue(0)]
+        [GHProperty, DefaultValue(0)]
         [RefreshProperties(RefreshProperties.Repaint)]
         public int StatusClosed
         {

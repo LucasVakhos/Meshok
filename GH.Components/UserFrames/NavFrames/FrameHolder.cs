@@ -36,9 +36,9 @@ namespace GH.Components
         private RibbonStatusBar _statusBar;
         [Browsable(false)]
         public Control Owner { get; set; }
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         public RibbonPageGroup FrameGroup { get => _frameGroup; set => _frameGroup = value; }
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         public NavBarControl NavBar
         {
             get => _navBar;
@@ -51,9 +51,9 @@ namespace GH.Components
                     _navBar.ActiveGroupChanged += NavBar_ActiveGroupChanged;
             }
         }
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         public RibbonControl Ribbon { get => _ribbon; set => _ribbon = value; }
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         public RibbonStatusBar StatusBar { get => _statusBar; set => _statusBar = value; }
         public FrameHolder()
         {

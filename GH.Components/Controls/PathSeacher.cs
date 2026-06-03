@@ -30,7 +30,7 @@ namespace GH.Components
         }
         private XtraOpenFileDialog openFileDialog;
         private ContainerControl _owner;
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         public ContainerControl Owner
         {
             get
@@ -47,7 +47,7 @@ namespace GH.Components
             }
         }
         private CheckEdit _remoteControl;
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         public CheckEdit RemoteControl
         {
             get => _remoteControl;
@@ -63,7 +63,7 @@ namespace GH.Components
             }
         }
         private TextEdit _serverControl;
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         public TextEdit ServerControl
         {
             get => _serverControl;
@@ -74,7 +74,7 @@ namespace GH.Components
                 _serverControl = value;
             }
         }
-        //[GH.ComponentsProperty, DefaultValue(null)]
+        //[GHProperty, DefaultValue(null)]
         //[Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design", typeof(UITypeEditor))]
         //[Localizable(true)]
         //public ComboBoxItemCollection Pathes { get => Properties.Items; set => Properties.Items.Assign(value); }

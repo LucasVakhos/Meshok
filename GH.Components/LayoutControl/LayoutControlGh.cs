@@ -11,9 +11,9 @@ namespace GH.Components
     public class LayoutControlGh : DataLayoutControl, ISavedControl
     {
         private bool _saveLayout = false;
-        [GH.ComponentsProperty, DefaultValue(false)]
+        [GHProperty, DefaultValue(false)]
         public bool SaveLayout { get => _saveLayout; set => _saveLayout = value; }
-        [Browsable(false), GH.ComponentsProperty, DefaultValue(false)]
+        [Browsable(false), GHProperty, DefaultValue(false)]
         public override ISite Site
         {
             get
@@ -34,7 +34,7 @@ namespace GH.Components
             }
         }
         private ContainerControl _owner;
-        [GH.ComponentsProperty]
+        [GHProperty]
         public ContainerControl Owner
         {
             get

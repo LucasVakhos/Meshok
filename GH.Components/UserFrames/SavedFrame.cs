@@ -5,7 +5,7 @@ namespace GH.Components
     {
         Control _activeControl = null;
         private bool _saveLayout = true;
-        [GH.ComponentsProperty, DefaultValue(true)]
+        [GHProperty, DefaultValue(true)]
         public bool SaveLayout { get => _saveLayout; set => _saveLayout = value; }
         new public Control Parent
         {

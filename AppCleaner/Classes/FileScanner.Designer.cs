@@ -1,10 +1,10 @@
+﻿//FileScanner.Designer.cs
 using DevExpress.XtraEditors.Controls;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
-//FileScanner.Designer.cs
 namespace AppCleaner
 {
     [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]

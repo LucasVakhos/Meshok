@@ -16,7 +16,7 @@ namespace GH.Components
         [Browsable(false)]
         public IRibbonForm IMmainForm => RunContext.Instance.MainForm as IRibbonForm;
         private Control _owner;
-        [GH.ComponentsProperty, Browsable(true)]
+        [GHProperty, Browsable(true)]
         public Control Owner
         {
             get => _owner;
@@ -50,7 +50,7 @@ namespace GH.Components
             }
         }
         private Image _smallImage;
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         [Editor("DevExpress.Utils.Design.DXImageEditor, DevExpress.Design.v17.2", typeof(UITypeEditor))]
         public Image Image
         {
@@ -64,7 +64,7 @@ namespace GH.Components
             }
         }
         private Image _largeImage;
-        [GH.ComponentsProperty, DefaultValue(null)]
+        [GHProperty, DefaultValue(null)]
         [Editor("DevExpress.Utils.Design.DXImageEditor, DevExpress.Design.v17.2", typeof(UITypeEditor))]
         public Image LargeImage
         {
@@ -77,7 +77,7 @@ namespace GH.Components
                 _largeImage = value;
             }
         }
-        [GH.ComponentsProperty, Browsable(true)]
+        [GHProperty, Browsable(true)]
         public virtual string Caption { get => Text; set => Text = value; }
         protected void DlgInfo(string message)
         {

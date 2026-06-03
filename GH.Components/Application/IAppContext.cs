@@ -1,4 +1,5 @@
-﻿namespace GH.Components
+﻿using System.Windows.Forms;
+namespace GH.Components
 {
     public interface IAppContext
     {

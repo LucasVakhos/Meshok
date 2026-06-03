@@ -7,6 +7,7 @@ using DevExpress.XtraLayout.Utils;
 using System.Diagnostics;
 using System.Text;
 namespace AppCleaner;
+
 public partial class FileScanner : XtraUserControl
 {
     private const int UiUpdateIntervalMs = 500;
@@ -39,7 +40,7 @@ public partial class FileScanner : XtraUserControl
     private ComboToDoItems TodoType => _todoType;
     private ComboToDoItems _todoType;
 
-    
+
     public FileScanner()
     {
         InitializeComponent();
@@ -113,8 +114,9 @@ public partial class FileScanner : XtraUserControl
         cboSearchExt.Properties.Items.AddRange(FilePatterns.AllPatterns);
         cboSelectToDo.Properties.Items.Clear();
         _todoItems.Clear();
-        foreach (var item in Enum.GetValues<ComboToDoItems>()
-                     .OrderBy(x => x.GetAttribute<ComboItemAttribute>()?.Name ?? x.ToString()))
+        foreach (ComboToDoItems item in Enum.GetValues<ComboToDoItems>()
+                     //.OrderBy(x => x.GetAttribute<ComboItemAttribute>()?.Name ?? x.ToString())
+                     )
         {
             _todoItems.Add(item);
             cboSelectToDo.Properties.Items.Add(
@@ -278,7 +280,9 @@ public partial class FileScanner : XtraUserControl
             ComboToDoItems.NormalizeMethodSignatures
                 => Task.Run(() => NormalizeMethodSignaturesFolderAsync(cancellationToken), cancellationToken),
             ComboToDoItems.RestoreCSharpFilesFromBak
-            => Task.Run(() => RestoreCSharpFilesFromBakFolderAsync(cancellationToken), cancellationToken),
+                => Task.Run(() => RestoreCSharpFilesFromBakFolderAsync(cancellationToken), cancellationToken),
+            ComboToDoItems.RestoreMissingUsings
+                => Task.Run(() => RecoveryMissingUsings(cancellationToken), cancellationToken),
             _ => Task.CompletedTask
         };
     }
@@ -380,7 +384,7 @@ public partial class FileScanner : XtraUserControl
         _store.SetPlaceValue(_todoType, cboPlaceFolder.Text);
         _store.AddPathes(cboPlaceFolder.Text);
         _store.RefreshCommandStates();
-    }   
+    }
     #endregion
 
     private void cboDRY_RUN_EditValueChanged(object sender, EventArgs e)
@@ -440,7 +444,7 @@ public partial class FileScanner : XtraUserControl
     {
         bool useFileDialog =
             TodoType == ComboToDoItems.DeleteNonProjectFiles ||
-            TodoType == ComboToDoItems.SyncProjectFileWithSample ||
+            TodoType is ComboToDoItems.SyncProjectFileWithSample or ComboToDoItems.RestoreMissingUsings ||
             TodoType == ComboToDoItems.ConvertOldCsprojToSdkStyle;
         if (useFileDialog)
         {
@@ -507,7 +511,7 @@ public partial class FileScanner : XtraUserControl
         var attr = TodoType.GetAttribute<ComboItemAttribute>();
         bool isFindReplace = TodoType == ComboToDoItems.FindAndReplace;
         bool isFindAdd = TodoType == ComboToDoItems.FindValueOrClassAddScaveToProject;
-        bool isSync = TodoType == ComboToDoItems.SyncProjectFileWithSample;
+        bool isSync = TodoType is ComboToDoItems.SyncProjectFileWithSample or ComboToDoItems.RestoreMissingUsings;
         bool isConvert = TodoType == ComboToDoItems.ConvertOldCsprojToSdkStyle;
         bool isProjectMode = isFindAdd || isSync || isConvert;
         cboSearchFolder.Properties.NullValuePrompt = isConvert

@@ -23,6 +23,7 @@ public sealed class ScannerSetting : INotifyPropertyChanged
         [ComboToDoItems.TranslateEnToRu] = new() { SearchPathType = PathFilterType.Folder, PlacePathType = PathFilterType.Folder },
         [ComboToDoItems.NormalizeMethodSignatures] = new() { SearchPathType = PathFilterType.Folder, PlacePathType = PathFilterType.Folder },
         [ComboToDoItems.RestoreCSharpFilesFromBak] = new() { SearchPathType = PathFilterType.Folder, PlacePathType = PathFilterType.Folder },
+        [ComboToDoItems.RestoreMissingUsings] = new() { SearchPathType = PathFilterType.Project, PlacePathType = PathFilterType.Project },
     };
 
     public ActionSettings GetActionSettings(ComboToDoItems action)
@@ -244,6 +245,9 @@ public sealed class ScannerSetting : INotifyPropertyChanged
             ComboToDoItems.ConvertOldCsprojToSdkStyle =>
                 !string.IsNullOrWhiteSpace(ProjectFile),
             ComboToDoItems.SyncProjectFileWithSample =>
+                !string.IsNullOrWhiteSpace(ProjectFile) &&
+                !string.IsNullOrWhiteSpace(SampleProjectFile),
+            ComboToDoItems.RestoreMissingUsings =>
                 !string.IsNullOrWhiteSpace(ProjectFile) &&
                 !string.IsNullOrWhiteSpace(SampleProjectFile),
             ComboToDoItems.FindValueOrClassAddScaveToProject =>
