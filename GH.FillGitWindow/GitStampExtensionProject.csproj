@@ -11,4 +11,18 @@
 		<PackageReference Include="Microsoft.VisualStudio.Extensibility.Sdk" Version="17.14.40265" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <AdditionalFiles Remove="C:\Users\Admin\.nuget\packages\microsoft.visualstudio.threading.analyzers\17.14.15\buildTransitive\AdditionalFiles\vs-threading.LegacyThreadSwitchingMembers.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Update="C:\Users\Admin\.nuget\packages\microsoft.visualstudio.threading.analyzers\17.14.15\buildTransitive\AdditionalFiles\vs-threading.LegacyThreadSwitchingMembers.txt">
+	    <IncludeInVSIX>true</IncludeInVSIX>
+	  </AdditionalFiles>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Remove="C:\Users\Admin\.nuget\packages\microsoft.visualstudio.threading.analyzers\17.14.15\buildTransitive\AdditionalFiles\vs-threading.LegacyThreadSwitchingMembers.txt" />
+	</ItemGroup>
+
 </Project>

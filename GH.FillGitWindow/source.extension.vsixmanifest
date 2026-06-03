@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="GH.FillGitWindow.0efbffb9-ba6e-4869-95e1-f66288d0b4da" Version="1.0" Language="ru-RU" Publisher="GH.FillGitWindow" />
-        <DisplayName>GH.FillGitWindow</DisplayName>
-        <Description xml:space="preserve">Empty VSIX Project.</Description>
+        <Identity Id="GitStampExtension.b450b6c5-07ce-43d4-a384-09f9110c775a" Version="1.0" Language="ru-RU" Publisher="GH.Programmer" />
+        <DisplayName>GitStampExtensionProject</DisplayName>
+        <Description xml:space="preserve">Расширение для заполнения обязательного окна Git</Description>
+        <Preview>true</Preview>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.14, )">
