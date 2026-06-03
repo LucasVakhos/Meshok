@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "A.Old", "A.Old", "{39126E93
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GH.Components", "GH.Z.Controls\Controls\GH.Components.csproj", "{03AF1818-71D1-40E0-A3C8-89A695C1BE7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitStampExtensionProject", "GH.FillGitWindow\GitStampExtensionProject.csproj", "{F3CC1D35-2A52-41BB-8BD5-E33547B656DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,12 @@ Global
 		{03AF1818-71D1-40E0-A3C8-89A695C1BE7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03AF1818-71D1-40E0-A3C8-89A695C1BE7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03AF1818-71D1-40E0-A3C8-89A695C1BE7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3CC1D35-2A52-41BB-8BD5-E33547B656DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3CC1D35-2A52-41BB-8BD5-E33547B656DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3CC1D35-2A52-41BB-8BD5-E33547B656DD}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{F3CC1D35-2A52-41BB-8BD5-E33547B656DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3CC1D35-2A52-41BB-8BD5-E33547B656DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3CC1D35-2A52-41BB-8BD5-E33547B656DD}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
