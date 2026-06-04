@@ -1,4 +1,6 @@
-﻿using System;
+﻿// GH.Components\NHibernate\Entities\ProtoEntity.cs
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -262,6 +264,22 @@ namespace GH.Components
         {
             AsValue(name, value);
         }
+    }
+
+    public enum DataAction
+    {
+        None,
+        Insert,
+        Update,
+        Delete
+    }
+
+    public enum InfoType
+    {
+        None,
+        Info,
+        Warning,
+        Error
     }
 
 }
