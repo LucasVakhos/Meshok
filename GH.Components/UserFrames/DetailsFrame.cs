@@ -1,4 +1,5 @@
 ﻿using DevExpress.XtraLayout;
+using GH.Components.NHibernate.Entities;
 using System.ComponentModel;
 namespace GH.Components
 {
@@ -8,7 +9,7 @@ namespace GH.Components
         private LayoutControlItem _place;
         private LayoutControlGroup _page;
         private TabbedGroup _pages;
-        [MyProperty, Browsable(false)]
+        [GHProperty, Browsable(false)]
         public LayoutControlItem Place
         {
             get => _place;
@@ -43,7 +44,7 @@ namespace GH.Components
         {
             InitializeComponent();
         }
-        [MyProperty, Browsable(false)]
+        [GHProperty, Browsable(false)]
         public DataSource MasterSource
         {
             get => _masterSource;
@@ -162,7 +163,7 @@ namespace GH.Components
             ((System.ComponentModel.ISupportInitialize)(this.lgRoot)).EndInit();
             this.ResumeLayout(false);
         }
-        [MyEvents]
+        [GHEvents]
         public event EventHandler StateChanged;
     }
 }

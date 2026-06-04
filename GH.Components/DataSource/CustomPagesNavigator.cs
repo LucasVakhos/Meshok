@@ -1,4 +1,5 @@
 ﻿using DevExpress.XtraEditors;
+using GH.Components.NHibernate.Entities;
 using NHibernate;
 using System.ComponentModel;
 namespace GH.Components

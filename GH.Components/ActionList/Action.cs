@@ -414,7 +414,7 @@ namespace GH.Components
                 return;
             handleClick((object)e.Item, (EventArgs)e);
         }
-        private void toolbar_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
+        private void toolbar_ButtonClick(object sender, ToolStripItemClickedEventArgs e)
         {
             if (!targets.Contains((Component)e.Button))
                 return;
