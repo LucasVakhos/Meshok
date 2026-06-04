@@ -147,7 +147,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
             this.ResumeLayout(false);
         }
-        private Controls.LayoutControlGh layoutControlGh1;
+        public GH.Components.LayoutControlGh layoutControl;
+        private GH.Components.LayoutControlGh layoutControlGh1;
         private DevExpress.XtraLayout.LayoutControlGroup rootGroup;
         private DevExpress.XtraEditors.XtraUserControl value;
         private DevExpress.XtraLayout.LayoutControlItem lcControl;

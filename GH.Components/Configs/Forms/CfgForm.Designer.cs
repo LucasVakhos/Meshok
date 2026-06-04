@@ -195,10 +195,11 @@ namespace GH.Components
             ((System.ComponentModel.ISupportInitialize)(this.lcEnter)).EndInit();
             this.ResumeLayout(false);
         }
-        public Components.ActionList actionList;
-        public Components.ActionGh actEnter;
-        public Components.ActionGh actCancel;
-        public Controls.LayoutControlGh layoutControl;
+        public GH.Components.ActionList actionList;
+        public GH.Components.ActionGh actEnter;
+        public GH.Components.ActionGh actCancel;
+        public GH.Components.LayoutControlGh layoutControl;
+        private GH.Components.LayoutControlGh layoutControlGh1;
         public SimpleButton btnEnter;
         public SimpleButton btnCancel;
         public LayoutControlGroup rootGroup;

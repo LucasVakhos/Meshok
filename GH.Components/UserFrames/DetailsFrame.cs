@@ -1,5 +1,4 @@
 ﻿using DevExpress.XtraLayout;
-using GH.Components.NHibernate.Entities;
 using System.ComponentModel;
 namespace GH.Components
 {
