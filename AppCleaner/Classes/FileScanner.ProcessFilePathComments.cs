@@ -1,26 +1,20 @@
 ﻿// Classes\FileScanner.ProcessFilePathComments.cs
-using System.Text;
-
 namespace AppCleaner;
 
 public partial class FileScanner
 {
     private void AddFilePathCommentToCsFiles(CancellationToken cancellationToken)
     {
-        cancellationToken.ThrowIfCancellationRequested();
+        var rootFolder = _store.SearchFolder;
 
         var files = GetFilesForOperation(
-            _store.SearchFolder,
+            rootFolder,
             "*.cs",
             cancellationToken,
-            preferProjectFiles: true,
+            preferProjectFiles: false,
             includeDesignerFiles: false);
 
         _store.SetProgressMaximum(files.Length);
-        AddToLog($"Найдено .cs файлов проекта: {files.Length}");
-
-        var changedCount = 0;
-        var skippedCount = 0;
 
         foreach (var file in files)
         {
@@ -28,77 +22,39 @@ public partial class FileScanner
 
             try
             {
-                var projectRoot = GetProjectRootForFile(file, cancellationToken);
-                var relativePath = GetRelativeFilePath(projectRoot, file);
-                var comment = $"// {relativePath}";
+                var relativePath = Path
+                    .GetRelativePath(rootFolder, file)
+                    .Replace("/", "\\");
+
+                var comment = $"//{relativePath}";
 
                 var encoding = DetectFileEncoding(file);
                 var text = File.ReadAllText(file, encoding);
 
-                if (HasSameHeaderComment(text, comment))
+                // уже есть такой comment
+                if (text.StartsWith(comment + Environment.NewLine))
                 {
-                    skippedCount++;
-                    AddToLog($"[Пропуск] Уже есть comment: {relativePath}");
+                    CountProcessedFile(file);
                     continue;
                 }
 
-                if (!_store.DryRun)
-                {
-                    CreateBackup(file);
+                CreateBackup(file);
 
-                    var newText = comment + Environment.NewLine + text;
-                    File.WriteAllText(file, newText, encoding);
-                }
+                File.WriteAllText(
+                    file,
+                    comment + Environment.NewLine + text,
+                    encoding);
 
-                changedCount++;
-                AddToLog(_store.DryRun
-                    ? $"[DRY RUN] Будет добавлен: {comment}"
-                    : $"[Обновлён] {comment}");
+                AddToLog(comment);
             }
             catch (Exception ex)
             {
-                AddToLog($"[Ошибка] {file} - {ex.Message}");
+                AddToLog($"ERROR {file}: {ex.Message}");
             }
             finally
             {
                 CountProcessedFile(file);
             }
         }
-
-        AddToLog($"Готово. Обновлено: {changedCount}, пропущено: {skippedCount}");
-    }
-
-    private string GetProjectRootForFile(string filePath, CancellationToken cancellationToken)
-    {
-        var folder = Path.GetDirectoryName(filePath);
-
-        while (!string.IsNullOrWhiteSpace(folder))
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            if (Directory.GetFiles(folder, "*.csproj", SearchOption.TopDirectoryOnly).Any())
-                return folder;
-
-            folder = Directory.GetParent(folder)?.FullName;
-        }
-
-        return _store.SearchFolder;
-    }
-
-    private static string GetRelativeFilePath(string rootFolder, string filePath)
-    {
-        var relativePath = Path.GetRelativePath(rootFolder, filePath);
-        return relativePath.Replace("/", "\\");
-    }
-
-    private static bool HasSameHeaderComment(string text, string comment)
-    {
-        if (string.IsNullOrWhiteSpace(text))
-            return false;
-
-        using var reader = new StringReader(text);
-        var firstLine = reader.ReadLine()?.Trim();
-
-        return string.Equals(firstLine, comment, StringComparison.OrdinalIgnoreCase);
     }
 }

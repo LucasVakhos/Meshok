@@ -1,5 +1,5 @@
-using System.Reflection;
 namespace AppCleaner;
+
 static class Program
 {
     /// <summary>

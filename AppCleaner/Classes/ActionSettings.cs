@@ -7,5 +7,5 @@ public sealed class ActionSettings
     [Saved]
     public string? SearchValue { get; set; }
     [Saved]
-    public string? PlaceValue { get; set; }  
+    public string? PlaceValue { get; set; }
 }

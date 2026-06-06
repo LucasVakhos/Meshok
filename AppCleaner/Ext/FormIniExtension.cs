@@ -1,5 +1,6 @@
 ﻿using AppCleaner.Classes;
 namespace AppCleaner;
+
 public static class FormIniExtension
 {
     public static void SaveState(this Form form)

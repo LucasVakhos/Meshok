@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 namespace AppCleaner;
+
 public sealed class ScannerSetting : INotifyPropertyChanged
 {
     [Saved]
@@ -387,5 +388,5 @@ public sealed class ScannerSetting : INotifyPropertyChanged
         field = value;
         OnPropertyChanged(propertyName!);
         return true;
-    }    
+    }
 }

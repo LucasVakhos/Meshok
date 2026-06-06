@@ -1,5 +1,4 @@
 #nullable enable
-using System.Diagnostics.CodeAnalysis;
 namespace AppCleaner
 {
     public static class EnumClassExtension
