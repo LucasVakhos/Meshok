@@ -203,7 +203,7 @@ public partial class FileScanner : XtraUserControl
         {
             AddToLog("Операция отменена пользователем.");
         }
-        catch (Exception ex)
+        catch (System.Exception ex)
         {
             AddToLog($"[Критическая ошибка] {ex.Message}");
             AddToLog(ex.ToString());
@@ -400,7 +400,7 @@ public partial class FileScanner : XtraUserControl
         {
             await StartAsync().ConfigureAwait(true);
         }
-        catch (Exception ex)
+        catch (System.Exception ex)
         {
             AddToLog($"[Критическая ошибка] {ex.Message}");
         }
@@ -519,9 +519,10 @@ public partial class FileScanner : XtraUserControl
         bool isSync = TodoType is ComboToDoItems.SyncProjectFileWithSample or ComboToDoItems.RestoreMissingUsings;
         bool isConvert = TodoType == ComboToDoItems.ConvertOldCsprojToSdkStyle;
         bool isProjectMode = isFindAdd || isSync || isConvert;
-        SetVisibility(ldFOLDERS, isProcessFiles);
+        // ldFOLDERS контрол был удалён из дизайна
+        // SetVisibility(ldFOLDERS, isProcessFiles);
 
-        SetVisibility(lgTODO, TodoType is ComboToDoItems.ClearNameSpace or ComboToDoItems.DeleteNonProjectFiles);
+        SetVisibility(lgToDo, TodoType is ComboToDoItems.ClearNameSpace or ComboToDoItems.DeleteNonProjectFiles);
         
         cboSearchFolder.Properties.NullValuePrompt = isConvert
             ? "Установите старый файл проекта..."
@@ -538,10 +539,11 @@ public partial class FileScanner : XtraUserControl
         SetVisibility(lcNET_Version, isConvert);
         SetVisibility(emptySearchExt, !isProjectMode);
         SetVisibility(lcSearchMask, !isProjectMode);
-        SetVisibility(lgTODO, isFindReplace || isFindAdd || isConvert);
+        SetVisibility(lgToDo, isFindReplace || isFindAdd || isConvert);
         SetVisibility(lcDRY_RUN, TodoType is ComboToDoItems.ClearNameSpace or ComboToDoItems.DeleteNonProjectFiles);
         SetVisibility(lcFind, isFindReplace || isFindAdd);
         SetVisibility(lcReplace, isFindReplace);
+        SetVisibility(lgToDo, isFindReplace || isFindAdd || isConvert);
         SetVisibility(lcPlaceFolder, isFindAdd || isSync);
         cboSearchFolder.Properties.NullValuePrompt = isProjectMode
             ? "Установите файл проекта для сравнения..."

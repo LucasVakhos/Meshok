@@ -17,10 +17,7 @@
 		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
-	<ItemGroup>
-		<None Remove="Forms\**" />
-		<None Remove="Properties\**" />
-	</ItemGroup>
+
 
 	<ItemGroup>
 		<Content Remove="C:\Users\Admin\.nuget\packages\edgesharp.core\0.9.0\contentFiles\any\net5.0\WebView2Loader.dll" />
@@ -31,8 +28,6 @@
 	<ItemGroup>
 		<EmbeddedResource Include="Classes\FileScanner.resx" />
 		<EmbeddedResource Include="MainForm.resx" />
-		<!-- Добавьте остальные .resx-файлы по необходимости -->
-		<!-- ... остальные .resx-файлы -->
 	</ItemGroup>
 
 	<!-- Явное включение всех Compile -->
@@ -96,9 +91,7 @@
 		<Compile Include="Ext\StringHelpers.cs" />
 		<Compile Include="MainForm.cs" />
 		<Compile Include="MainForm.Designer.cs" />
-		<!-- Добавьте остальные .cs-файлы по необходимости -->
 		<Compile Include="Program.cs" />
-		<!-- ... остальные .cs-файлы -->
 	</ItemGroup>
 
 	<ItemGroup>

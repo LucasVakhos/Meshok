@@ -136,7 +136,7 @@ namespace AppCleaner
                 finalDestination = Path.Combine(destinationDir!, $"{name}_{DateTime.Now:yyyyMMdd_HHmmss}{ext}");
             }
 
-            File.Copy(sourceFilePath, finalDestination, overwrite: false);
+            File.Copy(sourceFilePath, finalDestination, overwrite: true);
             AddToLog($"[Скопировано в GH.Meshok.Deleted] {finalDestination}");
         }
         private static string IndentText(string text, int spaces)
