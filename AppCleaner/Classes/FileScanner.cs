@@ -4,6 +4,7 @@ using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 using DevExpress.XtraLayout;
 using DevExpress.XtraLayout.Utils;
+using DevExpress.XtraScheduler.Outlook.Interop;
 using System.Diagnostics;
 using System.Text;
 namespace AppCleaner;
@@ -509,13 +510,19 @@ public partial class FileScanner : XtraUserControl
         _store.RefreshCommandStates();
     }
     private void SetupLayouts()
-    {
+    { 
+
         var attr = TodoType.GetAttribute<ComboItemAttribute>();
+        bool isProcessFiles = attr.OperationTypes == OperationTypes.ProcessFiles;
         bool isFindReplace = TodoType == ComboToDoItems.FindAndReplace;
         bool isFindAdd = TodoType == ComboToDoItems.FindValueOrClassAddScaveToProject;
         bool isSync = TodoType is ComboToDoItems.SyncProjectFileWithSample or ComboToDoItems.RestoreMissingUsings;
         bool isConvert = TodoType == ComboToDoItems.ConvertOldCsprojToSdkStyle;
         bool isProjectMode = isFindAdd || isSync || isConvert;
+        SetVisibility(ldFOLDERS, isProcessFiles);
+
+        SetVisibility(lgTODO, TodoType is ComboToDoItems.ClearNameSpace or ComboToDoItems.DeleteNonProjectFiles);
+        
         cboSearchFolder.Properties.NullValuePrompt = isConvert
             ? "Установите старый файл проекта..."
             : isProjectMode
@@ -530,8 +537,8 @@ public partial class FileScanner : XtraUserControl
         lcPlaceFolder.Text = attr?.PlaceLabel ?? "Папка для найденного:";
         SetVisibility(lcNET_Version, isConvert);
         SetVisibility(emptySearchExt, !isProjectMode);
-        SetVisibility(lcSearchExt, !isProjectMode);
-        SetVisibility(lgFindReplace, isFindReplace || isFindAdd || isConvert);
+        SetVisibility(lcSearchMask, !isProjectMode);
+        SetVisibility(lgTODO, isFindReplace || isFindAdd || isConvert);
         SetVisibility(lcDRY_RUN, TodoType is ComboToDoItems.ClearNameSpace or ComboToDoItems.DeleteNonProjectFiles);
         SetVisibility(lcFind, isFindReplace || isFindAdd);
         SetVisibility(lcReplace, isFindReplace);

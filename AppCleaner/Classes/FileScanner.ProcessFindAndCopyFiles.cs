@@ -108,6 +108,37 @@ namespace AppCleaner
             File.Copy(filePath, backupPath, overwrite: true);
             AddToLog($"[Бэкап] {backupPath}");
         }
+
+        private void BackupToDeletedStore(string sourceFilePath, string projectDirectory)
+        {
+            if (string.IsNullOrWhiteSpace(sourceFilePath) || string.IsNullOrWhiteSpace(projectDirectory))
+                return;
+
+            var projectParent = Directory.GetParent(projectDirectory)?.FullName;
+            if (string.IsNullOrWhiteSpace(projectParent))
+                return;
+
+            var deletedRoot = Path.Combine(projectParent, "GH.Meshok.Deleted");
+
+            // Сохраняем относительную структуру внутри хранилища удалённых файлов
+            var relativePath = NormalizeRelativePath(Path.GetRelativePath(projectDirectory, sourceFilePath));
+            var destinationPath = Path.Combine(deletedRoot, relativePath.Replace('/', Path.DirectorySeparatorChar));
+
+            var destinationDir = Path.GetDirectoryName(destinationPath);
+            if (!string.IsNullOrWhiteSpace(destinationDir) && !Directory.Exists(destinationDir))
+                Directory.CreateDirectory(destinationDir);
+
+            var finalDestination = destinationPath;
+            if (File.Exists(finalDestination))
+            {
+                var name = Path.GetFileNameWithoutExtension(finalDestination);
+                var ext = Path.GetExtension(finalDestination);
+                finalDestination = Path.Combine(destinationDir!, $"{name}_{DateTime.Now:yyyyMMdd_HHmmss}{ext}");
+            }
+
+            File.Copy(sourceFilePath, finalDestination, overwrite: false);
+            AddToLog($"[Скопировано в GH.Meshok.Deleted] {finalDestination}");
+        }
         private static string IndentText(string text, int spaces)
         {
             var indent = new string(' ', spaces);
@@ -176,6 +207,17 @@ namespace AppCleaner
                         AddToLog($"[DRY-RUN] Был бы удалён: {relativePath}");
                         continue;
                     }
+
+                    try
+                    {
+                        BackupToDeletedStore(filePath, projectDirectory);
+                    }
+                    catch (Exception ex)
+                    {
+                        AddToLog($"[Ошибка копирования в GH.Meshok.Deleted] {relativePath}: {ex.Message}");
+                        // продолжаем попытку удалить даже если резервная копия не создалась
+                    }
+
                     File.Delete(filePath);
                     deletedCount++;
                     AddToLog($"Удалено: {relativePath}");

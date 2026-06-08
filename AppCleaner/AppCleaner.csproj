@@ -29,10 +29,7 @@
 
 	<!-- Явное включение всех EmbeddedResource -->
 	<ItemGroup>
-		<EmbeddedResource Include="Classes\FileScanner.resx">
-			<Generator>ResXFileCodeGenerator</Generator>
-			<LastGenOutput>FileScanner.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
+		<EmbeddedResource Include="Classes\FileScanner.resx" />
 		<EmbeddedResource Include="MainForm.resx" />
 		<!-- Добавьте остальные .resx-файлы по необходимости -->
 		<!-- ... остальные .resx-файлы -->
@@ -43,9 +40,11 @@
 		<Compile Include="Classes\ActionSettings.cs" />
 		<Compile Include="Classes\FilePatterns.cs" />
 		<Compile Include="Classes\FileScanner.cs" />
-		<Compile Include="Classes\FileScanner.Designer.cs" />
+		<Compile Include="Classes\FileScanner.Designer.cs">
+			<DependentUpon>FileScanner.cs</DependentUpon>
+		</Compile>
 		<Compile Include="Classes\FileScanner.ProcessFilePathComments.cs">
-		<DependentUpon>FileScanner.cs</DependentUpon>
+			<DependentUpon>FileScanner.cs</DependentUpon>
 		</Compile>
 
 		<Compile Include="Classes\FileScanner.RecoveryMissingUsings.cs">

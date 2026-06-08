@@ -12,7 +12,7 @@ public partial class FileScanner
     {
         return TodoType switch
         {
-            ComboToDoItems.DeleteNonProjectFiles => ValidateProjectFile(),
+            ComboToDoItems.DeleteNonProjectFiles => DeleteNonProjectFile(),
             ComboToDoItems.SyncProjectFileWithSample => ValidateSyncProjectFileWithSample(),
             ComboToDoItems.RestoreMissingUsings => ValidateSyncProjectFileWithSample(),
             ComboToDoItems.ConvertOldCsprojToSdkStyle => ValidateConvertOldCsprojToSdkStyle(),
@@ -62,7 +62,7 @@ public partial class FileScanner
         }
         return true;
     }
-    private bool ValidateProjectFile()
+    private bool DeleteNonProjectFile()
     {
         if (string.IsNullOrWhiteSpace(_store.ProjectFile) ||
             !_store.ProjectFile.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase) ||

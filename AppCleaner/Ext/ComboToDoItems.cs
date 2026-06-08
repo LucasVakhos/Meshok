@@ -10,7 +10,7 @@ namespace AppCleaner
         DeleteRegionRows,
         [ComboItem(Name = "Найти и заменить...")]
         FindAndReplace,
-        [ComboItem(Name = "Найти Class или значение в Class и добавить в папку проекта...")]
+        [ComboItem(Name = "Найти Class или значение в Class и добавить в папку проекта...", OperationTypes = OperationTypes.ProcessFiles)]
         FindValueOrClassAddScaveToProject,
         [ComboItem(Name = "Удалить лишние ссылки на namespace...")]
         ClearNameSpace,
@@ -18,9 +18,9 @@ namespace AppCleaner
         CollectAllNameSpaces,
         [ComboItem(Name = "Собрать нужные using Packages проекта...")]
         CollectUsingPackages,
-        [ComboItem(Name = "Удалить *.bak-файлы...")]
+        [ComboItem(Name = "Удалить *.bak-файлы...", OperationTypes = OperationTypes.ProcessFiles)]
         DeleteBakFiles,
-        [ComboItem(Name = "Удалить файлы не входящие в проект...", SearchLabel = "Cканировать Project:")]
+        [ComboItem(Name = "Удалить файлы не входящие в проект...", OperationTypes = OperationTypes.ProcessFiles, SearchLabel = "Cканировать Project:")]
         DeleteNonProjectFiles,
         [ComboItem(Name = "Синхронизировать файл проекта с образцом файла проекта ...", SearchLabel = "Cканировать Project:", PlaceLabel = "Образец Project:")]
         SyncProjectFileWithSample,
