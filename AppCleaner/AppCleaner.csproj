@@ -115,17 +115,22 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
-	<Target Name="CopyFilesToLibs" AfterTargets="Build">
-		<!-- временно
+	<Target Name="CopyLibsAfterBuild" AfterTargets="Build">
+		<!-- Создаём папку libs -->
+		<MakeDir Directories="$(OutputPath)libs" />
+		
+		<!-- Копируем ВСЕ DLL в папку libs (кроме главного exe) -->
 		<ItemGroup>
-			<DllFiles Include="$(OutputPath)*.dll" Exclude="$(OutputPath)$(AssemblyName).dll" />
+			<AllDlls Include="$(OutputPath)*.dll" />
+			<!-- Исключаем сам exe и его связанные файлы, если они почему-то есть -->
 		</ItemGroup>
-		<Message Text="Найденные DLL для перемещения: @(DllFiles)" Importance="high" />
-		<MakeDir Directories="$(OutputPath)Libs" />
-		<Move SourceFiles="@(DllFiles)" DestinationFolder="$(OutputPath)Libs" />
-		<Exec Command="powershell -Command &quot;$exclude = @('libs', 'ru', 'runtimes'); Get-ChildItem '$(OutputPath)' -Directory | Where-Object { $exclude -notcontains $_.Name } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue&quot;" />
-	 -->
-
-		<Exec Command="powershell -Command &quot;$exclude = @('ru', 'runtimes'); Get-ChildItem '$(OutputPath)' -Directory | Where-Object { $exclude -notcontains $_.Name } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue&quot;" />
+		
+		<!-- Перемещаем DLL в libs -->
+		<Move SourceFiles="@(AllDlls)" DestinationFolder="$(OutputPath)libs" />
+		
+		<!-- Удаляем пустые папки (кроме libs, ru, runtimes) -->
+		<Exec Command="powershell -NoProfile -Command &quot;$exclude = @('libs', 'ru', 'runtimes'); Get-ChildItem '$(OutputPath)' -Directory -ErrorAction SilentlyContinue | Where-Object { $exclude -notcontains $_.Name } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue&quot;" />
+		
+		<Message Text="✓ DLL перемещены в папку libs, exe будет загружать их оттуда" Importance="high" />
 	</Target>
 </Project>
