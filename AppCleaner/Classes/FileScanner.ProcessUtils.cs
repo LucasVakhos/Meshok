@@ -550,10 +550,10 @@ public partial class FileScanner
         var field = typeof(ComboToDoItems).GetField(selectedAction.ToString());
         if (field is null)
             return;
+        
         var attr = (ComboItemAttribute?)SysAttr.GetCustomAttribute(field, typeof(ComboItemAttribute));
-        if (string.IsNullOrWhiteSpace(attr?.Pattern))
-            return;
-        _store.FindText = attr.Pattern;
+        //var findText = attr.Pattern.
+        _store.SearchPattern = (PatternType) attr.Pattern;
         AddToLog($"[Конфиг] MaskFindSymbolText установлен по умолчанию: {_store.FindText}");
     }
     private static string GetDisplayName(Enum value)

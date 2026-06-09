@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 namespace AppCleaner
 {
@@ -258,8 +259,9 @@ namespace AppCleaner
             cancellationToken.ThrowIfCancellationRequested();
             try
             {
-                var pattern = _store.SearchPattern == FilePatterns.PatternBak
-                    ? _store.SearchPattern
+                var att = _store.SearchPattern.GetAttribute<DisplayAttribute>();
+                var pattern = _store.SearchPattern == PatternType.BAK
+                    ? att?.Name
                     : "*";
                 return Directory.GetFiles(directory, pattern, SearchOption.TopDirectoryOnly)
                     .Where(file => !ShouldIgnoreFile(NormalizeRelativePath(Path.GetFileName(file))))

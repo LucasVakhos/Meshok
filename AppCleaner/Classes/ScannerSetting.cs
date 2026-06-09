@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using AppCleaner.Ext;
+using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Configuration;
 using System.Reflection;
@@ -56,7 +57,7 @@ public sealed class ScannerSetting : INotifyPropertyChanged
     private string _searchFolder = string.Empty;
     private string _placeFolder = string.Empty;
     private string _projectFile = string.Empty;
-    private string _searchPattern = "*.cs";
+    private PatternType _searchPattern = PatternType.CS;
     private string _logText = string.Empty;
     private int _totalFiles;
     private int _progressValue;
@@ -141,10 +142,10 @@ public sealed class ScannerSetting : INotifyPropertyChanged
         }
     }
     [Saved]
-    public string SearchPattern
+    public PatternType SearchPattern
     {
         get => _searchPattern;
-        set => SetField(ref _searchPattern, value ?? "*.cs");
+        set => SetField(ref _searchPattern, value);
     }
     [Saved]
     public int SelectedActionIndex

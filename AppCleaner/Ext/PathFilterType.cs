@@ -1,4 +1,4 @@
-﻿namespace AppCleaner;
+﻿namespace AppCleaner.Ext;
 
 public enum PathFilterType
 {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 namespace AppCleaner
 {
@@ -11,9 +12,10 @@ namespace AppCleaner
             // Если выбрана папка решения — сначала читаем .slnx/.sln и берём проекты оттуда.
             // Если решения нет — ищем проекты рекурсивно.
             // Если проектов нет — сканируем папку как обычную директорию.
+            var att = _store.SearchPattern.GetAttribute<DisplayAttribute>();
             var files = GetFilesForOperation(
                 _store.SearchFolder,
-                _store.SearchPattern,
+                att?.Name ?? "*.cs",
                 cancellationToken,
                 preferProjectFiles: true);
             AddToLog($"Найдено файлов: {files.Length}");

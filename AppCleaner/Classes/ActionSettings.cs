@@ -1,4 +1,6 @@
-﻿namespace AppCleaner;
+﻿using AppCleaner.Ext;
+
+namespace AppCleaner;
 
 public sealed class ActionSettings
 {

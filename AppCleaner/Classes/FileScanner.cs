@@ -1,10 +1,13 @@
 //FileScanner
 #nullable enable
+using AppCleaner.Ext;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 using DevExpress.XtraLayout;
 using DevExpress.XtraLayout.Utils;
 using DevExpress.XtraScheduler.Outlook.Interop;
+using System.Collections;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Text;
 namespace AppCleaner;
@@ -82,7 +85,7 @@ public partial class FileScanner : XtraUserControl
         txtReplace.DataBindings.Add("EditValue", bsFileScanner,
             nameof(ScannerSetting.ReplaceText), true,
             DataSourceUpdateMode.OnPropertyChanged);
-        cboSearchExt.DataBindings.Add("EditValue", bsFileScanner,
+        cboSearchPatterns.DataBindings.Add("EditValue", bsFileScanner,
             nameof(ScannerSetting.SearchPattern), true,
             DataSourceUpdateMode.OnPropertyChanged);
         cboDRY_RUN.DataBindings.Add("SelectedIndex", bsFileScanner,
@@ -111,8 +114,8 @@ public partial class FileScanner : XtraUserControl
     private void InitializeComboBoxes()
     {
         RefreshPathComboBoxes();
-        cboSearchExt.Properties.Items.Clear();
-        cboSearchExt.Properties.Items.AddRange(FilePatterns.AllPatterns);
+        cboSearchPatterns.Properties.Items.Clear();
+        cboSearchPatterns.Properties.Items.AddRange(GetPatternNames());
         cboSelectToDo.Properties.Items.Clear();
         _todoItems.Clear();
         foreach (ComboToDoItems item in Enum.GetValues<ComboToDoItems>()
@@ -133,6 +136,15 @@ public partial class FileScanner : XtraUserControl
         }
         SetSelectedNetFromStore();
     }
+
+    private static string[] GetPatternNames()
+    {
+        return   Enum.GetValues(typeof(PatternType))
+        .Cast<PatternType>()
+        .Select(x => x.GetDisplayName())
+        .ToArray();        
+    }
+
     private ComboNetItems GetNetBySelectedIndex()
     {
         int index = cboNET.SelectedIndex;
@@ -333,9 +345,26 @@ public partial class FileScanner : XtraUserControl
             AddToLog($"Папка назначения: {_store.PlaceFolder}");
     }
     #region UI events
-    private void cboSearchExt_EditValueChanged(object sender, EventArgs e)
+    private void cboSearchPatterns_EditValueChanged(object sender, EventArgs e)
     {
-        _store.SearchPattern = cboSearchExt.EditValue?.ToString() ?? "*.cs";
+        _store.SearchPattern =
+            PatternTypeExtensions.FromDisplayName(
+                cboSearchPatterns.EditValue?.ToString());
+    }
+    public static PatternType FromDisplayName(string value)
+    {
+        foreach (PatternType pattern in Enum.GetValues(typeof(PatternType)))
+        {
+            if (string.Equals(
+                    pattern.GetAttribute<DisplayAttribute>()?.Name,
+                    value,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                return pattern;
+            }
+        }
+
+        return PatternType.CS;
     }
 
     #region UpdatePathFilters
@@ -511,7 +540,6 @@ public partial class FileScanner : XtraUserControl
     }
     private void SetupLayouts()
     { 
-
         var attr = TodoType.GetAttribute<ComboItemAttribute>();
         bool isProcessFiles = attr.OperationTypes == OperationTypes.ProcessFiles;
         bool isFindReplace = TodoType == ComboToDoItems.FindAndReplace;
@@ -538,7 +566,7 @@ public partial class FileScanner : XtraUserControl
                 : "Установите папку куда копировать найденное...";
         lcSearchFolder.Text = attr?.SearchLabel ?? "Cканировать папку:";
         lcPlaceFolder.Text = attr?.PlaceLabel ?? "Папка для найденного:";
-        SetVisibility(lcNET_Version, isConvert);
+        SetVisibility(lcNetVersion, isConvert);
         SetVisibility(emptySearchExt, !isProjectMode);
         SetVisibility(lcSearchMask, !isProjectMode);
         SetVisibility(lcDRY_RUN, TodoType is ComboToDoItems.ClearNameSpace or ComboToDoItems.DeleteNonProjectFiles);
