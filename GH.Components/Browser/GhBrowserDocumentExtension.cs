@@ -1,4 +1,8 @@
-﻿using System.Text.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 namespace GH.Components
 {
     public static class GhBrowserDocumentExtension
@@ -7,6 +11,71 @@ namespace GH.Components
         {
             PropertyNameCaseInsensitive = true
         };
+        public static async Task<T?> ExecuteJsonScriptAsync<T>(this GhBrowser browser, string script)
+        {
+            string json = await browser.ExecuteScriptAsync(script);
+            return JsonSerializer.Deserialize<T>(json, JsonOptions);
+        }
+
+        public static async Task<bool> SetPayMethodAsync(
+            this GhBrowser browser,
+            string value,
+            bool isChecked)
+        {
+            string selector = JsonSerializer.Serialize($"input[type='checkbox'][value='{value}']");
+            string state = isChecked ? "true" : "false";
+            string script = $"""
+                (() => {
+                    const e = document.querySelector({{selector}});
+                    if (!e) return false;
+                    e.checked = {{state}};
+                    e.dispatchEvent(new Event("input", { bubbles: true }));
+                    e.dispatchEvent(new Event("change", { bubbles: true }));
+                    return true;
+                })()
+                """;
+            return await browser.ExecuteJsonScriptAsync<bool>(script);
+        }
+
+        public static async Task<bool> SetFileInputAsync(
+            this GhBrowser browser,
+            string selector,
+            string filePath)
+        {
+            await browser.EnsureCoreWebView2Async();
+            string documentJson = await browser.CoreWebView2.CallDevToolsProtocolMethodAsync(
+                "DOM.getDocument",
+                "{}");
+            using JsonDocument document = JsonDocument.Parse(documentJson);
+            int rootNodeId = document.RootElement
+                .GetProperty("root")
+                .GetProperty("nodeId")
+                .GetInt32();
+
+            string queryParams = JsonSerializer.Serialize(new
+            {
+                nodeId = rootNodeId,
+                selector
+            });
+            string queryJson = await browser.CoreWebView2.CallDevToolsProtocolMethodAsync(
+                "DOM.querySelector",
+                queryParams);
+            using JsonDocument query = JsonDocument.Parse(queryJson);
+            int nodeId = query.RootElement.GetProperty("nodeId").GetInt32();
+            if (nodeId == 0)
+                return false;
+
+            string setParams = JsonSerializer.Serialize(new
+            {
+                files = new[] { filePath },
+                nodeId
+            });
+            await browser.CoreWebView2.CallDevToolsProtocolMethodAsync(
+                "DOM.setFileInputFiles",
+                setParams);
+            return true;
+        }
+
         // =========================
         // Document
         // =========================
