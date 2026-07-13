@@ -24,16 +24,15 @@ namespace GH.Components
         {
             string selector = JsonSerializer.Serialize($"input[type='checkbox'][value='{value}']");
             string state = isChecked ? "true" : "false";
-            string script = $"""
-                (() => {
-                    const e = document.querySelector({{selector}});
-                    if (!e) return false;
-                    e.checked = {{state}};
-                    e.dispatchEvent(new Event("input", { bubbles: true }));
-                    e.dispatchEvent(new Event("change", { bubbles: true }));
-                    return true;
-                })()
-                """;
+            string script =
+                "(() => {" +
+                "const e = document.querySelector(" + selector + ");" +
+                "if (!e) return false;" +
+                "e.checked = " + state + ";" +
+                "e.dispatchEvent(new Event('input', { bubbles: true }));" +
+                "e.dispatchEvent(new Event('change', { bubbles: true }));" +
+                "return true;" +
+                "})()";
             return await browser.ExecuteJsonScriptAsync<bool>(script);
         }
 
