@@ -1,4 +1,4 @@
-using GH.Browser;
+using GH.Components;
 using System;
 using System.Threading.Tasks;
 namespace MeshokBrowser.Workers
