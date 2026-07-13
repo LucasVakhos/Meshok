@@ -79,6 +79,11 @@ namespace MeshokBrowser
             return qty > 0;
         }
 
+        public System.Threading.Tasks.Task<T?> ExecuteJsonScriptAsync<T>(string script)
+        {
+            return webBrowser.ExecuteJsonScriptAsync<T>(script);
+        }
+
         public InnerWB()
         {
             InitializeComponent();
