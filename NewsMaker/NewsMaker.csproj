@@ -13,7 +13,7 @@
     <ApplicationIcon>Bridge_0.ico</ApplicationIcon>
     <Platforms>AnyCPU;x86</Platforms>
     <PlatformTarget Condition="'$(Configuration)' == 'Debug'">x86</PlatformTarget>
-      <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+      <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
@@ -34,84 +34,7 @@
     <Reference Include="DevExpress.XtraPrinting.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraLayout.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Application\AppContextNM.cs" />
-    <Compile Include="Application\FactoryCriatorNM.cs" />
-    <Compile Include="Common\RuSender.cs" />
-    <Compile Include="Common\SendService.cs" />
-    <Compile Include="Common\TaskbarProgress.cs" />
-    <Compile Include="Configs\Cfg\CfgPost.cs" />
-    <Compile Include="Configs\Cfg\CfgProgram.cs" />
-    <Compile Include="Configs\Cfg\CfgBridgeNote.cs" />
-    <Compile Include="Configs\Cfg\CfgRuSender.cs" />
-    <Compile Include="Configs\Forms\CfgFormBridgeNote.cs">
-          <SubType>Form</SubType>
-        </Compile>
-    <Compile Include="Configs\Frames\CfgFrameBridgeNote.cs">
-          <SubType>UserControl</SubType>
-        </Compile>
-    <Compile Include="Configs\Frames\CfgFrameProgram.cs">
-          <SubType>UserControl</SubType>
-        </Compile>
-    <Compile Include="Configs\Frames\CfgFrameProgram.Designer.cs">
-          <DependentUpon>CfgFrameProgram.cs</DependentUpon>
-        </Compile>
-    <Compile Include="Configs\Frames\CfgFrameRuSender.cs">
-          <SubType>UserControl</SubType>
-        </Compile>
-    <Compile Include="Configs\Frames\CfgFrameRuSender.Designer.cs">
-          <DependentUpon>CfgFrameRuSender.cs</DependentUpon>
-        </Compile>
-    <Compile Include="Configs\Frames\CfgFramePost.cs">
-          <SubType>UserControl</SubType>
-        </Compile>
-    <Compile Include="Configs\Frames\CfgFramePost.Designer.cs">
-          <DependentUpon>CfgFramePost.cs</DependentUpon>
-        </Compile>
-    <Compile Include="Controls\CurrentCounter.cs" />
-    <Compile Include="Controls\CurrentText.cs">
-          <SubType>Component</SubType>
-        </Compile>
-    <Compile Include="Controls\ElapsedCounter.cs" />
-    <Compile Include="Controls\TotalCounter.cs" />
-    <Compile Include="Controls\TotalText.cs">
-          <SubType>Component</SubType>
-        </Compile>
-    <Compile Include="Controls\WorkStatusCounter.cs" />
-    <Compile Include="NHibernate\User.cs" />
-    <Compile Include="Processes\Excel.cs" />
-    <Compile Include="Processes\Info.cs" />
-    <Compile Include="Forms\MainForm.cs">
-          <SubType>Form</SubType>
-        </Compile>
-    <Compile Include="Forms\MainForm.Designer.cs">
-          <DependentUpon>MainForm.cs</DependentUpon>
-        </Compile>
-    <Compile Include="Processes\ColMap.cs" />
-    <Compile Include="Processes\Letter.cs" />
-    <Compile Include="Processes\SendCallBack.cs" />
-    <Compile Include="Processes\MailSender.cs" />
-    <Compile Include="Processes\NewsProcessor.cs" />
-    <Compile Include="Processes\MySqlHelper.cs" />
-    <Compile Include="Processes\Prepare.cs" />
-    <Compile Include="Processes\ResultList.cs" />
-    <Compile Include="Controls\SimpleInfoText.cs">
-          <SubType>Component</SubType>
-        </Compile>
-    <Compile Include="Processes\Subscribers.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-          <AutoGen>True</AutoGen>
-          <DependentUpon>Resources.resx</DependentUpon>
-          <DesignTime>True</DesignTime>
-        </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-          <AutoGen>True</AutoGen>
-          <DependentUpon>Settings.settings</DependentUpon>
-          <DesignTimeSharedInput>True</DesignTimeSharedInput>
-        </Compile>
-  </ItemGroup>
+  
   <ItemGroup>
     <EmbeddedResource Include="Configs\Frames\CfgFrameBridgeNote.resx">
           <DependentUpon>CfgFrameBridgeNote.cs</DependentUpon>
