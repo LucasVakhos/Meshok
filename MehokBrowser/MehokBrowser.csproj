@@ -145,5 +145,11 @@
   <ItemGroup>
     <ProjectReference Include="..\GH.Components\GH.Components.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Workers\WorkWithLots\WorkerCreateCSV.cs" />
+    <Compile Remove="Workers\WorkWithLots\WorkerScanLots.cs" />
+    <Compile Remove="Workers\WorkWithLots\WorkerScanLotsOld.cs" />
+    <Compile Remove="Workers\ProcOrders\sav\**\*.cs" />
+  </ItemGroup>
 </Project>
 
