@@ -9,65 +9,314 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>GH.Components</RootNamespace>
     <AssemblyName>GH.Components</AssemblyName>
+      <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Antlr3.Runtime" Version="3.5.1" />
-    <PackageReference Include="BouncyCastle" Version="1.8.9" />
-    <PackageReference Include="BouncyCastle.Cryptography" Version="2.6.2" />
-    <PackageReference Include="EventHook" Version="1.4.113" />
-    <PackageReference Include="FirebirdSql.Data.FirebirdClient" Version="10.3.4" />
-    <PackageReference Include="FluentNHibernate" Version="3.3.0" />
-    <PackageReference Include="Google.Protobuf" Version="3.34.1" />
-    <PackageReference Include="Iesi.Collections" Version="4.1.1" />
-    <PackageReference Include="K4os.Compression.LZ4" Version="1.3.8" />
-    <PackageReference Include="K4os.Compression.LZ4.Streams" Version="1.3.8" />
-    <PackageReference Include="K4os.Hash.xxHash" Version="1.0.8" />
-    <PackageReference Include="log4net" Version="3.3.0" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.5" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.5" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.5" />
-    <PackageReference Include="MySql.Data" Version="9.6.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="NHibernate" Version="5.3.20" />
-    <PackageReference Include="Remotion.Linq" Version="2.2.0" />
-    <PackageReference Include="Remotion.Linq.EagerFetching" Version="2.2.0" />
-    <PackageReference Include="RestSharp" Version="114.0.0" />
-    <PackageReference Include="SSH.NET" Version="2025.1.0" />
-    <PackageReference Include="System.Buffers" Version="4.6.1" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="10.0.5" />
-    <PackageReference Include="System.Formats.Asn1" Version="10.0.5" />
-    <PackageReference Include="System.IO.Pipelines" Version="10.0.5" />
-    <PackageReference Include="System.Memory" Version="4.6.3" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.6.1" />
-    <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
-    <PackageReference Include="System.Security.AccessControl" Version="6.0.0" />
-    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
-    <PackageReference Include="System.Security.Permissions" Version="8.0.0" />
-    <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
-    <PackageReference Include="System.Text.Encodings.Web" Version="10.0.5" />
-    <PackageReference Include="System.Text.Json" Version="10.0.5" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
-    <PackageReference Include="ZstdSharp.Port" Version="0.8.6" />
+    <ItemGroup>
+    <Reference Include="DevExpress.Data.Desktop.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Drawing.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Data.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Images.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Printing.v25.2.Core, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v25.2.UI, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraBars.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraDialogs.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraEditors.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraGrid.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraLayout.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraNavBar.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraPrinting.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Data.Desktop.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    		<Reference Include="DevExpress.Drawing.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    		<Reference Include="DevExpress.Data.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    		<Reference Include="DevExpress.Images.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    		<Reference Include="DevExpress.Printing.v25.2.Core, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    		<Reference Include="DevExpress.Utils.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    		<Reference Include="DevExpress.Utils.v25.2.UI, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    		<Reference Include="DevExpress.XtraBars.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    		<Reference Include="DevExpress.XtraDialogs.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    		<Reference Include="DevExpress.XtraEditors.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    		<Reference Include="DevExpress.XtraGrid.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    		<Reference Include="DevExpress.XtraLayout.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    		<Reference Include="DevExpress.XtraNavBar.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    		<Reference Include="DevExpress.XtraPrinting.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    		<Reference Include="EventHook, Version=1.4.113.0, Culture=neutral, PublicKeyToken=2c14189d5ed28bd7, processorArchitecture=MSIL">
-    			<HintPath>..\..\KULAKOVSKY\MeshokBrowser\packages\EventHook.1.4.113\lib\net45\EventHook.dll</HintPath>
-    		</Reference>
+    <Compile Include="ActionList\Action.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="ActionList\ActionCollection.cs" />
+    <Compile Include="ActionList\ActionDataGh.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="ActionList\ActionList.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="ActionList\ActionTargetDescriptionInfo.cs" />
+    <Compile Include="ActionList\ComponentExtension.cs" />
+    <Compile Include="ActionList\MessageHook.cs" />
+    <Compile Include="ActionList\StandardActionAttribute.cs" />
+    <Compile Include="Application\AppContext.cs" />
+    <Compile Include="Application\IAppContext.cs" />
+    <Compile Include="Application\NamedPipeManager.cs" />
+    <Compile Include="Application\RunContext.cs" />
+    <Compile Include="Application\VersionHelper.cs" />
+    <Compile Include="Application\WM_Messages.cs" />
+    <Compile Include="Attributes\DbConnectionProperty.cs" />
+    <Compile Include="Attributes\Designers\PropertyGridExtender.cs" />
+    <Compile Include="Attributes\Editors\BaseListEditor.cs" />
+    <Compile Include="Attributes\EditorType.cs" />
+    <Compile Include="Attributes\GHClassDisplayAttribute.cs" />
+    <Compile Include="Attributes\Designers\BaseControlDesignerSimple.cs" />
+    <Compile Include="Configs\Cfg\CfgApp.cs" />
+    <Compile Include="Configs\Cfg\CfgCore.cs" />
+    <Compile Include="Configs\Cfg\CfgCoreConnection.cs" />
+    <Compile Include="Configs\Forms\CfgForm.cs">
+    			<SubType>Form</SubType>
+    		</Compile>
+    <Compile Include="Configs\Forms\CfgForm.Designer.cs">
+    			<DependentUpon>CfgForm.cs</DependentUpon>
+    		</Compile>
+    <Compile Include="Configs\Forms\CfgFormType.cs">
+    			<SubType>Form</SubType>
+    		</Compile>
+    <Compile Include="Configs\Forms\LoginFormType.cs">
+    			<SubType>Form</SubType>
+    		</Compile>
+    <Compile Include="Configs\Frames\CfgBaseFrame.cs">
+    			<SubType>UserControl</SubType>
+    		</Compile>
+    <Compile Include="Configs\Frames\CfgBaseFrame.Designer.cs">
+    			<DependentUpon>CfgBaseFrame.cs</DependentUpon>
+    		</Compile>
+    <Compile Include="Configs\Frames\CfgConnectFrame.cs">
+    			<SubType>UserControl</SubType>
+    		</Compile>
+    <Compile Include="Configs\Frames\CfgConnectFrame.Designer.cs">
+    			<DependentUpon>CfgConnectFrame.cs</DependentUpon>
+    		</Compile>
+    <Compile Include="Configs\Frames\CfgConnectFrameType.cs">
+    			<SubType>UserControl</SubType>
+    		</Compile>
+    <Compile Include="Configs\Frames\CfgCoreFrame.cs">
+    			<SubType>UserControl</SubType>
+    		</Compile>
+    <Compile Include="Configs\Frames\CfgCoreFrame.Designer.cs">
+    			<DependentUpon>CfgCoreFrame.cs</DependentUpon>
+    		</Compile>
+    <Compile Include="Configs\Frames\CfgCoreFrameType.cs">
+    			<SubType>UserControl</SubType>
+    		</Compile>
+    <Compile Include="Configs\Frames\LoginFrame.cs">
+    			<SubType>UserControl</SubType>
+    		</Compile>
+    <Compile Include="Configs\Frames\LoginFrame.Designer.cs">
+    			<DependentUpon>LoginFrame.cs</DependentUpon>
+    		</Compile>
+    <Compile Include="Configs\Frames\LoginFrameType.cs">
+    			<SubType>UserControl</SubType>
+    		</Compile>
+    <Compile Include="Configs\Frames\TestFrame.cs">
+    			<SubType>UserControl</SubType>
+    		</Compile>
+    <Compile Include="Configs\Frames\TestFrame.Designer.cs">
+    			<DependentUpon>TestFrame.cs</DependentUpon>
+    		</Compile>
+    <Compile Include="Configs\IniFile\IniFile.cs" />
+    <Compile Include="Configs\IniFile\IniHelper.cs" />
+    <Compile Include="DataSource\DataSource.Actions.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="DataSource\DocSupport.Editors.cs" />
+    <Compile Include="Attributes\UpdatableProperty.cs" />
+    <Compile Include="Controls\PathSeacher.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\SizeHeper.cs" />
+    <Compile Include="Controls\AboutLabel.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="Controls\InfoAlarm.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="Grids\GridGh.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="Grids\HighlightingViewGh.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="Grids\HLViewGhInfoRegistrator.cs" />
+    <Compile Include="Grids\ViewGh.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="Grids\ViewGhInfoRegistrator.cs" />
+    <Compile Include="Grids\ViewHandlerGh.cs" />
+    <Compile Include="Grids\ViewInfoGh.cs" />
+    <Compile Include="Interfaces\IAppForm.cs" />
+    <Compile Include="Interfaces\IBarsForm.cs" />
+    <Compile Include="Interfaces\ICaption.cs" />
+    <Compile Include="Interfaces\IDataSource.cs" />
+    <Compile Include="Interfaces\IDetailsFrame.cs" />
+    <Compile Include="Interfaces\INavBarForm.cs" />
+    <Compile Include="Interfaces\INavBarGroupFrame.cs" />
+    <Compile Include="Interfaces\IOpenData.cs" />
+    <Compile Include="Interfaces\IOrderStatus.cs" />
+    <Compile Include="Interfaces\IRibbonControlFrame.cs" />
+    <Compile Include="Interfaces\IRibbonForm.cs" />
+    <Compile Include="Interfaces\ISavedControl.cs" />
+    <Compile Include="Interfaces\ITitle.cs" />
+    <Compile Include="Interfaces\IUpdateAlarm.cs" />
+    <Compile Include="Interfaces\IUpdate_reminder.cs" />
+    <Compile Include="NHibernate\Entities\AbstractEntity.cs" />
+    <Compile Include="NHibernate\Entities\BaseEntity.cs" />
+    <Compile Include="NHibernate\Entities\BaseUser.cs" />
+    <Compile Include="NHibernate\Entities\Field.cs" />
+    <Compile Include="NHibernate\FactoryCriator.cs" />
+    <Compile Include="UserExceptions\NotImplemented.cs" />
+    <Compile Include="Controls\ConnectButton.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="DataSource\BindingControlMap.cs" />
+    <Compile Include="DataSource\DataSource.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="Attributes\Editors\DataSourceListEditor.cs" />
+    <Compile Include="DataSource\DataState.cs" />
+    <Compile Include="DataSource\Delegates.cs" />
+    <Compile Include="DataSource\DetailsList.cs" />
+    <Compile Include="DataSource\DetailSource.cs" />
+    <Compile Include="DataSource\DisablePagesReason.cs" />
+    <Compile Include="DataSource\DocSupport.cs" />
+    <Compile Include="DataSource\EditGrants.cs" />
+    <Compile Include="DataSource\EditTypes.cs" />
+    <Compile Include="DataSource\EdQty.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="DataSource\PageSupport.cs" />
+    <Compile Include="Grids\GridHighLiteProcessor.cs" />
+    <Compile Include="Grids\GridHighLiteSetting.cs">
+    			<SubType>Form</SubType>
+    		</Compile>
+    <Compile Include="Grids\GridHighLiteSetting.Designer.cs">
+    			<DependentUpon>GridHighLiteSetting.cs</DependentUpon>
+    		</Compile>
+    <Compile Include="Helpers\ClipboardHelper.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
+    <Compile Include="Helpers\GHException.cs" />
+    <Compile Include="Helpers\ObjectHelper.cs" />
+    <Compile Include="Images\ActionImages.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="Images\EditTypesConst.cs" />
+    <Compile Include="Images\EditTypesExtension.cs" />
+    <Compile Include="Attributes\MapAttribute.cs" />
+    <Compile Include="LayoutControl\ButtonsPanel.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="LayoutControl\IPagesFrame.cs" />
+    <Compile Include="LayoutControl\LayoutControlGh.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="NHibernate\IFactoryCriator.cs" />
+    <Compile Include="NHibernate\INHRepository.cs" />
+    <Compile Include="NHibernate\NHHelper.cs" />
+    <Compile Include="NHibernate\NHRepository.cs" />
+    <Compile Include="NHibernate\UpdateProcessor.cs">
+    			<SubType>Form</SubType>
+    		</Compile>
+    <Compile Include="NHibernate\UpdateProcessor.Designer.cs">
+    			<DependentUpon>UpdateProcessor.cs</DependentUpon>
+    		</Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserForms\AboutBox.cs">
+    			<SubType>Form</SubType>
+    		</Compile>
+    <Compile Include="UserForms\AboutBox.Designer.cs">
+    			<DependentUpon>AboutBox.cs</DependentUpon>
+    		</Compile>
+    <Compile Include="Controls\LoginControl.cs">
+    			<SubType>Component</SubType>
+    		</Compile>
+    <Compile Include="UserForms\SimpleForm.cs">
+    			<SubType>Form</SubType>
+    		</Compile>
+    <Compile Include="UserForms\SplashScreen.cs">
+    			<SubType>Form</SubType>
+    		</Compile>
+    <Compile Include="UserFrames\AbstractFrame.cs">
+    			<SubType>UserControl</SubType>
+    		</Compile>
+    <Compile Include="UserFrames\NavFrames\FrameHolder.cs">
+    			<SubType>UserControl</SubType>
+    		</Compile>
+    <Compile Include="UserFrames\NavFrames\NavFrame.Main.cs">
+    			<SubType>UserControl</SubType>
+    		</Compile>
+    <Compile Include="UserFrames\NavFrames\NavFrame.cs">
+    			<SubType>UserControl</SubType>
+    		</Compile>
+    <Compile Include="UserFrames\SavedFrame.cs">
+    			<SubType>UserControl</SubType>
+    		</Compile>
+    <Compile Include="Helpers\ActionsCreateHelper.cs" />
+    <Compile Include="Attributes\GHEvents.cs" />
+    <Compile Include="Attributes\GHProperty.cs" />
+    <Compile Include="Helpers\OptionsHelper.cs" />
+    <Compile Include="UserExceptions\UserExceptions.cs" />
+    <Compile Include="Utils\DlgHelper.cs" />
+    <Compile Include="Utils\Internet.cs" />
+    <Compile Include="Utils\LayoutHelper.cs" />
+    <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Utils\Protector.cs" />
+    <Compile Include="Utils\StringExtensions.cs" />
+    <Compile Include="Utils\UtilsGh.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ActionList\Images\Action.bmp" />
+    <EmbeddedResource Include="ActionList\Images\ActionList.bmp" />
+    <EmbeddedResource Include="Configs\Forms\CfgForm.resx">
+    			<DependentUpon>CfgForm.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="Configs\Forms\CfgFormType.resx">
+    			<DependentUpon>CfgFormType.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="Configs\Frames\CfgBaseFrame.resx">
+    			<DependentUpon>CfgBaseFrame.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="Configs\Frames\CfgConnectFrame.resx">
+    			<DependentUpon>CfgConnectFrame.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="Configs\Frames\CfgConnectFrameType.resx">
+    			<DependentUpon>CfgConnectFrameType.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="Configs\Frames\CfgCoreFrame.resx">
+    			<DependentUpon>CfgCoreFrame.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="Configs\Frames\CfgCoreFrameType.resx">
+    			<DependentUpon>CfgCoreFrameType.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="Configs\Frames\LoginFrame.resx">
+    			<DependentUpon>LoginFrame.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="Configs\Frames\LoginFrameType.resx">
+    			<DependentUpon>LoginFrameType.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="Configs\Frames\TestFrame.resx">
+    			<DependentUpon>TestFrame.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="Controls\ConnectButton.resx">
+    			<DependentUpon>ConnectButton.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="Grids\GridHighLiteSetting.resx">
+    			<DependentUpon>GridHighLiteSetting.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="Images\ActionImages.resx">
+    			<DependentUpon>ActionImages.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="NHibernate\UpdateProcessor.resx">
+    			<DependentUpon>UpdateProcessor.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="UserForms\AboutBox.resx">
+    			<DependentUpon>AboutBox.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="UserForms\SplashScreen.resx">
+    			<DependentUpon>SplashScreen.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="UserFrames\AbstractFrame.resx">
+    			<DependentUpon>AbstractFrame.cs</DependentUpon>
+    		</EmbeddedResource>
+    <EmbeddedResource Include="ActionList\ActionList.resx">
+    			<DependentUpon>ActionList.cs</DependentUpon>
+    		</EmbeddedResource>
   </ItemGroup>
 </Project>
+
