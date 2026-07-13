@@ -18,57 +18,6 @@
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GH.Components\GH.Components.csproj">
-          <Project>{40ca39f7-1ed9-4228-b5d5-b4164ec7040a}  <ItemGroup>
-    <Reference Include="DevExpress.CodeParser.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Drawing.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Data.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Images.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Office.v25.2.Core, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.RichEdit.v25.2.Core, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.RichEdit.v25.2.Export, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Printing.v25.2.Core, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Data.Desktop.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Utils.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraEditors.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraPrinting.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraLayout.v25.2, Version=25.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <EmbeddedResource Include="Configs\Frames\CfgFrameBridgeNote.resx">
-          <DependentUpon>CfgFrameBridgeNote.cs</DependentUpon>
-        </EmbeddedResource>
-    <EmbeddedResource Include="Configs\Frames\CfgFramePost.resx">
-          <DependentUpon>CfgFramePost.cs</DependentUpon>
-        </EmbeddedResource>
-    <EmbeddedResource Include="Configs\Frames\CfgFrameProgram.resx">
-          <DependentUpon>CfgFrameProgram.cs</DependentUpon>
-        </EmbeddedResource>
-    <EmbeddedResource Include="Configs\Frames\CfgFrameRuSender.resx">
-          <DependentUpon>CfgFrameRuSender.cs</DependentUpon>
-        </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MainForm.resx">
-          <DependentUpon>MainForm.cs</DependentUpon>
-        </EmbeddedResource>
-    <EmbeddedResource Include="Properties\licenses.licx" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-          <Generator>ResXFileCodeGenerator</Generator>
-          <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-          <SubType>Designer</SubType>
-        </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ACCICONS_133.ico" />
-    <Content Include="Bridge_0.ico" />
-    <Content Include="Common\RuSender.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
-  </ItemGroup>
-</Project>
-
-          <Name>GH.Components</Name>
-        </ProjectReference>
+    <ProjectReference Include="..\GH.Components\GH.Components.csproj" />
   </ItemGroup>
 </Project>
