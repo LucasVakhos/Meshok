@@ -140,6 +140,9 @@
     <Content Include="Bridge_0.ico" />
     <Content Include="Common\RuSender.html" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+  </ItemGroup>
 </Project>
 
           <Name>GH.Components</Name>
