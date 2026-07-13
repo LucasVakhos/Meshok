@@ -1,4 +1,4 @@
-using GH.Components;
+using GH.Browser;
 using System;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
