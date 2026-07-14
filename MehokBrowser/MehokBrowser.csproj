@@ -5,7 +5,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
+    <Nullable>annotations</Nullable>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>MehokBrowser</RootNamespace>
     <AssemblyName>MehokBrowser</AssemblyName>
