@@ -102,6 +102,9 @@
   <ItemGroup>
     <ProjectReference Include="..\IniFile\IniFile.csproj" />
   </ItemGroup>
+  <ItemGroup Condition="Exists('..\Secret.cs')">
+    <Compile Include="..\Secret.cs" Link="Secret.cs" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="MySql.Data" Version="9.7.0" />

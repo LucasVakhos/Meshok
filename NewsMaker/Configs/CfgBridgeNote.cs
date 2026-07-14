@@ -7,10 +7,10 @@ namespace NewsMaker
     {
         protected override void CreateSomething()
         {
-            Server = "bd.bridgenote.com";
-            Database = "bridgenote";
-            UserID = "bridge";
-            Password = "1MaB5zIrOndfqfvUJc";
+            Server = GH.Components.SecretProvider.NewsBridgeServer;
+            Database = GH.Components.SecretProvider.NewsBridgeDatabase;
+            UserID = GH.Components.SecretProvider.NewsBridgeUserId;
+            Password = GH.Components.SecretProvider.NewsBridgePassword;
         }
         public static MySqlConnection CreateConnection()
         {

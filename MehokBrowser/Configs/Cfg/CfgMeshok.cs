@@ -26,10 +26,10 @@ namespace MeshokBrowser
         public static string _profile_url = $"https://{_site_name}/profile.php";
         [DataMember]
         [Display(Name = "Логин", Description = "Логин типа (email@mail.com)"), EmailAddress]
-        public override string UserLogin { get; set; } = "bridgenote@gmail.com";
+        public override string UserLogin { get; set; } = GH.Components.SecretProvider.MeshokUserLogin;
         [DataMember]
         [Display(Name = "Пароль", Description = "Пароль"), PasswordPropertyText]
-        public override string UserPassword { get; set; } = "DjcmvjqEhj;fq2021";
+        public override string UserPassword { get; set; } = GH.Components.SecretProvider.MeshokUserPassword;
         [DataMember]
         [Display(Name = "Дополнительно", Description = "Дополнительные условия доставки")]
         public string AddInfo { get; set; } = "Отправка Почтой России зависит от веса и оценочной стоимости ПО. " +

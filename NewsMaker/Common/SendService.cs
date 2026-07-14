@@ -14,6 +14,7 @@ namespace NewsMaker.Common
         private static readonly CfgApp cfgApp = IniHelper.CfgAppForm();
         private static readonly CfgRuSender cfgRuSender = IniHelper.CoreCfg<CfgRuSender>();
         private static readonly CfgProgram cfgProgram = IniHelper.CoreCfg<CfgProgram>();
+        private static readonly CfgPost cfgPost = IniHelper.CoreCfg<CfgPost>();
         private int _hasData;
         private bool _dataLoaded;
         public int RunDay
@@ -176,6 +177,8 @@ namespace NewsMaker.Common
             body = body.Replace("#test_label", TestLabel(html));
             body = body.Replace("#hello_name", name);
             body = body.Replace("#unsubscribe_url", UnsubscribeUrl(unsubscribe_url, html));
+            body = body.Replace("#contact_email", cfgPost.BridgeEmail ?? string.Empty);
+            body = body.Replace("#contact_phone", cfgPost.ContactPhone ?? string.Empty);
             return body.Trim();
         }
         string bodyText = string.Empty;

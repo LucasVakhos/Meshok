@@ -24,7 +24,7 @@ namespace GH.Configs
                 _dataSource = value;
             }
         }
-        private string _dataSource = "localhost";
+        private string _dataSource = GH.Components.SecretProvider.CdUchetDataSource;
         [DataMember]
         [DbConnectionProperty(Category = Category.Connection, Caption = "Remote",
             ToolTip = "Если подключение к серверу на другом компьютере то Remote [V]", Default = false, EditorType = EditorType.Check, SubGroup = "Server")]
@@ -82,7 +82,7 @@ namespace GH.Configs
             switch (name)
             {
                 case nameof(DataSource):
-                    return "localhost";
+                    return GH.Components.SecretProvider.CdUchetDataSource;
                 case nameof(Remote):
                     return false;
                 case nameof(Port):
@@ -92,11 +92,11 @@ namespace GH.Configs
                 case nameof(Dialect):
                     return 3;
                 case nameof(Database):
-                    return "CDUCHET.GDB";
+                    return GH.Components.SecretProvider.CdUchetDatabase;
                 case nameof(UserID):
-                    return "SYSDBA";
+                    return GH.Components.SecretProvider.CdUchetUserId;
                 case nameof(Password):
-                    return "42220";
+                    return GH.Components.SecretProvider.CdUchetPassword;
                 case nameof(ServerType):
                     return FbServerType.Default;
                 default:

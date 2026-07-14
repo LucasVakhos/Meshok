@@ -11,7 +11,7 @@ namespace MeshokBrowser
     {
         private bool _isComplete = false;
         [UpdatableProperty]
-        public virtual string DataSource { get; set; } = "localhost";
+        public virtual string DataSource { get; set; } = GH.Components.SecretProvider.LegacyIShopDataSource;
         [UpdatableProperty]
         public virtual bool BaseRemote { get; set; } = false;
         [UpdatableProperty]
@@ -21,9 +21,9 @@ namespace MeshokBrowser
         [UpdatableProperty]
         public virtual string BaseCharset { get; set; } = "WIN1251";
         [UpdatableProperty]
-        public virtual string BaseLogin { get; set; } = "SYSDBA";
+        public virtual string BaseLogin { get; set; } = GH.Components.SecretProvider.LegacyIShopLogin;
         [UpdatableProperty]
-        public virtual string BasePassword { get; set; } = "42220";
+        public virtual string BasePassword { get; set; } = GH.Components.SecretProvider.LegacyIShopPassword;
         [UpdatableProperty]
         public virtual string Database { get; set; }
         [UpdatableProperty]
@@ -59,7 +59,7 @@ namespace MeshokBrowser
     public class ConfigIShop : PrivateConfig<SettingIShop>, IConnectSetting
     {
         [Display(Name = "Server", Description = "Серевер или имя компьютера")]
-        public virtual string DataSource { get; set; } = "localhost";
+        public virtual string DataSource { get; set; } = GH.Components.SecretProvider.LegacyIShopDataSource;
         [Display(Name = "Remote", Description = "База на другом компьютере")]
         public virtual bool BaseRemote { get; set; } = false;
         [Display(Name = "Dialect", Description = "Dialect Базы данных")]
@@ -69,10 +69,10 @@ namespace MeshokBrowser
         [Display(Name = "Charset", Description = "Charset Базы данных")]
         public virtual string BaseCharset { get; set; } = "WIN1251";
         [Display(Name = "Login", Description = "Login  для подключения к Базе данных")]
-        public virtual string BaseLogin { get; set; } = "SYSDBA";
+        public virtual string BaseLogin { get; set; } = GH.Components.SecretProvider.LegacyIShopLogin;
         [Display(Name = "Password", Description = "Password для подключения к Базе данных")]
-        public virtual string BasePassword { get; set; } = "42220";
-        private string _base = "";
+        public virtual string BasePassword { get; set; } = GH.Components.SecretProvider.LegacyIShopPassword;
+        private string _base = GH.Components.SecretProvider.LegacyIShopDatabase;
         [Display(Name = "База данных", Description = "Локальный путь к базе данных включая название файла")]
         public virtual string Database { get => _base; set => _base = value; }
         [Display(Name = "Remember Me", Description = "Входить без подтверждения авторизации")]
