@@ -76,7 +76,12 @@ Get-ChildItem $PSScriptRoot -Directory -Recurse -Force |
 
 $vsPath = Join-Path $PSScriptRoot '.vs'
 if (Test-Path $vsPath) {
-    Remove-Item $vsPath -Recurse -Force
+    try {
+        Remove-Item $vsPath -Recurse -Force -ErrorAction Stop
+    }
+    catch {
+        Write-Warning "Unable to remove locked Visual Studio cache '$vsPath'. Build will continue. Close Visual Studio to remove it later."
+    }
 }
 
 Invoke-DotNet -Arguments @('clean', 'Meshok.Sln')
