@@ -1,6 +1,4 @@
-﻿using FluentNHibernate.Cfg;
-using FluentNHibernate.Cfg.Db;
-using GH.Configs;
+﻿using GH.Configs;
 using NewsMaker.NHibernate;
 using NHibernate;
 namespace GH.NHibernate
@@ -13,11 +11,7 @@ namespace GH.NHibernate
         }
         public override ISessionFactory GetSessionFactory()
         {
-            return Fluently.Configure()
-                .Database(MySQLConfiguration.Standard.ConnectionString(GetConnectionString()))
-                .ExposeConfiguration(cfg => cfg.SetProperty("command_timeout", "200"))
-                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<User>())
-                .BuildSessionFactory();
+            return SessionFactoryBuilder.BuildMySql(GetConnectionString(), typeof(User).Assembly);
         }
     }
 }

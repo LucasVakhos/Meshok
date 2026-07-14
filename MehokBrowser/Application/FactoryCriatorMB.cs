@@ -1,6 +1,4 @@
-﻿using FluentNHibernate.Cfg;
-using FluentNHibernate.Cfg.Db;
-using GH.Configs;
+﻿using GH.Configs;
 using MeshokBrowser.NHibernate;
 using NHibernate;
 namespace GH.NHibernate
@@ -16,11 +14,7 @@ namespace GH.NHibernate
         }
         public override ISessionFactory GetSessionFactory()
         {
-            string cs = GetConnectionString();
-            FirebirdConfiguration fbc = new FirebirdConfiguration();
-            return Fluently.Configure().Database(fbc.ConnectionString(cs))
-                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<User>())
-                .BuildSessionFactory();
+            return SessionFactoryBuilder.BuildFirebird(GetConnectionString(), typeof(User).Assembly);
         }
     }
 }

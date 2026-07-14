@@ -1,4 +1,4 @@
-﻿using FluentNHibernate.Mapping;
+﻿using NHibernate.Mapping.ByCode.Conformist;
 using GH.Attributes;
 using GH.NHibernate;
 namespace MeshokBrowser.NHibernate
@@ -12,16 +12,15 @@ namespace MeshokBrowser.NHibernate
             set { Name = value; }
         }
     }
-    public class UserMap : ClassMap<User>
+    public class UserMap : ClassMapping<User>
     {
         public UserMap()
         {
             Table("MANAGERS");
-            Id(x => x.id, "MN_ID");
-            Map(x => x.Name, "MN_NAME");
-            //Map(x => x.Login, "MN_NAME");
-            Map(x => x.Password, "MN_PASSWORD");
-            Map(x => x.Active, "MN_ACTIVE");
+            Id(x => x.id, map => map.Column("MN_ID"));
+            Property(x => x.Name, map => map.Column("MN_NAME"));
+            Property(x => x.Password, map => map.Column("MN_PASSWORD"));
+            Property(x => x.Active, map => map.Column("MN_ACTIVE"));
         }
     }
 }

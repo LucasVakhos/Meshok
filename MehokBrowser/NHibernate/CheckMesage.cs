@@ -1,4 +1,4 @@
-﻿using FluentNHibernate.Mapping;
+﻿using NHibernate.Mapping.ByCode.Conformist;
 using System.ComponentModel.DataAnnotations;
 using Common;
 using GH.NHibernate;
@@ -115,29 +115,29 @@ namespace MeshokBrowser.NHibernate
             orderLine.Infos.Add(this);
         }
     }
-    public class CheckMesageMap : ClassMap<CheckMesage>
+    public class CheckMesageMap : ClassMapping<CheckMesage>
     {
         public CheckMesageMap()
         {
             Table("z$check_message");
-            Id(x => x.id, "cod_id");
-            Map(x => x.c_id, "c_id");
-            Map(x => x.c_name, "c_name");
-            Map(x => x.c_email, "c_email");
-            Map(x => x.md_id, "md_id");
-            Map(x => x.md_name, "md_name");
-            Map(x => x.mp_id, "mp_id");
-            Map(x => x.mp_name, "mp_name");
-            Map(x => x.md_address, "md_address");
-            Map(x => x.cs_id, "cs_id");
-            Map(x => x.cs_name, "cs_name");
-            Map(x => x.dp_packed, "dp_packed");
-            Map(x => x.dp_totalsumm, "dp_totalsumm");
-            Map(x => x.dp_totalsumm_info, "dp_totalsumm_info");
-            Map(x => x.md_treck_num, "md_treck_num");
-            Map(x => x.md_tracking_url, "md_tracking_url");
-            Map(x => x.zsc_case, "zsc_case");
-            Map(x => x.mess_text, "zsc_message");
+            Id(x => x.id, map => map.Column("cod_id"));
+            Property(x => x.c_id, map => map.Column("c_id"));
+            Property(x => x.c_name, map => map.Column("c_name"));
+            Property(x => x.c_email, map => map.Column("c_email"));
+            Property(x => x.md_id, map => map.Column("md_id"));
+            Property(x => x.md_name, map => map.Column("md_name"));
+            Property(x => x.mp_id, map => map.Column("mp_id"));
+            Property(x => x.mp_name, map => map.Column("mp_name"));
+            Property(x => x.md_address, map => map.Column("md_address"));
+            Property(x => x.cs_id, map => map.Column("cs_id"));
+            Property(x => x.cs_name, map => map.Column("cs_name"));
+            Property(x => x.dp_packed, map => map.Column("dp_packed"));
+            Property(x => x.dp_totalsumm, map => map.Column("dp_totalsumm"));
+            Property(x => x.dp_totalsumm_info, map => map.Column("dp_totalsumm_info"));
+            Property(x => x.md_treck_num, map => map.Column("md_treck_num"));
+            Property(x => x.md_tracking_url, map => map.Column("md_tracking_url"));
+            Property(x => x.zsc_case, map => map.Column("zsc_case"));
+            Property(x => x.mess_text, map => map.Column("zsc_message"));
         }
     }
 }

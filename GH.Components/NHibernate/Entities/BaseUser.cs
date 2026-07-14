@@ -1,4 +1,4 @@
-﻿using FluentNHibernate.Mapping;
+﻿using NHibernate.Mapping.ByCode.Conformist;
 using System.ComponentModel;
 namespace GH.Components
 {
@@ -33,16 +33,16 @@ namespace GH.Components
         public virtual bool Active { get; set; }
     }
 
-    public class UserMap : ClassMap<BaseUser>
+    public class UserMap : ClassMapping<BaseUser>
     {
         public UserMap()
         {
             Table("users");
-            Id(x => x.id, "u_id");
-            Map(x => x.Name, "u_name");
-            Map(x => x.Login, "u_e_mail");
-            Map(x => x.Password, "u_password");
-            Map(x => x.Active, "u_active");
+            Id(x => x.id, map => map.Column("u_id"));
+            Property(x => x.Name, map => map.Column("u_name"));
+            Property(x => x.Login, map => map.Column("u_e_mail"));
+            Property(x => x.Password, map => map.Column("u_password"));
+            Property(x => x.Active, map => map.Column("u_active"));
         }
     }
 }

@@ -41,9 +41,6 @@
     <Compile Include="NHibernate\Entities\BaseEntity.cs" />
     <Compile Include="NHibernate\Entities\BaseUser.cs" />
     <Compile Include="NHibernate\Entities\Field.cs" />
-    <Compile Remove="NHibernate\UpdateProcessor.cs" />
-    <Compile Remove="NHibernate\UpdateProcessor.Designer.cs" />
-    <EmbeddedResource Remove="NHibernate\UpdateProcessor.resx" />
   </ItemGroup>
 <ItemGroup>
     <EmbeddedResource Include="ActionList\Images\Action.bmp" />
@@ -113,7 +110,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="MySql.Data" Version="9.7.0" />
     <PackageReference Include="NHibernate" Version="5.6.1" />
-    <PackageReference Include="FluentNHibernate" Version="3.4.1" />
     <PackageReference Include="log4net" Version="3.3.1" />
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />

@@ -1,6 +1,4 @@
-﻿using FluentNHibernate.Cfg;
-using FluentNHibernate.Cfg.Db;
-using NHibernate;
+﻿using NHibernate;
 namespace GH.Components
 {
     public class FactoryCriator<TFactoryCriator, TUser, TSetting> : IFactoryCriator
@@ -28,11 +26,7 @@ namespace GH.Components
             catch (Exception e)
             {
                 Logger.Error(e);
-                return Fluently.Configure()
-                    .Database(MySQLConfiguration.Standard.ConnectionString(GetConnectionString()))
-                    .ExposeConfiguration(cfg => cfg.SetProperty("command_timeout", "200"))
-                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<TUser>())
-                    .BuildSessionFactory();
+                return SessionFactoryBuilder.BuildMySql(GetConnectionString(), typeof(TUser).Assembly);
             }
         }
         //protected virtual CfgCoreConnection GetCfg()

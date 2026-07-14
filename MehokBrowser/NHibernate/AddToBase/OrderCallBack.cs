@@ -1,16 +1,16 @@
-﻿using FluentNHibernate.Mapping;
+﻿using NHibernate.Mapping.ByCode.Conformist;
 using GH.NHibernate;
 namespace MeshokBrowser.NHibernate
 {
     public class OrderCallBack : BaseEntity
     {
     }
-    public class OrderCallBackMap : ClassMap<OrderCallBack>
+    public class OrderCallBackMap : ClassMapping<OrderCallBack>
     {
         public OrderCallBackMap()
         {
             Table("z$import_co");
-            Id(x => x.id, "co_id");
+            Id(x => x.id, map => map.Column("co_id"));
         }
     }
 }

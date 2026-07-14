@@ -1,4 +1,4 @@
-﻿using FluentNHibernate.Mapping;
+﻿using NHibernate.Mapping.ByCode.Conformist;
 using GH.NHibernate;
 using System.ComponentModel.DataAnnotations;
 namespace MeshokBrowser.NHibernate
@@ -16,17 +16,17 @@ namespace MeshokBrowser.NHibernate
         [Display(Name = "Текст сообщения")]
         public virtual string zsc_message { get; set; }
     }
-    public class MessagesSetMap : ClassMap<MessagesSet>
+    public class MessagesSetMap : ClassMapping<MessagesSet>
     {
         public MessagesSetMap()
         {
             Table("z$statuses_cod");
-            Id(x => x.id, "zsc_id");
-            Map(x => x.zsc_cs_id, "zsc_cs_id");
-            Map(x => x.zsc_zs_id, "zsc_zs_id");
-            Map(x => x.zsc_md_id, "zsc_md_id").Nullable();
-            Map(x => x.zsc_case, "zsc_case");
-            Map(x => x.zsc_message, "zsc_message");
+            Id(x => x.id, map => map.Column("zsc_id"));
+            Property(x => x.zsc_cs_id, map => map.Column("zsc_cs_id"));
+            Property(x => x.zsc_zs_id, map => map.Column("zsc_zs_id"));
+            Property(x => x.zsc_md_id, map => map.Column("zsc_md_id"));
+            Property(x => x.zsc_case, map => map.Column("zsc_case"));
+            Property(x => x.zsc_message, map => map.Column("zsc_message"));
         }
     }
 }

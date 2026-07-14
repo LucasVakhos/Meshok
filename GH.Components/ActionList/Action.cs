@@ -2,7 +2,6 @@
 // Type: GH.Components.Windows.Forms.Actions.Action
 // Assembly: GH.Components.Windows.Forms.Actions, Version=1.3.0.0, Culture=neutral, PublicKeyToken=81de48f2c6979a5b
 // MVID: A3CB4EFA-A290-4B96-A454-5604A140D416
-// Assembly location: E:\C#\KULAKOVSKY\AmigoPlus\AmigoPlus\bin\Debug\lib\GH.Components.Windows.Forms.Actions.dll
 using DevExpress.XtraBars;
 using DevExpress.XtraNavBar;
 using System.ComponentModel;
@@ -385,8 +384,6 @@ namespace GH.Components
             EventInfo eventInfo2 = extendee.GetType().GetEvent("CheckStateChanged");
             if (eventInfo2 != (EventInfo)null)
                 eventInfo2.AddEventHandler((object)extendee, (Delegate)_checkStateChangedEventHandler);
-            if (extendee is ToolBarButton toolBarButton)
-                toolBarButton.Parent.ButtonClick += toolbar_ButtonClick;
             if (extendee is NavBarItem navBarItem)
                 navBarItem.LinkClicked += navBarItem_LinkClicked;
             if (extendee is BarItem barItem)
@@ -400,8 +397,6 @@ namespace GH.Components
             EventInfo eventInfo2 = extendee.GetType().GetEvent("CheckStateChanged");
             if (eventInfo2 != (EventInfo)null)
                 eventInfo2.RemoveEventHandler((object)extendee, (Delegate)_checkStateChangedEventHandler);
-            if (extendee is ToolBarButton toolBarButton)
-                toolBarButton.Parent.ButtonClick -= toolbar_ButtonClick;
             if (extendee is NavBarItem navBarItem)
                 navBarItem.LinkClicked -= navBarItem_LinkClicked;
             if (extendee is BarItem barItem)
@@ -418,11 +413,6 @@ namespace GH.Components
             if (!targets.Contains((Component)e.Item))
                 return;
             handleClick((object)e.Item, (EventArgs)e);
-        }
-        private void toolbar_ButtonClick(object sender, ToolStripItemClickedEventArgs e)
-        {
-            if (!targets.Contains((Component)e.Button)) return;
-            handleClick((object)e.Button, (EventArgs)e);
         }
         private void target_Click(object sender, EventArgs e)
         {

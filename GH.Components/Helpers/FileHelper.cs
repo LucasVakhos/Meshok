@@ -10,7 +10,7 @@ namespace GH.Components
             {
                 FileHelper.OpenViaProcess(link);
             }
-            catch (GH.ComponentsException ex)
+            catch (GHException ex)
             {
                 DlgHelper.DlgError("Не возможно открыть url: " + link + Environment.NewLine + ex.Message);
             }
@@ -26,7 +26,7 @@ namespace GH.Components
                 else
                     FileHelper.OpenFolder(fileName);
             }
-            catch (GH.ComponentsException ex)
+            catch (GHException ex)
             {
                 DlgHelper.DlgError("Не возможно открыть файл: " + fileName + Environment.NewLine + ex.Message);
             }
@@ -49,7 +49,7 @@ namespace GH.Components
             }
             catch (Win32Exception ex)
             {
-                throw new GH.ComponentsException(ex.Message);
+                throw new GHException(ex.Message, ex);
             }
         }
     public static void OpenViaProcess(string fileName)
@@ -67,7 +67,7 @@ namespace GH.Components
             }
             catch (Win32Exception ex)
             {
-                throw new GH.ComponentsException(ex.Message);
+                throw new GHException(ex.Message, ex);
             }
         }
     public static bool IsCompressed(string pad)

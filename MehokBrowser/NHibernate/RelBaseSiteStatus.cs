@@ -1,17 +1,17 @@
-﻿using FluentNHibernate.Mapping;
+﻿using NHibernate.Mapping.ByCode.Conformist;
 using GH.NHibernate;
 namespace MeshokBrowser.NHibernate
 {
     public class RelBaseSiteStatus : BaseEntity
     {
     }
-    public class RelBaseSiteStatusMap : ClassMap<RelBaseSiteStatus>
+    public class RelBaseSiteStatusMap : ClassMapping<RelBaseSiteStatus>
     {
         public RelBaseSiteStatusMap()
         {
             Table("z$import_statuses");
-            Id(x => x.id, "cs_id");
-            Map(x => x.Name, "cs_name");
+            Id(x => x.id, map => map.Column("cs_id"));
+            Property(x => x.Name, map => map.Column("cs_name"));
         }
     }
 }
