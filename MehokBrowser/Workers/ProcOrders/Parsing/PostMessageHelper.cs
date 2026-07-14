@@ -1,5 +1,4 @@
-﻿using Gecko;
-using Gecko.DOM;
+using GH.Components;
 using MeshokBrowser.NHibernate;
 using System;
 using System.Collections.Generic;
@@ -11,10 +10,10 @@ namespace MeshokBrowser.Workers
 {
     public static class PostMessageHelper
     {
-        public static void PostingMessage(GeckoWebBrowser browser, OrderLine currentObject)
+        public static void PostingMessage(GhBrowser browser, OrderLine currentObject)
         {
-            GeckoDocument doc = browser.Document;
-            GeckoTextAreaElement memo = doc.GetElementsByTagName("textarea").Where(x => x.Id == "MESS").FirstOrDefault() as GeckoTextAreaElement;
+            GhDocument doc = browser.Document;
+            GhTextAreaElement memo = doc.GetElementsByTagName("textarea").Where(x => x.Id == "MESS").FirstOrDefault() as GhTextAreaElement;
             if (memo == null)
                 return;
             string bodiText = doc.Body.TextContent;
@@ -32,7 +31,7 @@ namespace MeshokBrowser.Workers
                 string mess = item.ticket + "\r\n" + item.mess_text;
                 memo.Value = mess;
                 Application.DoEvents();
-                foreach (GeckoInputElement btn in doc.GetElementsByTagName("input").Where(x => x.GetAttribute("type") == "submit" && x.GetAttribute("value") == "Отправить"))
+                foreach (GhInputElement btn in doc.GetElementsByTagName("input").OfType<GhInputElement>().Where(x => x.GetAttribute("type") == "submit" && x.GetAttribute("value") == "Отправить"))
                 {
                     btn.Focus();
                     Application.DoEvents();

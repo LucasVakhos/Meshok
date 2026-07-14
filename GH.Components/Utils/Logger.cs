@@ -4,6 +4,7 @@ using log4net.Core;
 using log4net.Filter;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
+using System.Configuration;
 namespace GH.Components
 {
     public static class Logger

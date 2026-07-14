@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System;
@@ -226,15 +226,7 @@ namespace GH.Components
         {
             throw new NotImplemented(nameof(GetAboutBox), this);
         }
-    internal void SetSqlFactoryCriator()
-        {
-            IFactoryCriator factory = GetSqlFactoryCriator();
-            NHHelper.SetMainFactoryCriator(factory);
-        }
-    public virtual IFactoryCriator GetSqlFactoryCriator()
-        {
-            throw new NotImplemented(nameof(GetSqlFactoryCriator), this);
-        }
+
     public virtual Form GetLoginForm()
         {
             throw new NotImplemented(nameof(GetLoginForm), this);

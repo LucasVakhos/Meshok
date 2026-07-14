@@ -21,7 +21,7 @@ namespace GH.Configs
                 _dataSource = value;
             }
         }
-        private string _dataSource = "localhost";
+        private string _dataSource = GH.Components.SecretProvider.IShopDataSource;
         [DataMember]
         [DbConnectionProperty(Category = Category.Connection, Caption = "Remote",
             ToolTip = "Если подключение к серверу на другом компьютере то Remote [V]", Default = false, EditorType = EditorType.Check, SubGroup = "Server")]
@@ -79,7 +79,7 @@ namespace GH.Configs
             switch (name)
             {
                 case nameof(DataSource):
-                    return "localhost";
+                    return GH.Components.SecretProvider.IShopDataSource;
                 case nameof(Remote):
                     return false;
                 case nameof(Port):
@@ -89,17 +89,17 @@ namespace GH.Configs
                 case nameof(Dialect):
                     return 3;
                 case nameof(Database):
-                    return Path.Combine(RunContext.ExePath + "ISHOP.FDB");
+                    return Path.Combine(RunContext.ExePath + GH.Components.SecretProvider.IShopDatabasePath);
                 case nameof(UserID):
-                    return "SYSDBA";
+                    return GH.Components.SecretProvider.IShopUserId;
                 case nameof(Password):
-                    return "42220";
+                    return GH.Components.SecretProvider.IShopPassword;
                 case nameof(ServerType):
                     return FbServerType.Default;
                 case nameof(UserLogin):
-                    return "Виктор";
+                    return GH.Components.SecretProvider.IShopUserLogin;
                 case nameof(UserPassword):
-                    return "1234567";
+                    return GH.Components.SecretProvider.IShopUserPassword;
                 default:
                     return null;
             }

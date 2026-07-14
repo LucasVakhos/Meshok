@@ -1,4 +1,4 @@
-using GH.Browser;
+using GH.Components;
 using System;
 using System.Threading.Tasks;
 namespace MeshokBrowser.Workers
@@ -33,7 +33,7 @@ namespace MeshokBrowser.Workers
         }
         protected async Task SetProgressTotalAsync()
         {
-            string text = await ProcScreen.GetElementTextAsync(".p_l_count") ?? "1";
+            string text = await ProcScreen.webBrowser.GetElementTextAsync(".p_l_count") ?? "1";
             string find = "Страница 1 из";
             int cnt = text.IndexOf(find, StringComparison.OrdinalIgnoreCase);
             text = cnt == -1 ? "1" : text.Substring(cnt + find.Length).Trim();
@@ -50,7 +50,7 @@ namespace MeshokBrowser.Workers
         private async Task<bool> DeletePageAsync()
         {
             ClearCash();
-            bool result = await ProcScreen.ExecuteBoolScriptAsync("""
+            bool result = await ProcScreen.webBrowser.ExecuteBoolScriptAsync("""
                 (() => {
                     const checkboxes = Array.from(document.querySelectorAll('input[name="work[]"]'));
                     if (checkboxes.length === 0) return false;

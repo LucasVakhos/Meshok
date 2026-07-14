@@ -1,9 +1,9 @@
-﻿using DevExpress.XtraEditors;
+using DevExpress.XtraEditors;
 using System.Collections;
 namespace GH.Components
 {
     public delegate void OnGetSqlString(SqlTypes sqlType, BaseEntity item, out string sqlString);
-    public delegate void GetRepository(out INHRepository repo);
+    public delegate void GetRepository(out IDataRepository repo);
     public class ActionCreateParams
     {
         public readonly ActionDataGh Action;

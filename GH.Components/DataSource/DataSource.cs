@@ -1,4 +1,4 @@
-﻿using DevExpress.Data;
+using DevExpress.Data;
 using DevExpress.Export.Xl;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid;
@@ -228,9 +228,9 @@ namespace GH.Components
 
     private bool _Opening = false;
     private IList<AbstractEntity> _inProcList = new List<AbstractEntity>();
-    internal INHRepository _repository;
+    internal IDataRepository _repository;
         [Browsable(false)]
-        public INHRepository Repository
+        public IDataRepository Repository
         {
             get
             {

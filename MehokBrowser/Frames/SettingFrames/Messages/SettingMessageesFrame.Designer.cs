@@ -1,4 +1,4 @@
-﻿namespace MeshokBrowser.Workers
+namespace MeshokBrowser.Workers
 {
     partial class MessagesSetting
     {
@@ -28,10 +28,10 @@
             this.pmuMessage = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mniFish = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.dataLayout = new GH.Controls.LayoutControlGh();
+            this.dataLayout = new GH.Components.LayoutControlGh();
             this.comboZSC_CASE = new DevExpress.XtraEditors.LookUpEdit();
-            this.gridControl = new GH.Grids.GridGh();
-            this.gridView = new GH.Grids.ViewGh();
+            this.gridControl = new GH.Components.GridGh();
+            this.gridView = new GH.Components.ViewGh();
             this.colid = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colcs_name = new DevExpress.XtraGrid.Columns.GridColumn();
             this.baseStatusCombo = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
@@ -97,7 +97,7 @@
             // 
             // dataSource
             // 
-            this.dataSource.DataSource = typeof(MeshokBrowser.NHibernate.MessagesSet);
+            this.dataSource.DataSource = typeof(MeshokBrowser.Models.MessagesSet);
             this.dataSource.Grid = this.gridControl;
             this.dataSource.PageSupport.EditGroup = this.groupEdit;
             this.dataSource.PageSupport.PageForEdit = this.PageEdit;
@@ -556,9 +556,9 @@
         private System.Windows.Forms.ContextMenuStrip pmuMessage;
         private System.Windows.Forms.ToolStripMenuItem mniFish;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private GH.Controls.LayoutControlGh dataLayout;
-        private GH.Grids.GridGh gridControl;
-        private GH.Grids.ViewGh gridView;
+        private GH.Components.LayoutControlGh dataLayout;
+        private GH.Components.GridGh gridControl;
+        private GH.Components.ViewGh gridView;
         private DevExpress.XtraGrid.Columns.GridColumn colid;
         private DevExpress.XtraGrid.Columns.GridColumn colcs_name;
         private DevExpress.XtraGrid.Columns.GridColumn colzs_name;

@@ -96,7 +96,7 @@ namespace NewsMaker
         {
             this.idempotencyKey = idempotencyKey;
             ToFrom to = new ToFrom(mailto, name);
-            ToFrom from = new ToFrom("info@bridgenote.com", "Bridgenote.com");
+            ToFrom from = new ToFrom(IniHelper.CoreCfg<CfgPost>().BridgeEmail, "Bridgenote.com");
             if (subject == null) subject = "Обновления на Bridgenote для " + name;
             if (body == null)
             {

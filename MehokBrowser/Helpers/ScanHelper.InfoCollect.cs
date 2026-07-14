@@ -1,9 +1,5 @@
-﻿using Common;
-using Gecko;
-using Gecko.Collections;
-using Gecko.DOM;
-using Gecko.Events;
-using GH.Helpers;
+using Common;
+using GH.Components;
 using MeshokBrowser.NHibernate;
 using MeshokBrowser.Workers;
 using System;
@@ -45,7 +41,7 @@ namespace MeshokBrowser.Helpers
                 // документ пустой
                 return false;
             // получает все ряды в документе
-            IEnumerable<GeckoElement> rows = scanParams.scan_table.GetElementsByTagName("tr").
+            IEnumerable<GhDomElement> rows = scanParams.scan_table.GetElementsByTagName("tr").
                     Where(x => x.GetAttribute("class") == "r1" || x.GetAttribute("class") == "r2");
             if (rows != null || rows.Count() > 0)
             {
@@ -87,7 +83,7 @@ namespace MeshokBrowser.Helpers
             if (rows == null || rows.Count() == 0)
                 // нет таких лотов
                 return false;
-            foreach (GeckoHtmlElement row in rows)
+            foreach (GhDomElement row in rows)
             {
                 if (!ProcessRunHelper.Executing)
                     // запрещаем дальнейшую обработку
@@ -170,14 +166,14 @@ namespace MeshokBrowser.Helpers
         protected void CollectForm()
         {
             ScanParams sp = ScanParams.Instance(true);
-            foreach (GeckoFormElement item in webDocument.Forms.Where(x => x.Id == "form2" &&
+            foreach (GhFormElement item in webDocument.Forms.Where(x => x.Id == "form2" &&
                 x.GetAttribute("method") == "POST" &&
                 x.GetElementsByTagName("table") != null
                 ))
             {
                 if (!ProcessRunHelper.Executing)
                     return;
-                foreach (GeckoHtmlElement table in item.GetElementsByTagName("table"))
+                foreach (GhDomElement table in item.GetElementsByTagName("table"))
                 {
                     if (table.ClassName == "standart_listing")
                     {
@@ -188,12 +184,12 @@ namespace MeshokBrowser.Helpers
                 }
             }
         }
-        protected void CollectOrdersRow(GeckoHtmlElement row)
+        protected void CollectOrdersRow(GhDomElement row)
         {
             ScanParams scanParams = ScanParams.Instance();
             scanParams.NewScan();
 #if USE_TEST_LABEL
-            foreach (GeckoHtmlElement div in row.GetElementsByTagName("div").Where(x => x.GetAttribute("class") == "deal_note"))
+            foreach (GhDomElement div in row.GetElementsByTagName("div").Where(x => x.GetAttribute("class") == "deal_note"))
             {
                 if (div.TextContent.ToUpper().Contains("TEST"))
                 {
@@ -204,15 +200,15 @@ namespace MeshokBrowser.Helpers
             if (!scanParams.Is_test)
                 return;
 #endif
-            foreach (GeckoHtmlElement item in row.GetElementsByTagName("td"))
+            foreach (GhDomElement item in row.GetElementsByTagName("td"))
             {
-                IDomHtmlCollection<GeckoElement> HrefCollettion = item.GetElementsByTagName("a");
-                IDomHtmlCollection<GeckoElement> DivCollettion = item.GetElementsByTagName("div");
+                IEnumerable<GhDomElement> HrefCollettion = item.GetElementsByTagName("a");
+                IEnumerable<GhDomElement> DivCollettion = item.GetElementsByTagName("div");
                 if (string.IsNullOrEmpty(scanParams.deal_url) && HrefCollettion.Count() == 0)
                     continue;
                 if (string.IsNullOrEmpty(scanParams.deal_url) && HrefCollettion.Count() == 2)
                 {
-                    foreach (GeckoElement a in item.GetElementsByTagName("a"))
+                    foreach (GhDomElement a in item.GetElementsByTagName("a"))
                     {
                         string url = a.GetAttribute("href");
                         if (url.Contains("item"))

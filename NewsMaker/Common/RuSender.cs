@@ -1,4 +1,4 @@
-﻿using GH.Utils;
+using GH.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -11,7 +11,7 @@ using System.Text;
 using Newtonsoft.Json.Converters;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using static GH.Utils.DlgHelper;
+using static GH.Components.DlgHelper;
 using System.Windows.Forms;
 using System.Linq;
 namespace NewsMaker.Common

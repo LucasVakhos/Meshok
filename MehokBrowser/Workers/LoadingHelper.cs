@@ -1,5 +1,5 @@
 using GH.AppContext;
-using GH.Browser;
+using GH.Components;
 using GH.Configs;
 using System.Collections.Generic;
 using System.IO;
@@ -22,7 +22,7 @@ namespace MeshokBrowser.Workers
         {
             if (!await browser.ExistsAsync("input[name='bulk_data']"))
                 return false;
-            CfgMeshok cfg = IniHelper.Cfg();
+            CfgMeshok cfg = IniHelper.Cfg<CfgMeshok>();
             await browser.SetElementValueAsync("select[name='format']", "891");
             await browser.SetElementValueAsync("select[name='sale_type']", "Sale");
             await browser.SetElementValueAsync("select[name='num_per']", "100");

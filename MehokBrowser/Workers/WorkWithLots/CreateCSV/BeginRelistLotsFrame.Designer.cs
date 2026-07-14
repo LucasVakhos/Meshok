@@ -1,4 +1,4 @@
-﻿namespace MeshokBrowser.Workers
+namespace MeshokBrowser.Workers
 {
     partial class BeginRelistLotsForm
     {
@@ -31,7 +31,7 @@
             DevExpress.XtraLayout.RowDefinition rowDefinition1 = new DevExpress.XtraLayout.RowDefinition();
             DevExpress.XtraLayout.RowDefinition rowDefinition2 = new DevExpress.XtraLayout.RowDefinition();
             DevExpress.XtraLayout.RowDefinition rowDefinition3 = new DevExpress.XtraLayout.RowDefinition();
-            this.layoutControl1 = new GH.Controls.LayoutControlGh();
+            this.layoutControl1 = new GH.Components.LayoutControlGh();
             this.lblInfo = new DevExpress.XtraEditors.LabelControl();
             this.btnOK = new DevExpress.XtraEditors.SimpleButton();
             this.btnCancel = new DevExpress.XtraEditors.SimpleButton();
@@ -217,7 +217,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataSource)).EndInit();
             this.ResumeLayout(false);
         }
-        private GH.Controls.LayoutControlGh layoutControl1;
+        private GH.Components.LayoutControlGh layoutControl1;
         private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup1;
         private DevExpress.XtraEditors.SimpleButton btnOK;
         private DevExpress.XtraEditors.SimpleButton btnCancel;

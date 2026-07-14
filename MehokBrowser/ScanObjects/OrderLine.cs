@@ -1,7 +1,5 @@
 ﻿using Common;
-using Gecko;
-using Gecko.DOM;
-using GH.Helpers;
+using GH.Components;
 using MeshokBrowser.Helpers;
 using MeshokBrowser.Workers;
 using System;
@@ -141,7 +139,7 @@ namespace MeshokBrowser.NHibernate
                 ChekClientOnOrder();
             }
         }
-        public virtual GeckoHtmlElement HtmlRow { get; set; }
+        public virtual GhDomElement HtmlRow { get; set; }
         private Title _title;
         public virtual Title Title
         {
@@ -173,7 +171,7 @@ namespace MeshokBrowser.NHibernate
                 }
             }
         }
-        public OrderLine(ScanParams scanParams, GeckoHtmlElement row)
+        public OrderLine(ScanParams scanParams, GhDomElement row)
         {
             SetOrderLine(scanParams, row);
             if (ScanSetting.ScanStatus == ScanStatus.ScanNew || ScanSetting.ScanStatus == ScanStatus.ScanLostDeals)
@@ -182,7 +180,7 @@ namespace MeshokBrowser.NHibernate
                 Client = new Client(Url, nick);
             }
         }
-        public void SetOrderLine(ScanParams scanParams, GeckoHtmlElement row)
+        public void SetOrderLine(ScanParams scanParams, GhDomElement row)
         {
             HtmlRow = row;
             title_url = scanParams.title_url;
@@ -211,7 +209,7 @@ namespace MeshokBrowser.NHibernate
         }
         public virtual void CheckRow()
         {
-            foreach (GeckoInputElement checkbox in HtmlRow.GetElementsByTagName("input").Where(x => x.GetAttribute("name") == "deal_work[]"))
+            foreach (GhInputElement checkbox in HtmlRow.GetElementsByTagName("input").OfType<GhInputElement>().Where(x => x.GetAttribute("name") == "deal_work[]"))
             {
                 checkbox.Checked = true;
                 Application.DoEvents();

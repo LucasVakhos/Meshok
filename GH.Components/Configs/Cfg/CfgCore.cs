@@ -6,7 +6,8 @@ namespace GH.Components
     public class CfgCore : AbstractEntity
     {
         internal static bool _loading = false;
-    internal string ConfigPath
+    internal string ConfigPath => AppCleaner.IniFile.DefaultFilePath;
+    private string LegacyConfigPath
         {
             get
             {
@@ -40,14 +41,21 @@ namespace GH.Components
             {
                 LoadDefauls();
                 CfgCore cfg = null;
-                FileInfo _fileInfo = new FileInfo(ConfigPath);
-                if (!_fileInfo.Exists)
-                {
-                    Save(true);
-                    return;
-                }
                 Type type = GetType();
-                string json = File.ReadAllText(_fileInfo.FullName, System.Text.Encoding.UTF8);
+                AppCleaner.IniFile ini = AppCleaner.IniFile.DefaultInstance();
+                string json = ini.Read(GetName(), "Json");
+                bool migrated = false;
+
+                if (string.IsNullOrEmpty(json) && File.Exists(LegacyConfigPath))
+                {
+                    string legacy = File.ReadAllText(LegacyConfigPath, System.Text.Encoding.UTF8).Trim();
+                    if (legacy.StartsWith("{"))
+                    {
+                        json = legacy;
+                        migrated = true;
+                    }
+                }
+
                 if (string.IsNullOrEmpty(json))
                 {
                     Save(true);
@@ -59,6 +67,8 @@ namespace GH.Components
                 {
                     cfg = JsonConvert.DeserializeObject(json, type, ser) as CfgCore;
                     Assigne(cfg);
+                    if (migrated)
+                        Save(true);
                 }
                 catch (Exception ex)
                 {
@@ -100,20 +110,15 @@ namespace GH.Components
         {
             if (!(anything || HasChanges))
                 return;
-            FileInfo _fileInfo = new FileInfo(ConfigPath);
             Type type = GetType();
-            Directory.CreateDirectory(Path.GetDirectoryName(_fileInfo.FullName));
-            if (_fileInfo.Exists)
-                File.Delete(_fileInfo.FullName);
             JsonSerializerSettings ser = new JsonSerializerSettings();
             ser.ContractResolver = new CamelCasePropertyNamesContractResolver();
             try
             {
                 string json = JsonConvert.SerializeObject(this, ser);
-                using (StreamWriter sw = new StreamWriter(_fileInfo.FullName, false, System.Text.Encoding.UTF8))
-                {
-                    sw.WriteLine(json);
-                }
+                AppCleaner.IniFile ini = AppCleaner.IniFile.DefaultInstance();
+                ini.Write(GetName(), "Json", json);
+                ini.Save();
             }
             catch (Exception ex)
             {

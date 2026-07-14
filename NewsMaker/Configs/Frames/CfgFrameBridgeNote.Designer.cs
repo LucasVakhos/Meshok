@@ -1,4 +1,4 @@
-﻿namespace MeshokBrowser
+namespace GH.Configs
 {
     partial class CfgFrameBridgeNote
     {

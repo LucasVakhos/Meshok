@@ -1,4 +1,4 @@
-﻿namespace MeshokBrowser
+namespace MeshokBrowser
 {
     partial class MainConfigFrame
     {
@@ -24,7 +24,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.layoutControl = new GH.Controls.LayoutControlGh();
+            this.layoutControl = new GH.Components.LayoutControlGh();
             this.lgRoot = new DevExpress.XtraLayout.LayoutControlGroup();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lgRoot)).BeginInit();
@@ -70,7 +70,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.lgRoot)).EndInit();
             this.ResumeLayout(false);
         }
-        private GH.Controls.LayoutControlGh layoutControl;
+        private GH.Components.LayoutControlGh layoutControl;
         private DevExpress.XtraLayout.LayoutControlGroup lgRoot;
     }
 }

@@ -16,13 +16,13 @@ namespace GH.Configs
             switch (name)
             {
                 case nameof(Server):
-                    return "bd.bridgenote.com";
+                    return GH.Components.SecretProvider.CoreNewsBridgeServer;
                 case nameof(Database):
-                    return "bridgenote";
+                    return GH.Components.SecretProvider.CoreNewsBridgeDatabase;
                 case nameof(UserID):
-                    return "bridge";
+                    return GH.Components.SecretProvider.CoreNewsBridgeUserId;
                 case nameof(Password):
-                    return "1MaB5zIrOndfqfvUJc";
+                    return GH.Components.SecretProvider.CoreNewsBridgePassword;
                 default:
                     return null;
             }

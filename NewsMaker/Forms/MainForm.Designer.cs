@@ -1,4 +1,4 @@
-﻿namespace NewsMaker
+namespace NewsMaker
 {
     partial class NewsMakerForm
     {
@@ -38,7 +38,7 @@
             this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miClose = new System.Windows.Forms.ToolStripMenuItem();
             this.imageCollection = new DevExpress.Utils.ImageCollection(this.components);
-            this.layoutControl = new GH.Controls.LayoutControlGh();
+            this.layoutControl = new GH.Components.LayoutControlGh();
             this.btnStart = new DevExpress.XtraEditors.SimpleButton();
             this.progressBar = new DevExpress.XtraEditors.ProgressBarControl();
             this.btnSendToMe = new DevExpress.XtraEditors.SimpleButton();
@@ -365,7 +365,7 @@
         private GH.Components.ActionList aclMain;
         private GH.Components.ActionGh actBegin;
         private GH.Components.ActionGh actSendToMe;
-        private GH.Controls.LayoutControlGh layoutControl;
+        private GH.Components.LayoutControlGh layoutControl;
         private DevExpress.XtraEditors.SimpleButton btnStart;
         private DevExpress.XtraEditors.ProgressBarControl progressBar;
         private DevExpress.XtraEditors.SimpleButton btnSendToMe;

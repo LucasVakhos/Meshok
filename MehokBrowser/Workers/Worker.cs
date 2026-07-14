@@ -9,17 +9,17 @@ namespace MeshokBrowser.Workers
     public class Worker : AbstractWorker
     {
         protected string ExportPath => Path.Combine(Application.StartupPath, RunContext.AppCfg.ExportPath);
-        protected CfgMeshok cfgMeshok = IniHelper.Cfg();
+        protected CfgMeshok cfgMeshok = IniHelper.Cfg<CfgMeshok>();
         protected string Begin_url { get; set; } = string.Empty;
         public Worker(IMainForm form) : base(form)
         {
-            ProcScreen.NavigationCompleted += WebBrowser_NavigationCompleted;
+            ProcScreen.webBrowser.NavigationCompleted += WebBrowser_NavigationCompleted;
         }
         private void WebBrowser_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
             if (!ProcessRunHelper.Executing || !ProcessRunHelper.EnableBaseDocumrntComplete)
                 return;
-            string url = ProcScreen.Source?.AbsoluteUri ?? string.Empty;
+            string url = ProcScreen.webBrowser.Source?.AbsoluteUri ?? string.Empty;
             if (!e.IsSuccess)
                 RedoNavigate(url);
             else
@@ -46,7 +46,7 @@ namespace MeshokBrowser.Workers
             if (disposedValue)
                 return;
             if (disposing)
-                ProcScreen.NavigationCompleted -= WebBrowser_NavigationCompleted;
+                ProcScreen.webBrowser.NavigationCompleted -= WebBrowser_NavigationCompleted;
             disposedValue = true;
             base.Dispose(disposing);
         }

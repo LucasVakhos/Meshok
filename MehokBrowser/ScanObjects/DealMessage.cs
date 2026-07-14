@@ -1,10 +1,10 @@
-﻿using FirebirdSql.Data.FirebirdClient;
+using FirebirdSql.Data.FirebirdClient;
 using MeshokBrowser.Helpers;
 using System;
 using System.Linq;
 namespace MeshokBrowser.NH
 {
-    public class DealMessage: DeliveryObject
+    public class DealMessage : MeshokBrowser.Models.CheckMesage
     {
         public string ticket
         {
@@ -37,10 +37,10 @@ namespace MeshokBrowser.NH
         {
             _orderLine = orderLine;
             message_case = recs.zsc_case;
-            base_id = recs.cod_id;
+            id = recs.cod_id;
             md_id = recs.md_id;
             mp_id = recs.mp_id;
-            base_status = recs.cs_id;
+            cs_id = recs.cs_id;
             dp_packed = recs.dp_packed;
             dp_totalsumm = recs.dp_totalsumm;
             mess_text = recs.zsc_message;

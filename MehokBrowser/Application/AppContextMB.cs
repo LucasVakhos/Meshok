@@ -1,7 +1,4 @@
-﻿using Gecko;
-using GH.AppContext;
-using GH.Configs;
-using GH.NHibernate;
+using GH.Components;
 using System.Windows.Forms;
 namespace MeshokBrowser
 {
@@ -9,12 +6,9 @@ namespace MeshokBrowser
     {
         protected override void InitializeSomething()
         {
-            if (!Xpcom.IsInitialized)
-            {
-                Xpcom.Initialize(Application.StartupPath + "\\Firefox\\");
-                //GeckoPreferences.User["general.useragent.override"] = "Mozilla/5.0 (Windows NT 6.1; rv:22.0) Gecko/20130405 Firefox/22.0";
-                GeckoPreferences.Default["browser.cache.memory.enabled"] = false;
-            }
+            // Первый запуск собирает старые разрозненные INI в один файл рядом с exe.
+            AppCleaner.IniFile.MigrateLegacyFiles();
+            // WebView2 is initialized by GhBrowser when its handle is created.
         }
         public override Form GetMainForm()
         {
@@ -39,9 +33,6 @@ namespace MeshokBrowser
         {
             return new CfgApp();
         }
-        public override IFactoryCriator GetSqlFactoryCriator()
-        {
-            return new FactoryCriatorMB();
-        }
+
     }
 }

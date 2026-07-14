@@ -1,4 +1,4 @@
-using GH.Browser;
+using GH.Components;
 using GH.Utils;
 using System;
 using System.Collections.Generic;
@@ -53,7 +53,7 @@ namespace MeshokBrowser.Workers
                 if (curSettingStep == ProcStep.Compare)
                 {
                     curSettingStep = ProcStep.GoToSetting;
-                    await ProcScreen.SubmitFormAsync("#form2");
+                    await ProcScreen.webBrowser.SubmitFormAsync("#form2");
                 }
                 else if (curSettingStep == ProcStep.GoToSetting)
                 {
@@ -63,17 +63,17 @@ namespace MeshokBrowser.Workers
         }
         private async Task FillPageAndPostAsync()
         {
-            bool isFillBegin = await LoadingHelper.FillBeginPageAsync(ProcScreen, files[0]);
+            bool isFillBegin = await LoadingHelper.FillBeginPageAsync(ProcScreen.webBrowser, files[0]);
             if (!isFillBegin)
             {
-                if (await ProcScreen.ClickElementAsync("input[name='SLCONSENT']"))
+                if (await ProcScreen.webBrowser.ClickElementAsync("input[name='SLCONSENT']"))
                     return;
                 curSettingStep = ProcStep.Setting;
                 ProcScreen.Navigate(Begin_url);
                 return;
             }
             curSettingStep = ProcStep.Compare;
-            if (!await ProcScreen.SubmitFormAsync("#form2"))
+            if (!await ProcScreen.webBrowser.SubmitFormAsync("#form2"))
             {
                 curSettingStep = ProcStep.Setting;
                 ProcScreen.Navigate(Begin_url);

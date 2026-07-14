@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 using Common;
 using GH.Components;
 using GH.Helpers;
-using GH.NHibernate;
 using MeshokBrowser.Frames;
-using MeshokBrowser.NHibernate;
-using static GH.Utils.UtilsGh;
+using MeshokBrowser.Data;
+using MeshokBrowser.Models;
+using static GH.Components.UtilsGh;
 namespace MeshokBrowser.Workers
 {
     public partial class MessagesSetting : SettingFrame
@@ -17,15 +17,15 @@ namespace MeshokBrowser.Workers
         {
             InitializeComponent();
             SetupLookups(this);
-            comboCS_ID.Properties.DataSource = (new NHRepository<BaseStatus>() as INHRepository).KeyIntLookupList();
+            comboCS_ID.Properties.DataSource = DapperLookupRepository.BaseStatuses();
             comboCS_ID.KeyDown += combo_KeyDown;
-            baseStatusCombo.DataSource = (new NHRepository<BaseStatus>() as INHRepository).KeyIntLookupList();
-            comboZS_ID.Properties.DataSource = (new NHRepository<SiteStatus>() as INHRepository).KeyIntLookupList();
+            baseStatusCombo.DataSource = DapperLookupRepository.BaseStatuses();
+            comboZS_ID.Properties.DataSource = DapperLookupRepository.SiteStatuses();
             comboZS_ID.KeyDown += combo_KeyDown;
-            siteStatusCombo.DataSource = (new NHRepository<SiteStatus>() as INHRepository).KeyIntLookupList(); 
-            comboMD_ID.Properties.DataSource = (new NHRepository<ModeDelivery>() as INHRepository).KeyIntLookupList(); 
+            siteStatusCombo.DataSource = DapperLookupRepository.SiteStatuses(); 
+            comboMD_ID.Properties.DataSource = DapperLookupRepository.DeliveryModes(); 
             comboMD_ID.KeyDown += combo_KeyDown;
-            deliveryCombo.DataSource = (new NHRepository<ModeDelivery>() as INHRepository).KeyIntLookupList();
+            deliveryCombo.DataSource = DapperLookupRepository.DeliveryModes();
             caseCombo.DataSource = EnumHelper<MessageCase>.GetIntKeyLookupSource();
             comboZSC_CASE.Properties.DataSource = EnumHelper<MessageCase>.GetIntKeyLookupSource();
             comboZSC_CASE.KeyDown += combo_KeyDown;
@@ -101,9 +101,9 @@ namespace MeshokBrowser.Workers
                     break;
             }
         }
-        private void bindingSource_GetRepository(out INHRepository repo)
+        private void bindingSource_GetRepository(out IDataRepository repo)
         {
-            repo = new NHRepository<MessagesSet>();
+            repo = new DapperMessageSettingsRepository();
         }
     }
 }

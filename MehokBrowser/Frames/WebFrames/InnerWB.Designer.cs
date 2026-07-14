@@ -1,4 +1,4 @@
-﻿namespace MeshokBrowser
+namespace MeshokBrowser
 {
     partial class InnerWB
     {
@@ -67,13 +67,10 @@
             // 
             // wbMain
             // 
-            this.wbMain.ConsoleMessageEventReceivesConsoleLogCalls = true;
-            this.wbMain.FrameEventsPropagateToMainWindow = false;
             this.wbMain.Location = new System.Drawing.Point(12, 38);
             this.wbMain.Name = "wbMain";
             this.wbMain.Size = new System.Drawing.Size(566, 321);
             this.wbMain.TabIndex = 9;
-            this.wbMain.UseHttpActivityObserver = false;
             // 
             // textBox1
             // 

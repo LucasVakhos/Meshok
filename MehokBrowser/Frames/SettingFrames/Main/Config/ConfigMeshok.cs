@@ -21,9 +21,9 @@ namespace MeshokBrowser
         public virtual string Site { get => _url.Substring(_url.IndexOf('/')).Replace('/', ' ').Trim(); }
         public virtual string Base_Url { get => _url; }
         public virtual string Profile_Url { get => _profile_url; }
-        private string _user = "bridgenote@gmail.com";
+        private string _user = GH.Components.SecretProvider.LegacyMeshokUser;
         public override string User { get => _user; set => _user = value; }
-        private string _passWrd = "CtlmvjqEhj;fq2018";
+        private string _passWrd = GH.Components.SecretProvider.LegacyMeshokPassword;
         public override string PassWrd { get => _passWrd; set => _passWrd = value; }
         private string _addInfo = "Стоимость отправки CD или LP Почтой России зависит от веса и оценочной стоимости ПО и составляет от 250 до 450 рублей " +
             "на стандартный CD или LP. Остальное обсуждается отдельно!";

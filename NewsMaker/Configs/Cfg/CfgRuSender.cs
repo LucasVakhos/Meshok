@@ -7,13 +7,13 @@ namespace NewsMaker
     {
         [DataMember]
         [Display(Name = "User Id", Description = "User Id для плдключения")]
-        public int ID { get; set; } = 3875;
+        public int ID { get; set; } = GH.Components.SecretProvider.RuSenderId;
         [DataMember]
         [Display(Name = "API Key", Description = "API key для подключения")]
-        public string ApiKey { get; set; } = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjIyMDc1LCJpZEV4dGVybmFsTWFpbEFwaUtleSI6Mzg3NSwiaWF0IjoxNzczMTk5NjU5fQ.9oYzM7cw0vK6Sr3zcL1wLzX0m0inNcl4qii4z14iMDA";
+        public string ApiKey { get; set; } = GH.Components.SecretProvider.RuSenderApiKey;
         [DataMember]
         [Display(Name = "Back Email", Description = "Обратный адрес")]
-        public string BackEmail { get; set; } = "info@bridgenote.com";
+        public string BackEmail { get; set; } = GH.Components.SecretProvider.RuSenderBackEmail;
         [DataMember]
         [Display(Name = "Send Limit In 1 Second", Description = "Ограничение рассылки за 1 секунду")]
         public int SendLimit { get; set; } = 10;

@@ -5,22 +5,19 @@ namespace MeshokBrowser
 {
     public class SettingBridge : PrivateSetting
     {
-        public virtual string Server { get; set; } = "bd.bridgenote.com";
-        public virtual string Base { get; set; } = "bridgenote";
-        public override string User { get; set; } = "bridge";
-        public override string PassWrd { get; set; } = "1MaB5zIrOndfqfvUJc";
+        public virtual string Server { get; set; } = GH.Components.SecretProvider.LegacyBridgeServer;
+        public virtual string Base { get; set; } = GH.Components.SecretProvider.LegacyBridgeDatabase;
+        public override string User { get; set; } = GH.Components.SecretProvider.LegacyBridgeUser;
+        public override string PassWrd { get; set; } = GH.Components.SecretProvider.LegacyBridgePassword;
     }
     public class ConfigBridge : PrivateConfig
     {
         private static uint _port = 3306;
         [Display(Name = "Server", Description = "Серевер или имя компьютера")]
         public virtual string Server { get; set; }
-        //private string _base = "bridgenote";
         [Display(Name = "Database", Description = "Путь к базе данных")]
         public virtual string Base { get; set; }
-        //private string _user = "bridge";
         public override string User { get; set; }
-        //private string _passWrd = "1MaB5zIrOndfqfvUJc";
         public override string PassWrd { get; set; }
         public override IIniFile GetIni()
         {

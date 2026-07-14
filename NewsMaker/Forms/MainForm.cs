@@ -1,10 +1,8 @@
-﻿using DevExpress.XtraEditors;
+using DevExpress.XtraEditors;
 using DevExpress.XtraLayout;
 using DevExpress.XtraLayout.Utils;
+using GH.Components;
 using GH.Configs;
-using GH.Controls;
-using GH.Interfaces;
-using GH.Utils;
 using NewsMaker.Common;
 using System;
 using System.Collections.Generic;
@@ -163,7 +161,7 @@ namespace NewsMaker
         {
             Info.FireInfo(mess, InfoType.MainInfo);
         }
-        void IMainForm.InvokeIfRequired(MethodInvoker action)
+        void IMainForm.InvokeIfRequired(System.Windows.Forms.MethodInvoker action)
         {
             InvokeIfRequired(action);
         }
@@ -243,7 +241,7 @@ namespace NewsMaker
                 workTimer.Enabled = _newsProcessor == null;
             }
         }
-        internal void InvokeIfRequired(MethodInvoker action)
+        internal void InvokeIfRequired(System.Windows.Forms.MethodInvoker action)
         {
             if (Disposing || IsDisposed)
                 return;
@@ -351,6 +349,6 @@ namespace NewsMaker
         void SetStatus(string mess, InfoType info);
         void Proces_Begined();
         void Proces_Finished();
-        void InvokeIfRequired(MethodInvoker action);
+        void InvokeIfRequired(System.Windows.Forms.MethodInvoker action);
     }
 }

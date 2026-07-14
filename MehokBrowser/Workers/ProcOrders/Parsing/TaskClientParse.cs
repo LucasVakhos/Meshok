@@ -1,11 +1,10 @@
-﻿using Gecko;
-using GH.Utils;
+using GH.Components;
 using MeshokBrowser.NHibernate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static GH.Utils.UtilsGh;
+using static GH.Components.UtilsGh;
 namespace MeshokBrowser.Workers
 {
     public class TaskClientParse : ParsingTask<Client>
@@ -17,7 +16,7 @@ namespace MeshokBrowser.Workers
         protected override void WorkWithDocument()
         {
             currentObject.ParsingSaccess = false;
-            GeckoHtmlElement a = null;
+            GhDomElement a = null;
             string nick = currentObject.nick;
             a = doc.GetElementsByTagName("a").Where(x => (nick != string.Empty && x.TextContent.Contains(nick)) || (x.ClassName == "un" && x.TextContent == string.Empty)).FirstOrDefault();
             if (a == null)
@@ -37,7 +36,7 @@ namespace MeshokBrowser.Workers
                 }
                 currentObject.site_id = int.Parse(id);
             }
-            GeckoHtmlElement city = a.Parent.Parent;
+            GhDomElement city = a.Parent.Parent;
             string cityName = "";
             if (city.TagName == "P")
             {
@@ -47,7 +46,7 @@ namespace MeshokBrowser.Workers
             }
             currentObject.ParsingSaccess = true;
             string addres = "Адрес доставки и контактная информация";
-            foreach (GeckoHtmlElement p_div in doc.GetElementsByTagName("div").Where(x => x.TextContent.Contains(addres)))
+            foreach (GhDomElement p_div in doc.GetElementsByTagName("div").Where(x => x.TextContent.Contains(addres)))
             {
                 string innerText = p_div.TextContent;
                 string[] separatingChars = { "\n", "\t" };
@@ -106,7 +105,7 @@ namespace MeshokBrowser.Workers
                         currentObject.ParsingSaccess = false;
                 }
                 return;
-                //foreach (GeckoHtmlElement td in p_div.GetElementsByTagName("td").Where(x => x.TextContent.Contains(addres)))
+                //foreach (GhDomElement td in p_div.GetElementsByTagName("td").Where(x => x.TextContent.Contains(addres)))
                 //{
                 //    string addressText = td.InnerHtml;
                 //    //string[] separatingChars = { "<br>", "</br>", "<b>", "</b>", "<p>", "</p>" };

@@ -1,4 +1,4 @@
-﻿using DevExpress.Skins;
+using DevExpress.Skins;
 using DevExpress.XtraSplashScreen;
 using System.Diagnostics;
 using System.Reflection;
@@ -26,6 +26,8 @@ namespace GH.Components
         }
     public static void RunInstance()
         {
+            // Защитный вызов для любого приложения, использующего GH.Components.
+            AppCleaner.IniFile.MigrateLegacyFiles();
             FileVersionInfo.GetVersionInfo(ExeFullName);
             string m_name = "Mutex_" + Path.GetFileNameWithoutExtension(Application.ExecutablePath);
             _mutex = new Mutex(true, m_name, out bool RuningNow);
@@ -97,7 +99,6 @@ namespace GH.Components
         }
     protected bool LogIn()
         {
-            SetSqlFactoryCriator();
             using (Form form = GetLoginForm())
             {
                 if (form == null || (CfgConnection.AutoEntering && CfgConnection.UserIsValid))

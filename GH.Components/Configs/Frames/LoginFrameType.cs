@@ -1,7 +1,7 @@
-﻿using System.Collections;
+using System.Collections;
 namespace GH.Components
 {
-    public class LoginFrameType<TConfig, TUser> : LoginFrame
+    public abstract class LoginFrameType<TConfig, TUser> : LoginFrame
         where TConfig : CfgCoreConnection
         where TUser : BaseUser
     {
@@ -33,10 +33,8 @@ namespace GH.Components
         //    throw new NotImplemented(nameof(GetCfg), this);
         //    //return IniHelper.Cfg<TConfig>();
         //}
-    protected virtual IList GetAllUsers()
-        {
-            return (new NHRepository<TUser>() as INHRepository).SelectAll();
-        }
+
+    protected abstract IList GetAllUsers();
     protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);

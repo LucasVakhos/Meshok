@@ -7,16 +7,19 @@ namespace NewsMaker
     {
         [DataMember]
         [Display(Name = "Smtp", Description = "Smtp сервер")]
-        public string Smtp { get; set; } = "smtp.yandex.ru";
+        public string Smtp { get; set; } = GH.Components.SecretProvider.NewsSmtpServer;
         [DataMember]
         [Display(Name = "Логин", Description = "Логин для подключения")]
-        public string User { get; set; } = "bridgenote";
+        public string User { get; set; } = GH.Components.SecretProvider.NewsSmtpUser;
         [DataMember]
         [Display(Name = "Пароль", Description = "Пароль для подключения")]
-        public string PassWrd { get; set; } = "Gznsqehj;fq2016";
+        public string PassWrd { get; set; } = GH.Components.SecretProvider.NewsSmtpPassword;
         [DataMember]
         [Display(Name = "Email", Description = "Обратный адрес")]
-        public string BridgeEmail { get; set; } = "bridgenote@yandex.ru";
+        public string BridgeEmail { get; set; } = GH.Components.SecretProvider.NewsBridgeEmail;
+        [DataMember]
+        [Display(Name = "Телефон", Description = "Контактный телефон в письме")]
+        public string ContactPhone { get; set; } = GH.Components.SecretProvider.NewsContactPhone;
         [DataMember]
         [Display(Name = "Порт", Description = "Порт")]
         public int Port { get; set; } = 25;

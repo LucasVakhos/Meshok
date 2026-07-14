@@ -1,6 +1,6 @@
-﻿using Gecko;
-using Gecko.DOM;
+using GH.Components;
 using MeshokBrowser.NHibernate;
+using System.Linq;
 using System.Windows.Forms;
 namespace MeshokBrowser.Workers
 {
@@ -16,7 +16,7 @@ namespace MeshokBrowser.Workers
                 return;
             currentObject.ParsingSaccess = false;
             int cnt = currentObject.Packet.OrderLines.Count;
-            foreach (GeckoHtmlElement row in doc.GetElementsByTagName("tr"))
+            foreach (GhDomElement row in doc.GetElementsByTagName("tr"))
             {
                 if (row.InnerHtml.Contains(@"<td class=""list"" style=""padding: 4px;""><a href=""/item/"))
                 {
@@ -36,14 +36,14 @@ namespace MeshokBrowser.Workers
                 }
             }
         apply_lbl:
-            GeckoHtmlElement div = doc.GetElementById("saleBAction") as GeckoHtmlElement;
-            foreach (GeckoSelectElement sel in div.GetElementsByTagName("select"))
+            GhDomElement div = doc.GetElementById("saleBAction") as GhDomElement;
+            foreach (GhSelectElement sel in div.GetElementsByTagName("select").OfType<GhSelectElement>())
             {
                 if (sel.Name == "do_work")
                 {
                     sel.SetAttribute("value", "J");
                     Application.DoEvents();
-                    foreach (GeckoInputElement btn in div.GetElementsByTagName("input"))
+                    foreach (GhInputElement btn in div.GetElementsByTagName("input").OfType<GhInputElement>())
                     {
                         if (btn.GetAttribute("value") == "Применить")
                         {

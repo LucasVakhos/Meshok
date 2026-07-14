@@ -1,4 +1,4 @@
-﻿namespace MeshokBrowser.Workers
+namespace MeshokBrowser.Workers
 {
     partial class BeginingForm
     {
@@ -31,7 +31,7 @@
             DevExpress.XtraLayout.RowDefinition rowDefinition1 = new DevExpress.XtraLayout.RowDefinition();
             DevExpress.XtraLayout.RowDefinition rowDefinition2 = new DevExpress.XtraLayout.RowDefinition();
             DevExpress.XtraLayout.RowDefinition rowDefinition3 = new DevExpress.XtraLayout.RowDefinition();
-            this.layoutControl1 = new GH.Controls.LayoutControlGh();
+            this.layoutControl1 = new GH.Components.LayoutControlGh();
             this.cboOnPage = new DevExpress.XtraEditors.LookUpEdit();
             this.dataSource = new GH.Components.DataSource(this.components);
             this.checkAddLost = new DevExpress.XtraEditors.CheckEdit();
@@ -247,7 +247,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.lcCancel)).EndInit();
             this.ResumeLayout(false);
         }
-        private GH.Controls.LayoutControlGh layoutControl1;
+        private GH.Components.LayoutControlGh layoutControl1;
         private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup1;
         private DevExpress.XtraEditors.LookUpEdit cboOnPage;
         private DevExpress.XtraEditors.CheckEdit checkAddLost;

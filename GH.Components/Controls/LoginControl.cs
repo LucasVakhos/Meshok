@@ -1,4 +1,4 @@
-﻿using DevExpress.XtraDataLayout;
+using DevExpress.XtraDataLayout;
 using DevExpress.XtraEditors;
 using DevExpress.XtraLayout;
 using System.ComponentModel;
@@ -13,11 +13,11 @@ namespace GH.Components
     public class LoginControl : LayoutControlItem
     {
         private static LoginControl login;
-    public static LoginControl Load<T>(LayoutControlItem item, BindingSource source) where T : BaseUser
+    public static LoginControl Load<T>(LayoutControlItem item, BindingSource source, IEnumerable<T> users = null) where T : BaseUser
         {
             if (login == null)
                 new LoginControl(item, source);
-            login.LookUpDataSource = (new NHRepository<T>() as INHRepository).KeyEntityLookupList();
+            login.LookUpDataSource = (users ?? Enumerable.Empty<T>()).Select(user => new KeyValuePair<BaseEntity, string>(user, user.Name)).ToArray();
             return login;
         }
 
@@ -100,11 +100,6 @@ namespace GH.Components
             //comboLogin.Size = Size;
             comboLogin.StyleController = LayoutControl;
             textEdits.Add(item, comboLogin);
-        }
-
-    private object NHRepository<T>()
-        {
-            throw new NotImplementedException();
         }
         Dictionary<LoginInputType, TextEdit> textEdits = new Dictionary<LoginInputType, TextEdit>();
         BindingSource DataSource;

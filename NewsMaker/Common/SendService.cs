@@ -1,11 +1,11 @@
-﻿using GH.AppContext;
+using GH.AppContext;
 using GH.Configs;
 using System;
 using System.IO;
 using System.Resources;
 using System.Text;
 using System.Windows.Forms;
-using csZip = Ionic.Zip;
+using System.IO.Compression;
 namespace NewsMaker.Common
 {
     public class SendService
@@ -14,6 +14,7 @@ namespace NewsMaker.Common
         private static readonly CfgApp cfgApp = IniHelper.CfgAppForm();
         private static readonly CfgRuSender cfgRuSender = IniHelper.CoreCfg<CfgRuSender>();
         private static readonly CfgProgram cfgProgram = IniHelper.CoreCfg<CfgProgram>();
+        private static readonly CfgPost cfgPost = IniHelper.CoreCfg<CfgPost>();
         private int _hasData;
         private bool _dataLoaded;
         public int RunDay
@@ -121,10 +122,12 @@ namespace NewsMaker.Common
             zipName = Path.ChangeExtension(excelName, ".zip");
             using (FileStream fs = new FileStream(zipName, FileMode.CreateNew))
             {
-                using (csZip.ZipFile zip = new csZip.ZipFile())
+                using (var archive = new ZipArchive(fs, ZipArchiveMode.Create))
                 {
-                    csZip.ZipEntry ze = zip.AddEntry(Path.GetFileName(excelName), File.OpenRead(excelName));
-                    zip.Save(fs);
+                    var entry = archive.CreateEntry(Path.GetFileName(excelName));
+                    using (var input = File.OpenRead(excelName))
+                    using (var output = entry.Open())
+                        input.CopyTo(output);
                 }
             }
             byte[] result = File.ReadAllBytes(zipName);
@@ -176,6 +179,8 @@ namespace NewsMaker.Common
             body = body.Replace("#test_label", TestLabel(html));
             body = body.Replace("#hello_name", name);
             body = body.Replace("#unsubscribe_url", UnsubscribeUrl(unsubscribe_url, html));
+            body = body.Replace("#contact_email", cfgPost.BridgeEmail ?? string.Empty);
+            body = body.Replace("#contact_phone", cfgPost.ContactPhone ?? string.Empty);
             return body.Trim();
         }
         string bodyText = string.Empty;

@@ -25,7 +25,7 @@
         private void InitializeComponent()
         {
             this.layoutControl = new DevExpress.XtraLayout.LayoutControl();
-            this.webBrowser = new Gecko.GeckoWebBrowser();
+            this.webBrowser = new GH.Components.GhBrowser();
             this.lgRoot = new DevExpress.XtraLayout.LayoutControlGroup();
             this.lcBrowser = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl)).BeginInit();
@@ -49,12 +49,12 @@
             // 
             // webBrowser
             // 
-            this.webBrowser.FrameEventsPropagateToMainWindow = false;
+
             this.webBrowser.Location = new System.Drawing.Point(12, 12);
             this.webBrowser.Name = "webBrowser";
             this.webBrowser.Size = new System.Drawing.Size(302, 237);
             this.webBrowser.TabIndex = 4;
-            this.webBrowser.UseHttpActivityObserver = false;
+
             // 
             // lgRoot
             // 
@@ -91,6 +91,6 @@
         protected DevExpress.XtraLayout.LayoutControl layoutControl;
         protected DevExpress.XtraLayout.LayoutControlGroup lgRoot;
         protected DevExpress.XtraLayout.LayoutControlItem lcBrowser;
-        public Gecko.GeckoWebBrowser webBrowser;
+        public GH.Components.GhBrowser webBrowser;
     }
 }

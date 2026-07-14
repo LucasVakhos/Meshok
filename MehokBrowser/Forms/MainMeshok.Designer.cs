@@ -1,4 +1,4 @@
-﻿namespace MeshokBrowser
+namespace MeshokBrowser
 {
     partial class MainMeshok
     {
@@ -17,9 +17,6 @@
                 if (mainBrowser != null)
                     mainBrowser.Dispose();
                 mainBrowser = null;
-                if (mainSettings != null)
-                    mainSettings.Dispose();
-                mainSettings = null;
                 if (messageSettings != null)
                     messageSettings.Dispose();
                 messageSettings = null;

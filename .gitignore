@@ -362,3 +362,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Local application credentials. Never commit this file.
+/Secret.cs
+
+# Local IDE and migration/build scratch files
+.idea/
+build-*.log
+build-*.txt
+mehokbrowser-build.txt
+temp_inspect.*
+_VS.Helper.ZipManifest.txt

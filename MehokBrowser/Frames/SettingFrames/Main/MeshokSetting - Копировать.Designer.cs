@@ -93,7 +93,7 @@
             // MeshokUser
             // 
             this.MeshokUser.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.dataSource, "User", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.MeshokUser.EditValue = "bridgenote@gmail.com";
+            this.MeshokUser.EditValue = GH.Components.SecretProvider.MeshokUserLogin;
             this.MeshokUser.Location = new System.Drawing.Point(94, 26);
             this.MeshokUser.Name = "MeshokUser";
             this.MeshokUser.Size = new System.Drawing.Size(196, 20);
@@ -212,7 +212,7 @@
             // MeshokPass
             // 
             this.MeshokPass.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.dataSource, "PassWrd", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.MeshokPass.EditValue = "CtlmvjqEhj;fq2018";
+            this.MeshokPass.EditValue = GH.Components.SecretProvider.MeshokUserPassword;
             this.MeshokPass.Location = new System.Drawing.Point(94, 56);
             this.MeshokPass.Name = "MeshokPass";
             this.MeshokPass.Size = new System.Drawing.Size(196, 20);
