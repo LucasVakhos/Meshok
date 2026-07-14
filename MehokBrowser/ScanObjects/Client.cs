@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-namespace MeshokBrowser.NHibernate
+using System.ComponentModel;
+namespace MeshokBrowser.Models
 {
     public class Client : DeliveryObject
     {

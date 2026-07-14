@@ -1,5 +1,5 @@
 using GH.Components;
-using MeshokBrowser.NHibernate;
+using MeshokBrowser.Models;
 using System.Linq;
 namespace MeshokBrowser.Workers
 {

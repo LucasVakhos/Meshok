@@ -1,6 +1,6 @@
-﻿using GH.Attributes;
+using GH.Attributes;
 using System.ComponentModel.DataAnnotations;
-namespace MeshokBrowser.NHibernate
+namespace MeshokBrowser.Models
 {
     public class Title : BaseScanEntity
     {

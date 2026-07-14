@@ -19,8 +19,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Default.cs" />
-    <Compile Remove="Application\FactoryCriatorNM.cs" />
-    <Compile Remove="NHibernate\**\*.cs" />
     <Compile Remove="Common\ISendpulse.cs" />
     <Compile Remove="Common\Sendpulse.cs" />
     <Compile Remove="Common\Utils.cs" />

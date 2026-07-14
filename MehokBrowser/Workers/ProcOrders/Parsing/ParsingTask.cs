@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
-namespace MeshokBrowser.NHibernate
+namespace MeshokBrowser.Models
 {
     public class ParsingTask<T> : DisposableTask where T : BaseScanEntity
     {

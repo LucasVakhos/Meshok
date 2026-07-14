@@ -1,8 +1,8 @@
-﻿//#define SKIP_CHANGE_STATUS
+//#define SKIP_CHANGE_STATUS
 //#define SKIP_ADD_TO_BASE
 using Common;
 using GH.Components;
-using MeshokBrowser.NHibernate;
+using MeshokBrowser.Models;
 using MeshokBrowser.Workers;
 using System;
 using System.Collections.Generic;

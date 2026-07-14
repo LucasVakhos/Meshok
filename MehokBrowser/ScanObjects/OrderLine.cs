@@ -1,4 +1,4 @@
-﻿using Common;
+using Common;
 using GH.Components;
 using MeshokBrowser.Helpers;
 using MeshokBrowser.Workers;
@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Forms;
-namespace MeshokBrowser.NHibernate
+namespace MeshokBrowser.Models
 {
     public class OrderLine : DeliveryObject
     {

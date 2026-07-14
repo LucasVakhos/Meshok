@@ -1,6 +1,5 @@
 using GH.AppContext;
 using GH.Configs;
-using GH.NHibernate;
 using System.Windows.Forms;
 namespace NewsMaker
 {

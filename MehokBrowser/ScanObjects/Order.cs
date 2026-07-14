@@ -1,9 +1,9 @@
-﻿using Common;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-namespace MeshokBrowser.NHibernate
+namespace MeshokBrowser.Models
 {
     public class Order : DeliveryObject
     {

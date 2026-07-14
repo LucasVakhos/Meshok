@@ -1,9 +1,8 @@
-﻿using Common;
-using GH.NHibernate;
+using Common;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-namespace MeshokBrowser.NHibernate
+namespace MeshokBrowser.Models
 {
     public class StatusRelation
     {

@@ -1,6 +1,6 @@
-﻿using DevExpress.XtraGrid.Views.Base;
+using DevExpress.XtraGrid.Views.Base;
 using DevExpress.XtraGrid.Views.Grid;
-using MeshokBrowser.NHibernate;
+using MeshokBrowser.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;

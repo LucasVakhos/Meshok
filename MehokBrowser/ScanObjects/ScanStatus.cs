@@ -1,4 +1,4 @@
-﻿namespace MeshokBrowser.NHibernate
+namespace MeshokBrowser.Models
 {
     public enum ScanStatus
     {

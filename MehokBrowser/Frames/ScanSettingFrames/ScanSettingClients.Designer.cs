@@ -1,4 +1,4 @@
-﻿namespace MeshokBrowser.Workers
+namespace MeshokBrowser.Workers
 {
     partial class ScanSettingClients
     {
@@ -98,7 +98,7 @@
             // 
             // dataSource
             // 
-            this.dataSource.DataSource = typeof(MeshokBrowser.NHibernate.Client);
+            this.dataSource.DataSource = typeof(MeshokBrowser.Models.Client);
             this.dataSource.Grid = this.clientsGrid;
             this.dataSource.OnOpen += new GH.Components.OpenHandler(this.dataSource_OnOpen);
             this.dataSource.PositionChanged += new System.EventHandler(this.bindingSource_PositionChanged);
@@ -132,7 +132,7 @@
             // 
             // detailSource
             // 
-            this.detailSource.DataSource = typeof(MeshokBrowser.NHibernate.Client);
+            this.detailSource.DataSource = typeof(MeshokBrowser.Models.Client);
             // 
             // gridView1
             // 

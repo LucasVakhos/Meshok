@@ -1,7 +1,7 @@
-﻿using Common;
+using Common;
 using System.ComponentModel;
 using System.Linq;
-namespace MeshokBrowser.NHibernate
+namespace MeshokBrowser.Models
 {
     public class DeliveryObject : BaseScanEntity, IDeliveryObject
     {

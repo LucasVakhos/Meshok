@@ -1,4 +1,4 @@
-﻿using MeshokBrowser.NHibernate;
+using MeshokBrowser.Models;
 using System;
 using System.Collections.Generic;
 namespace Common

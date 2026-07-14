@@ -1,6 +1,6 @@
 using Common;
 using GH.Components;
-using MeshokBrowser.NHibernate;
+using MeshokBrowser.Models;
 using MeshokBrowser.Workers;
 using System;
 using System.Collections.Generic;

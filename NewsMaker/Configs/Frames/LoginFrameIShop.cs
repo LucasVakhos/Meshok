@@ -1,6 +1,5 @@
-﻿using GH.Configs;
-using GH.NHibernate;
-using MeshokBrowser.NHibernate;
+using GH.Configs;
+using MeshokBrowser.Models;
 using System.Collections;
 using System.Collections.Generic;
 namespace MeshokBrowser

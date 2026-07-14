@@ -1,6 +1,5 @@
-﻿using GH.NHibernate;
 using System.Collections.Generic;
-namespace MeshokBrowser.NHibernate
+namespace MeshokBrowser.Models
 {
     public class BaseScanEntity : BaseEntity
     {

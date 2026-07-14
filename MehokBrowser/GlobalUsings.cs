@@ -1,4 +1,4 @@
 global using GH.Components;
 global using GH.Configs;
 global using MeshokBrowser.Models;
-global using MeshokBrowser.NHibernate;
+global using MeshokBrowser.Models;

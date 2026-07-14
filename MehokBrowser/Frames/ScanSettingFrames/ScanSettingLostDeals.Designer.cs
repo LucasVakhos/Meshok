@@ -1,4 +1,4 @@
-﻿namespace MeshokBrowser.Workers
+namespace MeshokBrowser.Workers
 {
     partial class ScanSettingLostDeals
     {
@@ -56,7 +56,7 @@
             // 
             // dataSource
             // 
-            this.dataSource.DataSource = typeof(MeshokBrowser.NHibernate.OrderLine);
+            this.dataSource.DataSource = typeof(MeshokBrowser.Models.OrderLine);
             this.dataSource.Grid = this.gridControl;
             this.dataSource.OnOpen += new GH.Components.OpenHandler(this.dataSource_OnOpen);
             // 

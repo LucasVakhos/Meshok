@@ -16,10 +16,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="NewsMaker\**\*.cs" />
-    <Compile Remove="NHibernate\**\*.cs" />
     <Compile Remove="Frames\SettingFrames\Main\**\*.cs" />
     <EmbeddedResource Remove="Frames\SettingFrames\Main\**\*.resx" />
-    <Compile Remove="Application\FactoryCriatorMB.cs" />
     <Compile Remove="Common\EnumExtensions.cs" />
     <Compile Remove="ScanObjects\DatabaseHelper.cs" />
     <Compile Remove="Workers\ProcOrders\sav\**\*.cs" />

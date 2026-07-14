@@ -16,7 +16,6 @@
   <ItemGroup>
     <Compile Remove="Extensions\ComponentExtension.cs" />
     <Compile Remove="Extensions\StringExtensions.cs" />
-    <Compile Remove="DataSource\CustomPagesNavigator.cs" />
     <Compile Remove="DataSource\FieldIntListEditor.cs" />
     <Compile Remove="Controls\ConnectButtonNew.cs" />
     <Compile Remove="Images\EditImages.cs" />
@@ -36,8 +35,6 @@
     <Compile Remove="Utils\AppIniSection.cs" />
     <Compile Remove="Utils\FinalizeInit.cs" />
     <Compile Remove="Z.FindFolder\**\*.cs" />
-    <Compile Remove="NHibernate\**\*.cs" />
-    <EmbeddedResource Remove="NHibernate\**\*.resx" />
   </ItemGroup>
 <ItemGroup>
     <EmbeddedResource Include="ActionList\Images\Action.bmp" />

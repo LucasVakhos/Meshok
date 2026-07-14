@@ -2,7 +2,7 @@ using GH.Components;
 using MeshokBrowser.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-namespace MeshokBrowser.NHibernate
+namespace MeshokBrowser.Models
 {
     public static class AllPackets
     {

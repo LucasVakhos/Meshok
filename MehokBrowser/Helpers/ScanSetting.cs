@@ -1,5 +1,5 @@
-﻿using GH.Configs;
-using MeshokBrowser.NHibernate;
+using GH.Configs;
+using MeshokBrowser.Models;
 using MeshokBrowser.Workers;
 using System;
 using System.Threading;
