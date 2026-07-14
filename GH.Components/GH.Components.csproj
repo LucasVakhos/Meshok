@@ -37,6 +37,10 @@
     <Compile Remove="Utils\FinalizeInit.cs" />
     <Compile Remove="Z.FindFolder\**\*.cs" />
     <Compile Remove="NHibernate\Entities\**\*.cs" />
+    <Compile Include="NHibernate\Entities\AbstractEntity.cs" />
+    <Compile Include="NHibernate\Entities\BaseEntity.cs" />
+    <Compile Include="NHibernate\Entities\BaseUser.cs" />
+    <Compile Include="NHibernate\Entities\Field.cs" />
     <Compile Remove="NHibernate\UpdateProcessor.cs" />
     <Compile Remove="NHibernate\UpdateProcessor.Designer.cs" />
     <EmbeddedResource Remove="NHibernate\UpdateProcessor.resx" />
