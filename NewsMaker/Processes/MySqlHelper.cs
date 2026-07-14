@@ -1,4 +1,4 @@
-﻿using GH.Configs;
+using GH.Configs;
 using MySql.Data.MySqlClient;
 using NewsMaker.Common;
 using System;
@@ -134,10 +134,10 @@ namespace NewsMaker
                             execCommand.ExecuteNonQuery();
                             transaction.Commit();
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                             transaction.Rollback();
-                            throw e;
+                            throw;
                         }
                     }
                 }

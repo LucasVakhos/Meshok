@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FirebirdSql.Data.FirebirdClient;
-using MeshokBrowser.NH;
+using Common;
+using MeshokBrowser.Deals;
 namespace MeshokBrowser.Helpers
 {
     public class ReadHelperDealMessages : ReaderHelperBase

@@ -1,12 +1,13 @@
 using FirebirdSql.Data.FirebirdClient;
+using Common;
 using MeshokBrowser.Helpers;
 using System;
 using System.Linq;
-namespace MeshokBrowser.NH
+namespace MeshokBrowser.Deals
 {
     public class DealMessage : MeshokBrowser.Models.CheckMesage
     {
-        public string ticket
+        public override string ticket
         {
             get
             {
@@ -16,13 +17,13 @@ namespace MeshokBrowser.NH
             }
         }
         private bool _dp_packed;
-        public bool dp_packed { get => _dp_packed; set => _dp_packed = value; }
+        public override bool dp_packed { get => _dp_packed; set => _dp_packed = value; }
         private double _dp_totalsumm = 0;
-        public double dp_totalsumm { get => _dp_totalsumm; set => _dp_totalsumm = value; }
+        public override double dp_totalsumm { get => _dp_totalsumm; set => _dp_totalsumm = value; }
         private string _mess_text = "";
-        public string mess_text { get => _mess_text.Replace("  ", " "); set => _mess_text = value; }
+        public override string mess_text { get => _mess_text.Replace("  ", " "); set => _mess_text = value; }
         private bool _needMessaging = true;
-        public bool NeedMessaging {
+        public override bool NeedMessaging {
             get {
 #if !test_email_message
                 if (message_case == MessageCase.EmailCheck && !string.IsNullOrEmpty(_orderLine.Client.c_email))
@@ -32,11 +33,10 @@ namespace MeshokBrowser.NH
             set => _needMessaging = value;
         }
         private OrderLine _orderLine;
-        public MessageCase message_case { get; private set; }
         public DealMessage(OrderLine orderLine, ReadHelperDealMessages recs)
         {
             _orderLine = orderLine;
-            message_case = recs.zsc_case;
+            zsc_case = (int)recs.zsc_case;
             id = recs.cod_id;
             md_id = recs.md_id;
             mp_id = recs.mp_id;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -80,10 +80,10 @@ namespace MeshokBrowser.Workers
                         else
                             trans.Rollback();
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         trans.Rollback();
-                        throw e;
+                        throw;
                     }
                 }
                 catch (Exception ex)
