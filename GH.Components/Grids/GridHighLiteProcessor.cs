@@ -226,12 +226,21 @@ namespace GH.Components
     private void LoadFromXML()
         {
             string file_name = RunContext.GetConfigsPath(this);
-            if (!File.Exists(file_name))
+            string key = Path.GetFileNameWithoutExtension(file_name);
+            AppCleaner.IniFile ini = AppCleaner.IniFile.DefaultInstance();
+            string xml = ini.Read("Highlighting", key);
+            if (string.IsNullOrEmpty(xml) && File.Exists(file_name))
+            {
+                xml = File.ReadAllText(file_name);
+                ini.Write("Highlighting", key, xml);
+                ini.Save();
+            }
+            if (string.IsNullOrEmpty(xml))
             {
                 LoadDefauls();
                 return;
             }
-            XDocument doc = XDocument.Load(file_name);
+            XDocument doc = XDocument.Parse(xml);
             foreach (HighLiterItem item in Items)
             {
                 XElement elements = doc.Descendants(nameof(HighLiterItem)).Where(x => x.FirstAttribute.Value == item.Id.ToString()).FirstOrDefault();
@@ -274,7 +283,6 @@ namespace GH.Components
             XElement root = new XElement(nameof(HighLiterItem) + "s");
             XDocument doc = new XDocument(root);
             string file_name = RunContext.GetConfigsPath(this);
-            Directory.CreateDirectory(Path.GetDirectoryName(file_name));
             foreach (HighLiterItem item in Items)
             {
                 XElement element = new XElement(nameof(HighLiterItem),
@@ -288,7 +296,9 @@ namespace GH.Components
                         new XElement("FontStrikeout", item.FontStrikeout));
                 root.Add(element);
             }
-            doc.Save(file_name);
+            AppCleaner.IniFile ini = AppCleaner.IniFile.DefaultInstance();
+            ini.Write("Highlighting", Path.GetFileNameWithoutExtension(file_name), doc.ToString(SaveOptions.DisableFormatting));
+            ini.Save();
         }
     }
 

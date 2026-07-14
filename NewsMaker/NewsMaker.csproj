@@ -29,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GH.Components\GH.Components.csproj" />
+    <ProjectReference Include="..\IniFile\IniFile.csproj" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Configs\Frames\CfgFrameBridgeNote.resx">

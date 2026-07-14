@@ -48,16 +48,32 @@ namespace GH.Components
             if (!_saveLayout)
                 return;
             string file_name = RunContext.GetConfigsPath(this);
-            if (File.Exists(file_name))
-                MainView.RestoreLayoutFromXml(file_name);
+            string key = Path.GetFileNameWithoutExtension(file_name);
+            AppCleaner.IniFile ini = AppCleaner.IniFile.DefaultInstance();
+            string layout = ini.Read("Layouts", key);
+            if (string.IsNullOrEmpty(layout) && File.Exists(file_name))
+            {
+                layout = Convert.ToBase64String(File.ReadAllBytes(file_name));
+                ini.Write("Layouts", key, layout);
+                ini.Save();
+            }
+            if (!string.IsNullOrEmpty(layout))
+            {
+                using MemoryStream stream = new MemoryStream(Convert.FromBase64String(layout));
+                MainView.RestoreLayoutFromStream(stream);
+            }
         }
     public void SaveControls()
         {
             if (!_saveLayout)
                 return;
             string file_name = RunContext.GetConfigsPath(this);
-            Directory.CreateDirectory(Path.GetDirectoryName(file_name));
-            MainView.SaveLayoutToXml(file_name);
+            string key = Path.GetFileNameWithoutExtension(file_name);
+            using MemoryStream stream = new MemoryStream();
+            MainView.SaveLayoutToStream(stream);
+            AppCleaner.IniFile ini = AppCleaner.IniFile.DefaultInstance();
+            ini.Write("Layouts", key, Convert.ToBase64String(stream.ToArray()));
+            ini.Save();
         }
     protected override BaseView CreateDefaultView()
         {

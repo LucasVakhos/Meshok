@@ -16,8 +16,7 @@ namespace MeshokBrowser
                 if (lc != null)
                 {
                     file_name = string.Format(s_file_name, ctrl.Name);
-                    if (File.Exists(file_name))
-                        lc.RestoreLayoutFromXml(file_name);
+                    RestoreLayout(file_name, stream => lc.RestoreLayoutFromStream(stream));
                     LoadControls(ctrl, string.Concat(prefix, ".", ctrl.Name));
                     continue;
                 }
@@ -25,8 +24,7 @@ namespace MeshokBrowser
                 if (gc != null)
                 {
                     file_name = string.Format(s_file_name, string.Concat(".", gc.Name, ".", gc.MainView.Name));
-                    if (File.Exists(file_name))
-                        gc.MainView.RestoreLayoutFromXml(file_name);
+                    RestoreLayout(file_name, stream => gc.MainView.RestoreLayoutFromStream(stream));
                     continue;
                 }
                 //VGridControl vgc = ctrl as VGridControl;
@@ -49,8 +47,7 @@ namespace MeshokBrowser
                 if (lc != null)
                 {
                     file_name = string.Format(s_file_name, ctrl.Name);
-                    Directory.CreateDirectory(Path.GetDirectoryName(file_name));
-                    lc.SaveLayoutToXml(file_name);
+                    SaveLayout(file_name, stream => lc.SaveLayoutToStream(stream));
                     SaveControls(ctrl, string.Concat(prefix, ".", ctrl.Name));
                     continue;
                 }
@@ -58,8 +55,7 @@ namespace MeshokBrowser
                 if (gc != null)
                 {
                     file_name = string.Format(s_file_name, string.Concat(".", gc.Name, ".", gc.MainView.Name));
-                    Directory.CreateDirectory(Path.GetDirectoryName(file_name));
-                    gc.MainView.SaveLayoutToXml(file_name);
+                    SaveLayout(file_name, stream => gc.MainView.SaveLayoutToStream(stream));
                     continue;
                 }
                 //VGridControl vgc = ctrl as VGridControl;
@@ -71,6 +67,32 @@ namespace MeshokBrowser
                 //    continue;
                 //}
             }
+        }
+
+        private static void RestoreLayout(string legacyPath, Action<Stream> restore)
+        {
+            AppCleaner.IniFile ini = AppCleaner.IniFile.DefaultInstance();
+            string key = Path.GetFileNameWithoutExtension(legacyPath);
+            string layout = ini.Read("Layouts", key);
+            if (string.IsNullOrEmpty(layout) && File.Exists(legacyPath))
+            {
+                layout = Convert.ToBase64String(File.ReadAllBytes(legacyPath));
+                ini.Write("Layouts", key, layout);
+                ini.Save();
+            }
+            if (string.IsNullOrEmpty(layout))
+                return;
+            using MemoryStream stream = new MemoryStream(Convert.FromBase64String(layout));
+            restore(stream);
+        }
+
+        private static void SaveLayout(string legacyPath, Action<Stream> save)
+        {
+            using MemoryStream stream = new MemoryStream();
+            save(stream);
+            AppCleaner.IniFile ini = AppCleaner.IniFile.DefaultInstance();
+            ini.Write("Layouts", Path.GetFileNameWithoutExtension(legacyPath), Convert.ToBase64String(stream.ToArray()));
+            ini.Save();
         }
     }
 }

@@ -159,5 +159,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GH.Components\GH.Components.csproj" />
+    <ProjectReference Include="..\IniFile\IniFile.csproj" />
   </ItemGroup>
 </Project>
