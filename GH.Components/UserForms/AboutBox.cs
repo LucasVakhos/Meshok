@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 namespace GH.Components
 {
     public partial class AboutBox : SimpleForm
@@ -36,7 +36,7 @@ namespace GH.Components
                     if (!string.IsNullOrEmpty(assemblyTitleAttribute.Title))
                         return assemblyTitleAttribute.Title;
                 }
-                return Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().CodeBase);
+                return Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location);
             }
         }
 

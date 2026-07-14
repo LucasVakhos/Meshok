@@ -1,4 +1,4 @@
-﻿using DevExpress.XtraSplashScreen;
+using DevExpress.XtraSplashScreen;
 using System.Reflection;
 namespace GH.Components
 {
@@ -66,7 +66,7 @@ namespace GH.Components
                     if (!string.IsNullOrEmpty(assemblyTitleAttribute.Title))
                         return assemblyTitleAttribute.Title;
                 }
-                return Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                return Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location);
             }
         }
 

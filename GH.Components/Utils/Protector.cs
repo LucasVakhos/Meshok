@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using System.Text;
 namespace GH.Components
 {
@@ -14,7 +14,7 @@ namespace GH.Components
         {
             byte[] plainBytes = Encoding.Unicode.GetBytes(plainText);
             var aes = Aes.Create();
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterations);
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterations, HashAlgorithmName.SHA1);
             aes.Key = pbkdf2.GetBytes(32); // установить 256-битный ключ
             aes.IV = pbkdf2.GetBytes(16); // установить 128-битный вектор
                                           // инициализации
@@ -29,7 +29,7 @@ namespace GH.Components
         {
             byte[] cryptoBytes = Convert.FromBase64String(cryptoText);
             var aes = Aes.Create();
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterations);
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterations, HashAlgorithmName.SHA1);
             aes.Key = pbkdf2.GetBytes(32);
             aes.IV = pbkdf2.GetBytes(16);
             var ms = new MemoryStream();

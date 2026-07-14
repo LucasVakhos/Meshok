@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.IO;
 using DevExpress.XtraEditors;
@@ -38,7 +38,7 @@ namespace MeshokBrowser
                     if (!string.IsNullOrEmpty(assemblyTitleAttribute.Title))
                         return assemblyTitleAttribute.Title;
                 }
-                return Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().CodeBase);
+                return Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location);
             }
         }
         public static string AssemblyVersion

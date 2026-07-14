@@ -1,4 +1,4 @@
-﻿using DevExpress.XtraEditors;
+using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid;
 using System.Diagnostics;
@@ -300,7 +300,7 @@ namespace GH.Components
                 {
                     using (FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                     {
-                        using (DESCryptoServiceProvider cryptic = new DESCryptoServiceProvider())
+                        using (DES cryptic = DES.Create())
                         {
                             cryptic.Key = ASCIIEncoding.ASCII.GetBytes(pass);
                             cryptic.IV = ASCIIEncoding.ASCII.GetBytes(pass);
@@ -323,7 +323,7 @@ namespace GH.Components
         {
             using (FileStream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
             {
-                using (DESCryptoServiceProvider cryptic = new DESCryptoServiceProvider())
+                using (DES cryptic = DES.Create())
                 {
                     cryptic.Key = ASCIIEncoding.ASCII.GetBytes(pass);
                     cryptic.IV = ASCIIEncoding.ASCII.GetBytes(pass);

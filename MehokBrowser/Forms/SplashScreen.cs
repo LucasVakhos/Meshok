@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
@@ -62,7 +62,7 @@ namespace MeshokBrowser
                     if (!string.IsNullOrEmpty(assemblyTitleAttribute.Title))
                         return assemblyTitleAttribute.Title;
                 }
-                return Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                return Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location);
             }
         }
         public static string AssemblyCopyright
