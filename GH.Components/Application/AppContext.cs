@@ -26,6 +26,8 @@ namespace GH.Components
         }
     public static void RunInstance()
         {
+            // Защитный вызов для любого приложения, использующего GH.Components.
+            AppCleaner.IniFile.MigrateLegacyFiles();
             FileVersionInfo.GetVersionInfo(ExeFullName);
             string m_name = "Mutex_" + Path.GetFileNameWithoutExtension(Application.ExecutablePath);
             _mutex = new Mutex(true, m_name, out bool RuningNow);

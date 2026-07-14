@@ -16,7 +16,11 @@ public sealed class SavedAttribute : Attribute
 /// </summary>
 public sealed class IniFile
 {
+    private const string MigrationSection = "IniMigration";
+    private const string MigrationVersionKey = "Version";
+    private const string CurrentMigrationVersion = "1";
     private static readonly Lazy<IniFile> Default = new(() => new IniFile(DefaultFilePath));
+    private static readonly object MigrationSync = new();
     private readonly object _sync = new();
     private readonly string _filePath;
     private readonly Dictionary<string, Dictionary<string, string>> _sections =
@@ -45,6 +49,78 @@ public sealed class IniFile
 
     public static IniFile DefaultInstance() => Default.Value;
 
+    /// <summary>
+    /// On first application start imports every legacy INI/JSON configuration
+    /// below the executable directory into the single default INI file.
+    /// Source files are kept intact; an old JSON file occupying the target path
+    /// is copied to a .legacy backup before conversion.
+    /// </summary>
+    public static void MigrateLegacyFiles()
+    {
+        lock (MigrationSync)
+        {
+            string targetPath = DefaultFilePath;
+            string? legacyTargetJson = null;
+
+            if (File.Exists(targetPath))
+            {
+                string existingText = File.ReadAllText(targetPath, Encoding.UTF8).Trim();
+                if (existingText.StartsWith('{'))
+                {
+                    legacyTargetJson = existingText;
+                    File.Copy(targetPath, targetPath + ".legacy", true);
+                    File.Delete(targetPath);
+                }
+            }
+
+            IniFile target = DefaultInstance();
+            if (target.Read(MigrationSection, MigrationVersionKey) == CurrentMigrationVersion)
+                return;
+
+            if (!string.IsNullOrEmpty(legacyTargetJson))
+                target.WriteIfMissing("CfgApp", "Json", legacyTargetJson);
+
+            foreach (string sourcePath in EnumerateLegacyIniFiles(AppContext.BaseDirectory)
+                         .OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
+            {
+                if (Path.GetFullPath(sourcePath).Equals(Path.GetFullPath(targetPath), StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                try
+                {
+                    string text = File.ReadAllText(sourcePath, Encoding.UTF8).Trim();
+                    if (string.IsNullOrEmpty(text))
+                        continue;
+
+                    if (text.StartsWith('{'))
+                    {
+                        string section = Path.GetFileNameWithoutExtension(sourcePath);
+                        target.WriteIfMissing(section, "Json", text);
+                    }
+                    else
+                    {
+                        IniFile source = new IniFile(sourcePath);
+                        foreach (var section in source._sections)
+                            foreach (var pair in section.Value)
+                                target.WriteIfMissing(section.Key, pair.Key, pair.Value);
+                    }
+                }
+                catch (IOException)
+                {
+                    // Один занятый старый файл не должен блокировать запуск.
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    // Недоступные каталоги пропускаются без потери остальных данных.
+                }
+            }
+
+            target.Write(MigrationSection, MigrationVersionKey, CurrentMigrationVersion);
+            target.Write(MigrationSection, "CompletedUtc", DateTime.UtcNow.ToString("O", CultureInfo.InvariantCulture));
+            target.Save();
+        }
+    }
+
     public string Read(string section, string key, string defaultValue = "")
     {
         lock (_sync)
@@ -67,6 +143,16 @@ public sealed class IniFile
             }
 
             values[key] = ConvertToIniString(value);
+        }
+    }
+
+    private void WriteIfMissing(string section, string key, object? value)
+    {
+        lock (_sync)
+        {
+            if (_sections.TryGetValue(section, out var values) && values.ContainsKey(key))
+                return;
+            Write(section, key, value);
         }
     }
 
@@ -162,6 +248,37 @@ public sealed class IniFile
                 }
                 values[parts[0].Trim()] = Unescape(parts[1]);
             }
+        }
+    }
+
+    private static IEnumerable<string> EnumerateLegacyIniFiles(string rootPath)
+    {
+        var pending = new Stack<string>();
+        pending.Push(rootPath);
+
+        while (pending.Count > 0)
+        {
+            string directory = pending.Pop();
+            string[] files;
+            string[] directories;
+            try
+            {
+                files = Directory.GetFiles(directory, "*.ini", SearchOption.TopDirectoryOnly);
+                directories = Directory.GetDirectories(directory, "*", SearchOption.TopDirectoryOnly);
+            }
+            catch (IOException)
+            {
+                continue;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                continue;
+            }
+
+            foreach (string file in files)
+                yield return file;
+            foreach (string child in directories)
+                pending.Push(child);
         }
     }
 
