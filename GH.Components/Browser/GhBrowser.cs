@@ -22,6 +22,8 @@ namespace GH.Components
 
         public Uri Url => Source;
 
+        public GhDocument Document => new GhDocument(this);
+
         public bool NoDefaultContextMenu
         {
             get => _noDefaultContextMenu;

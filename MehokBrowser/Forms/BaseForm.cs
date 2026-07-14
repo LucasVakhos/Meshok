@@ -3,8 +3,7 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Linq;
 using DevExpress.XtraBars.Ribbon;
-using GH.UserForms;
-using GH.Interfaces;
+using GH.Components;
 namespace MeshokBrowser
 {
     public class BaseForm : SimpleForm, IBaseFormInterface
@@ -13,7 +12,7 @@ namespace MeshokBrowser
         [Browsable(true)]
         [DefaultValue(true)]
         public bool SaveLayout { get => _saveLayout; set => _saveLayout = value; }
-        protected void InvokeIfRequired(MethodInvoker action)
+        protected void InvokeIfRequired(System.Windows.Forms.MethodInvoker action)
         {
             if (Disposing)
                 return;

@@ -1,4 +1,4 @@
-﻿using Gecko;
+using GH.Components;
 using MeshokBrowser.Helpers;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,7 +75,7 @@ namespace MeshokBrowser.NHibernate
             get => OrderLines.Where(x => x.Client != null).Select(x => x.Client).Distinct().ToList();
         }
         public static bool NeedSplit => OrderLines.Any(x => x.need_split);
-        public static OrderLine GetOrderLine(ScanParams scanParams, GeckoHtmlElement row)
+        public static OrderLine GetOrderLine(ScanParams scanParams, GhDomElement row)
         {
             OrderLine orderLine = OrderLines.SingleOrDefault(x => x.deal_id == scanParams.deal_id);
             if (orderLine == null)

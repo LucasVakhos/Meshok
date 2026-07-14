@@ -5,15 +5,8 @@ using System.IO;
 using MeshokBrowser.Workers;
 using DevExpress.XtraBars;
 using DevExpress.XtraBars.Docking2010.Views;
-using Gecko;
-using Gecko.Events;
-using Gecko.DOM;
 using System.Linq;
-using GH.Utils;
-using GH.Configs;
-using GH.Interfaces;
 using GH.Components;
-using GH.AppContext;
 namespace MeshokBrowser
 {
     public interface IMainForm : IAppForm
@@ -141,10 +134,10 @@ namespace MeshokBrowser
             AddPage(mainBrowser, false);
             ResumeLayout(false);
         }
-        private void WebBrowser_DocumentCompleted(object sender, GeckoDocumentCompletedEventArgs e)
+        private void WebBrowser_DocumentCompleted(object sender, EventArgs e)
         {
 #if old_version
-            if (!auth_success && e.Uri.OriginalString == cfgMeshok.Profile_Url && try_count < total_try_count)
+            if (!auth_success && mainBrowser.webBrowser.Url?.OriginalString == cfgMeshok.Profile_Url && try_count < total_try_count)
             {
                 Application.DoEvents();
                 auth_success = RegistrationWasCompleted();
@@ -163,7 +156,8 @@ namespace MeshokBrowser
                 }
             }
 #else
-            if (!auth_success && e.Uri.OriginalString.Contains(cfgMeshok.Base_Url) && try_count < total_try_count)
+            Uri currentUri = mainBrowser.webBrowser.Url;
+            if (!auth_success && currentUri != null && currentUri.OriginalString.Contains(cfgMeshok.Base_Url) && try_count < total_try_count)
             {
                 Application.DoEvents();
                 //auth_success = mainBrowser.Document.GetElementsByTagName("div").Any(div => div.Id == "desktop-profile-button");
@@ -172,12 +166,12 @@ namespace MeshokBrowser
                 auth_success = RegistrationWasCompleted();
                 if (!auth_success)
                 {
-                    if (e.Uri.LocalPath == "/")
+                    if (currentUri.LocalPath == "/")
                     {
-                        if (e.Uri.Query == "")
+                        if (currentUri.Query == "")
                             mainBrowser.Navigate("https://meshok.net/?_auth=1&_mode=login");
                         else
-                        if (e.Uri.Query == "?_auth=1&_mode=login")
+                        if (currentUri.Query == "?_auth=1&_mode=login")
                         {
                             LogIn();
                             try_count++;
@@ -191,7 +185,6 @@ namespace MeshokBrowser
                 else
                 {
                     CfgMeshok.RegCookie = mainBrowser.Document.Cookie;
-                    if (e.Uri.)
                     mainBrowser.Navigate(cfgMeshok.Profile_Url);
                 }
             }
@@ -199,7 +192,7 @@ namespace MeshokBrowser
         }
         bool RegistrationWasCompleted()
         {
-            GeckoDocument document = mainBrowser.Document;
+            GhDocument document = mainBrowser.Document;
             // новый вход
             if (document.GetElementsByTagName("div").Any(div => div.Id == "desktop-profile-button" && div.InnerHtml.Contains("bridgenote1")))
                 return true;
@@ -209,13 +202,13 @@ namespace MeshokBrowser
         }
         void LogIn()
         {
-            GeckoDocument document = mainBrowser.Document;
+            GhDocument document = mainBrowser.Document;
 #if old_version
-            GeckoFormElement frm = mainBrowser.Document.GetHtmlElementById("authForm") as GeckoFormElement;
+            GhFormElement frm = mainBrowser.Document.GetHtmlElementById("authForm") as GhFormElement;
             if (frm == null)
                 return;
             bool need_submit = false;
-            foreach (GeckoInputElement item in frm.GetElementsByTagName("input"))
+            foreach (GhInputElement item in frm.GetElementsByTagName("input").OfType<GhInputElement>())
             {
                 if (item.Type == "email")
                 {
@@ -248,16 +241,16 @@ namespace MeshokBrowser
                 frm.Submit();
 #else
             int count = 0;
-            GeckoFormElement frm = null;
+            GhFormElement frm = null;
             do
             {
                 Application.DoEvents();
-                frm = document.GetElementsByClassName("v-form").FirstOrDefault() as GeckoFormElement;
+                frm = document.GetElementsByClassName("v-form").FirstOrDefault() as GhFormElement;
                 count++;
             } while (frm == null && count < 1000);
             if (frm == null)
                 return;
-            foreach (GeckoInputElement item in frm.GetElementsByTagName("input"))
+            foreach (GhInputElement item in frm.GetElementsByTagName("input").OfType<GhInputElement>())
             {
                 if (item.Type == "email")
                 {
@@ -278,11 +271,11 @@ namespace MeshokBrowser
 #endif
         }
 #if !old_version
-        private void SetInput(GeckoInputElement input, string value)
+        private void SetInput(GhInputElement input, string value)
         {
             if (input == null)
                 return;
-            GeckoWebBrowser browser = mainBrowser.webBrowser;
+            GhBrowser browser = mainBrowser.webBrowser;
             mainBrowser.Select();
             input.Focus();
             Application.DoEvents();

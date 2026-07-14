@@ -4,8 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using DevExpress.XtraBars.Ribbon;
-using GH.AppContext;
-using GH.Controls;
+using GH.Components;
 namespace MeshokBrowser
 {
     public class BaseFrame : SavedFrame
@@ -49,7 +48,7 @@ namespace MeshokBrowser
         public BaseFrame()
         {
         }
-        protected void InvokeIfRequired(MethodInvoker action)
+        protected void InvokeIfRequired(System.Windows.Forms.MethodInvoker action)
         {
             if (Disposing)
                 return;

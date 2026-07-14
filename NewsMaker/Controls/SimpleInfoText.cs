@@ -25,7 +25,7 @@ namespace NewsMaker
         public virtual void RestoreText()
         {
         }
-        internal void InvokeIfRequired(MethodInvoker action)
+        internal void InvokeIfRequired(System.Windows.Forms.MethodInvoker action)
         {
             if (_main == null)
                 _main = (NewsMakerForm) FindForm();

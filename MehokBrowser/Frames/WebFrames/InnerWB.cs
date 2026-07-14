@@ -11,6 +11,8 @@ namespace MeshokBrowser
     {
         public GhBrowser webBrowser => wbMain;
 
+        public GhDocument Document => webBrowser.Document;
+
         public int StatusCode { get; set; }
 
         private async void SetBrowser()

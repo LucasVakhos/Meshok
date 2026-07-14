@@ -1,6 +1,5 @@
 ﻿//#define NOT_POST_MESSAGE 
-using Gecko;
-using Gecko.DOM;
+using GH.Components;
 using MeshokBrowser.NHibernate;
 using System.Linq;
 using System.Windows.Forms;
@@ -21,7 +20,7 @@ namespace MeshokBrowser.Workers
         protected override void WorkWithDocument()
         {
             currentObject.ParsingSaccess = true;
-            GeckoTextAreaElement memo = doc.GetElementsByTagName("textarea").Where(x => x.Id == "MESS").FirstOrDefault() as GeckoTextAreaElement;
+            GhTextAreaElement memo = doc.GetElementsByTagName("textarea").Where(x => x.Id == "MESS").FirstOrDefault() as GhTextAreaElement;
             if (memo == null)
                 return;
             string bodiText = doc.Body.TextContent;
@@ -41,8 +40,8 @@ namespace MeshokBrowser.Workers
             memo.Value = mess;
             memo.Focus();
             Application.DoEvents();
-            GeckoInputElement btn = doc.GetElementsByTagName("input").Where(x => x.GetAttribute("type") == "submit" &&
-                x.GetAttribute("value") == "Отправить").FirstOrDefault() as GeckoInputElement;
+            GhInputElement btn = doc.GetElementsByTagName("input").Where(x => x.GetAttribute("type") == "submit" &&
+                x.GetAttribute("value") == "Отправить").FirstOrDefault() as GhInputElement;
             if (btn != null)
             {
                 btn.Focus();

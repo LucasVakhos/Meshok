@@ -4,7 +4,7 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
-    <ImplicitUsings>disable</ImplicitUsings>
+    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>NewsMaker</RootNamespace>
@@ -13,11 +13,52 @@
     <ApplicationIcon>Bridge_0.ico</ApplicationIcon>
     <Platforms>AnyCPU;x86</Platforms>
     <PlatformTarget Condition="'$(Configuration)' == 'Debug'">x86</PlatformTarget>
-      <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Default.cs" />
+    <Compile Remove="Common\ISendpulse.cs" />
+    <Compile Remove="Common\Sendpulse.cs" />
+    <Compile Remove="Common\Utils.cs" />
+    <Compile Remove="Configs\CfgBridgeNote.cs" />
+    <Compile Remove="Configs\Cfg\CfgSendPulse.cs" />
+    <Compile Remove="Configs\Frames\CfgFrameStart.cs" />
+    <Compile Remove="Configs\Frames\LoginFrameIShop.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\GH.Components\GH.Components.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configs\Frames\CfgFrameBridgeNote.resx">
+      <DependentUpon>CfgFrameBridgeNote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Configs\Frames\CfgFramePost.resx">
+      <DependentUpon>CfgFramePost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Configs\Frames\CfgFrameProgram.resx">
+      <DependentUpon>CfgFrameProgram.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Configs\Frames\CfgFrameRuSender.resx">
+      <DependentUpon>CfgFrameRuSender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ACCICONS_133.ico" />
+    <Content Include="Bridge_0.ico" />
+    <Content Include="Common\RuSender.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Win.Design" Version="25.2.7" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
   </ItemGroup>
 </Project>

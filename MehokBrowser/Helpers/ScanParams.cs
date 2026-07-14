@@ -1,7 +1,5 @@
 ﻿using Common;
-using Gecko;
-using Gecko.DOM;
-using GH.Helpers;
+using GH.Components;
 namespace MeshokBrowser.Helpers
 {
     public class ScanParams
@@ -13,8 +11,8 @@ namespace MeshokBrowser.Helpers
                 _instance = new ScanParams();
             return _instance;
         }
-        public GeckoHtmlElement scan_table = null;
-        public GeckoFormElement scan_form = null;
+        public GhDomElement scan_table = null;
+        public GhFormElement scan_form = null;
         private string _c_nic;
         public string title_url;
         public string deal_url;

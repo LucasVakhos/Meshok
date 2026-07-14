@@ -1,7 +1,5 @@
 ﻿using Common;
-using Gecko;
-using Gecko.DOM;
-using GH.Helpers;
+using GH.Components;
 using MeshokBrowser.NHibernate;
 using System.Linq;
 using System.Threading;
@@ -23,7 +21,7 @@ namespace MeshokBrowser.Workers
         protected override void WorkWithDocument()
         {
             currentObject.ParsingSaccess = false;
-            GeckoTextAreaElement memo = doc.GetElementsByTagName("textarea").Where(x => x.GetAttribute("name") == "comment").FirstOrDefault() as GeckoTextAreaElement;
+            GhTextAreaElement memo = doc.GetElementsByTagName("textarea").Where(x => x.GetAttribute("name") == "comment").FirstOrDefault() as GhTextAreaElement;
             if (memo == null)
                 return;
             CheckMesage info = currentObject.Infos.FirstOrDefault();
@@ -37,7 +35,7 @@ namespace MeshokBrowser.Workers
             memo.Focus();
             memo.Value = mess;
             Application.DoEvents();
-            foreach (GeckoInputElement item in doc.GetElementsByTagName("input"))
+            foreach (GhInputElement item in doc.GetElementsByTagName("input").OfType<GhInputElement>())
             {
                 if (item.Name == "did" && ((currentObject.CurrStatus == OrderStatus.DealOK && item.GetAttribute("value") == "Y") ||
                     (currentObject.CurrStatus == OrderStatus.DealCanceled && item.GetAttribute("value") == "O")))
@@ -105,7 +103,7 @@ namespace MeshokBrowser.Workers
         protected override void EndParseCurrent()
         {
             currentObject.ParsingSaccess = true;
-            GeckoHtmlElement stat = doc.GetElementsByClassName("d_s_e_i").FirstOrDefault() as GeckoHtmlElement;
+            GhDomElement stat = doc.GetElementsByClassName("d_s_e_i").FirstOrDefault() as GhDomElement;
             if (stat == null)
             {
                 currentObject.deal_status = currentObject.CurrStatus.GetDisplayValue();

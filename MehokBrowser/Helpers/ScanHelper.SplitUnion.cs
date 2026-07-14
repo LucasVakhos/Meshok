@@ -1,7 +1,4 @@
-﻿using Gecko;
-using Gecko.Collections;
-using Gecko.DOM;
-using Gecko.Events;
+using GH.Components;
 using MeshokBrowser.NHibernate;
 using MeshokBrowser.Workers;
 using System;
@@ -26,7 +23,7 @@ namespace MeshokBrowser.Helpers
                 Application.DoEvents();
             return result;
         }
-        private void WebBrowser_DocumentCompleted(object sender, GeckoDocumentCompletedEventArgs e)
+        private void WebBrowser_DocumentCompleted(object sender, EventArgs e)
         {
             ProcessRunHelper.ProcScreen.webBrowser.DocumentCompleted -= WebBrowser_DocumentCompleted;
             ProcessRunHelper.EnableBaseDocumrntComplete = true;
@@ -60,11 +57,11 @@ namespace MeshokBrowser.Helpers
         */
         private bool FireBAction(string actName)
         {
-            GeckoInputElement submit = webDocument.GetElementById("submitDoWork") as GeckoInputElement;
+            GhInputElement submit = webDocument.GetElementById("submitDoWork") as GhInputElement;
             if (submit == null)
                 return false;
-            GeckoElement div = webDocument.GetElementById("saleBAction");
-            foreach (GeckoSelectElement item in div.GetElementsByTagName("select").Where(x => x.GetAttribute("name") == "do_work"))
+            GhDomElement div = webDocument.GetElementById("saleBAction");
+            foreach (GhSelectElement item in div.GetElementsByTagName("select").OfType<GhSelectElement>().Where(x => x.GetAttribute("name") == "do_work"))
             {
                 item.Focus();
                 item.Value = actName;
@@ -108,13 +105,13 @@ namespace MeshokBrowser.Helpers
         {
             CollectForm();
             ScanParams scanParams = ScanParams.Instance();
-            IEnumerable<GeckoElement> rows = scanParams.scan_table.GetElementsByTagName("tr").
+            IEnumerable<GhDomElement> rows = scanParams.scan_table.GetElementsByTagName("tr").
                     Where(x => x.GetAttribute("class") == "r1" || x.GetAttribute("class") == "r2");
             foreach (OrderLine orderLine in orderLines)
             {
-                foreach (GeckoHtmlElement row in rows)
+                foreach (GhDomElement row in rows)
                 {
-                    GeckoElement a = row.GetElementsByTagName("a").Where(x => x.HasAttribute("href") &&
+                    GhDomElement a = row.GetElementsByTagName("a").Where(x => x.HasAttribute("href") &&
                         x.GetAttribute("href").Contains(orderLine.Url)).FirstOrDefault();
                     if (a != null)
                     {

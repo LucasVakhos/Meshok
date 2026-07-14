@@ -1,7 +1,4 @@
-﻿using Gecko;
-using Gecko.Events;
-using GH.AppContext;
-using GH.Utils;
+using GH.Components;
 using MeshokBrowser.Workers;
 using System;
 using System.Collections.Generic;
@@ -30,7 +27,7 @@ namespace MeshokBrowser.NHibernate
                 return _scanFrame;
             }
         }
-        protected GeckoWebBrowser Browser
+        protected GhBrowser Browser
         {
             get
             {
@@ -46,7 +43,7 @@ namespace MeshokBrowser.NHibernate
                 return ListTasks[0] as T;
             }
         }
-        protected GeckoDocument doc { get => ScanFrame.webBrowser.Document; }
+        protected GhDocument doc { get => ScanFrame.webBrowser.Document; }
         //protected bool RepeatCycle { get; set; }
         public bool ScanFnished { get; set; }
         public string Url
@@ -69,13 +66,13 @@ namespace MeshokBrowser.NHibernate
                 ListTasks.Add(scanEntity as T);
         }
         protected virtual void WorkWithDocument() { }
-        protected virtual void wb_DocumentCompleted(object sender, GeckoDocumentCompletedEventArgs e)
+        protected virtual void wb_DocumentCompleted(object sender, EventArgs e)
         {
             if (WaitForOperationEnd)
             {
                 EndParseCurrent();
             }
-            else if (e.Uri.AbsoluteUri == Url)
+            else if (Browser.Url?.AbsoluteUri == Url)
                 ParseCurrent();
         }
         protected virtual void EndParseCurrent()
@@ -170,7 +167,7 @@ namespace MeshokBrowser.NHibernate
                 Thread.Sleep(50);
             }
         }
-        private void WebBrowser_DomSubmit(object sender, DomEventArgs e)
+        private void WebBrowser_DomSubmit(object sender, EventArgs e)
         {
             ScanFrame.BrowserEnabled(false);
             ScanFrame.webBrowser.DomSubmit -= WebBrowser_DomSubmit;

@@ -1,13 +1,7 @@
 ﻿//#define SKIP_CHANGE_STATUS
 //#define SKIP_ADD_TO_BASE
 using Common;
-using Gecko;
-using Gecko.Collections;
-using Gecko.DOM;
-using Gecko.Events;
 using GH.Components;
-using GH.Helpers;
-using GH.Utils;
 using MeshokBrowser.NHibernate;
 using MeshokBrowser.Workers;
 using System;
@@ -146,8 +140,8 @@ namespace MeshokBrowser.Helpers
 #if TEST_EMAIL_MESSAGE || SKIP_CHANGE_STATUS
             return;
 #else
-            GeckoHtmlElement main = null;
-            foreach (GeckoHtmlElement item in orderLine.HtmlRow.GetElementsByTagName("div"))
+            GhDomElement main = null;
+            foreach (GhDomElement item in orderLine.HtmlRow.GetElementsByTagName("div"))
             {
                 if (item.ClassName == "deal_status_info")
                 {
@@ -160,17 +154,17 @@ namespace MeshokBrowser.Helpers
             OrderStatus status = orderLine.CurrStatus;
             if (status == OrderStatus.New)
                 status++;
-            foreach (GeckoHtmlElement cur in main.GetElementsByTagName("div"))
+            foreach (GhDomElement cur in main.GetElementsByTagName("div"))
             {
                 if (cur.ClassName == "d_s_e_i" && cur.GetAttribute("rel") == orderLine.deal_id)
                 {
                     cur.Click();
                     Application.DoEvents();
-                    GeckoSelectElement sel = main.GetElementsByTagName("select").FirstOrDefault() as GeckoSelectElement;
+                    GhSelectElement sel = main.GetElementsByTagName("select").FirstOrDefault() as GhSelectElement;
                     sel.Focus();
                     Application.DoEvents();
                     sel.Value = status.GetDisplayValue();
-                    GeckoHelper.RaiseHTMLEvent(webDocument, sel, "change");
+                    sel.RaiseEvent("change");
                     Application.DoEvents();
                     return;
                 }

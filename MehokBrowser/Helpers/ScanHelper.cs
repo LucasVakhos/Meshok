@@ -1,4 +1,4 @@
-﻿using Gecko;
+using GH.Components;
 using MeshokBrowser.NHibernate;
 using MeshokBrowser.Workers;
 using System;
@@ -7,8 +7,8 @@ namespace MeshokBrowser.Helpers
 {
     public partial class ScanHelper : ScanSetting, IDisposable
     {
-        GeckoWebBrowser webBrowser => ProcessRunHelper.ProcScreen.webBrowser;
-        GeckoDocument webDocument => webBrowser.Document;
+        GhBrowser webBrowser => ProcessRunHelper.ProcScreen.webBrowser;
+        GhDocument webDocument => webBrowser.Document;
         IProcessNotify _processor = null;
         public string ShowOnPageValue { get => ShowOnPage.ToString(); }
         public string[] Splits { get; internal set; }
