@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json.Converters;
@@ -71,37 +72,31 @@ namespace NewsMaker.Common
             utf8.GetChars(utf8Bytes, 0, utf8Bytes.Length, utf8Chars, 0);
             return new string(utf8Chars);
         }
-        public static string ToDebugInfo(this WebException value, HttpWebRequest request)
+        public static string ToDebugInfo(this HttpRequestException value, HttpRequestMessage request)
         {
-            char[] sp = { '\r', '\n' };
-            string[] strings = request.Headers.ToString().Split(sp);
-            string ApiKeyName = "X-Api-Key";
-            string ApiKey = strings.First(o => o.StartsWith(ApiKeyName)).Substring(ApiKeyName.Length + 1).Trim();
-            string RequestUri = request.RequestUri.AbsoluteUri;
+            const string apiKeyName = "X-Api-Key";
+            string apiKey = request.Headers.TryGetValues(apiKeyName, out var values)
+                ? values.FirstOrDefault() ?? string.Empty
+                : string.Empty;
+            string maskedApiKey = apiKey[..Math.Min(20, apiKey.Length)];
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("=== DEBUG ===");
-            builder.AppendLine("WebException: " + value.Message + $" HResult: {value.HResult}");
-            builder.AppendLine($"{ApiKeyName} length: " + (ApiKey?.Length ?? 0));
-            builder.AppendLine($"{ApiKeyName} begin with: {ApiKey.Substring(0, 20)}");
-            builder.AppendLine($"Expect100Continue: {request.ServicePoint.Expect100Continue}");
-            builder.AppendLine($"RequestUri: {RequestUri}");
+            builder.AppendLine("HttpRequestException: " + value.Message + $" HResult: {value.HResult}");
+            builder.AppendLine($"{apiKeyName} length: {apiKey.Length}");
+            builder.AppendLine($"{apiKeyName} begin with: {maskedApiKey}");
+            builder.AppendLine($"Expect100Continue: {request.Headers.ExpectContinue}");
+            builder.AppendLine($"RequestUri: {request.RequestUri}");
             builder.AppendLine("=== request.Headers ===");
-            for (int i = 0; i < strings.Length; i++)
+            foreach (var header in request.Headers)
             {
-                string curr_val = strings[i].Trim();
-                if (string.IsNullOrWhiteSpace(curr_val))
-                    continue;
-                if (curr_val.StartsWith(ApiKeyName))
-                {
-                    builder.AppendLine($"{ApiKeyName}: {ApiKey.Substring(0, 20)}");
-                }
+                if (header.Key.Equals(apiKeyName, StringComparison.OrdinalIgnoreCase))
+                    builder.AppendLine($"{apiKeyName}: {maskedApiKey}");
                 else
-                    builder.AppendLine(curr_val);
+                    builder.AppendLine($"{header.Key}: {string.Join(", ", header.Value)}");
             }
             builder.AppendLine("=== DEBUG ===");
             return builder.ToString();
-        }
-        public static T InvokeIfRequired<T>(this Form form, Func<T> function)
+        }        public static T InvokeIfRequired<T>(this Form form, Func<T> function)
         {
             if (form.InvokeRequired)
             {
@@ -143,14 +138,18 @@ namespace NewsMaker.Common
         }
         private void handleError(Exception ex)
         {
-            if (ex is WebException)
+            HttpStatusCode? httpStatusCode = ex switch
+            {
+                WebException web when web.Response is HttpWebResponse response => response.StatusCode,
+                HttpRequestException http => http.StatusCode,
+                _ => null
+            };
+            if (httpStatusCode.HasValue)
             {
                 string errorMessage = string.Empty;
-                WebException web = ex as WebException;
-                string statusDescription = web.Message;
-                HttpStatusCode statusCode = (web.Response as HttpWebResponse).StatusCode;
-                UnprocessReason unprocessReason = UnprocessReason.AanotherUnSentReason;
-                switch ((int)statusCode)
+                string statusDescription = ex.Message;
+                HttpStatusCode statusCode = httpStatusCode.Value;
+                UnprocessReason unprocessReason = UnprocessReason.AanotherUnSentReason;                switch ((int)statusCode)
                 {
                     case 400:
                         errorMessage += statusDescription;
@@ -252,6 +251,7 @@ namespace NewsMaker.Common
     }
     public class RuSender
     {
+        private static readonly HttpClient HttpClient = new HttpClient();
         private string ApiUrl => "https://api.rusender.ru/api/v1/external-mails/send";
         //public static int ID => 3875;
         public int ID { get; }
@@ -268,30 +268,25 @@ namespace NewsMaker.Common
         {
             string returnStr = null;
             ResponseData response = new ResponseData();
-            HttpWebRequest request = WebRequest.CreateHttp(ApiUrl);
+            using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, ApiUrl);
             try
             {
-                request.Method = "POST";
-                request.ContentType = "application/json";
-                request.Headers.Add("X-Api-Key", ApiKey);
-                request.ServicePoint.Expect100Continue = false;
-                request.UserAgent = "BridgenoteApp/1.0";
-                //request.Headers.Add("Accept-Language", "en-UK");
+                request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
+                request.Headers.TryAddWithoutValidation("User-Agent", "BridgenoteApp/1.0");
+                request.Headers.ExpectContinue = false;
                 string stringdata = MakeRequestString(letter.Content);
-                byte[] buffer = Encoding.UTF8.GetBytes(stringdata);
-                request.ContentLength = buffer.Length;
-                Stream PostData = request.GetRequestStream();
-                PostData.Write(buffer, 0, buffer.Length);
-                PostData.Close();
-                HttpWebResponse webResp = null;
+                request.Content = new StringContent(stringdata, Encoding.UTF8, "application/json");
                 try
                 {
-                    webResp = (HttpWebResponse)request.GetResponse();
+                    using HttpResponseMessage webResp = HttpClient.Send(request);
                     HttpStatusCode status = webResp.StatusCode;
                     response.Add("http_code", (int)status);
-                    Stream WebResponse = webResp.GetResponseStream();
-                    StreamReader _response = new StreamReader(WebResponse);
-                    returnStr = _response.ReadToEnd();
+                    returnStr = webResp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    if (!webResp.IsSuccessStatusCode)
+                        throw new HttpRequestException(
+                            string.IsNullOrWhiteSpace(returnStr) ? webResp.ReasonPhrase : returnStr,
+                            null,
+                            webResp.StatusCode);
                     if (returnStr.Length > 0)
                     {
                         object jo = null;
@@ -310,23 +305,20 @@ namespace NewsMaker.Common
                         }
                     }
                 }
-                catch (WebException we)
+                catch (HttpRequestException ex)
                 {
-                    HttpStatusCode code = (we.Response as HttpWebResponse).StatusCode;
-                    Logger.Error(we);
-                    //Logger.Error(debug);
-                    response.RegError(we);
-                    response.Add("DebugInfo", we.ToDebugInfo(request));
+                    Logger.Error(ex);
+                    response.RegError(ex);
+                    response.Add("DebugInfo", ex.ToDebugInfo(request));
                 }
             }
             catch (Exception ex)
-            {                
+            {
                 Logger.Error(ex);
                 response.RegError(ex);
             }
             return response;
-        }
-        public class Converter : KeyValuePairConverter
+        }        public class Converter : KeyValuePairConverter
         {
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
