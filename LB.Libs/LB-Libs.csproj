@@ -13,7 +13,7 @@
     <PackageReference Include="DevExpress.Win" Version="25.2.7" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3967.48" />
   </ItemGroup>
-  <ItemGroup Condition="Exists('..\..\Secret.cs')">
-    <Compile Include="..\..\Secret.cs" Link="Secret.cs" />
+  <ItemGroup Condition="Exists('..\Secret.cs')">
+    <Compile Include="..\Secret.cs" Link="Secret.cs" />
   </ItemGroup>
 </Project>

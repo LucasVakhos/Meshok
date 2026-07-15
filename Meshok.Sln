@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsMaker", "NewsMaker\News
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IniFile", "IniFile\IniFile.csproj", "{E6A481B5-0B29-4D41-8E48-6BE92AE40372}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LB-Libs", "Libs\LB-Libs\LB-Libs.csproj", "{33E4CE81-8EF4-4F79-9DBF-ABEDB9CBA5BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LB-Libs", "LB.Libs\LB-Libs.csproj", "{33E4CE81-8EF4-4F79-9DBF-ABEDB9CBA5BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
