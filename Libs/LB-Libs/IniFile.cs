@@ -41,7 +41,7 @@ public sealed class IniFile
             string processPath = Environment.ProcessPath ?? AppDomain.CurrentDomain.FriendlyName;
             string name = Path.GetFileNameWithoutExtension(
                 string.IsNullOrEmpty(entryPath) ? processPath : entryPath);
-            return Path.Combine(AppContext.BaseDirectory, $"{name}.ini");
+            return Path.Combine(System.AppContext.BaseDirectory, $"{name}.ini");
         }
     }
 
@@ -80,7 +80,7 @@ public sealed class IniFile
             if (!string.IsNullOrEmpty(legacyTargetJson))
                 target.WriteIfMissing("CfgApp", "Json", legacyTargetJson);
 
-            foreach (string sourcePath in EnumerateLegacyIniFiles(AppContext.BaseDirectory)
+            foreach (string sourcePath in EnumerateLegacyIniFiles(System.AppContext.BaseDirectory)
                          .OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
             {
                 if (Path.GetFullPath(sourcePath).Equals(Path.GetFullPath(targetPath), StringComparison.OrdinalIgnoreCase))
@@ -364,4 +364,3 @@ public sealed class IniFile
         .Replace("%0A", "\n", StringComparison.OrdinalIgnoreCase)
         .Replace("%25", "%", StringComparison.OrdinalIgnoreCase);
 }
-
