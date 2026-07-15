@@ -1,9 +1,11 @@
 @page
 @model NewsWave.Pages.Mail.IndexModel
 @using NewsWave.NewsMaker
+@using System.Text.Json
 @{
     ViewData["Title"] = "NewsMaker";
     int percent = Model.Run.Total == 0 ? 0 : (int)Math.Round(Model.Run.Current * 100d / Model.Run.Total);
+    string reportJson = JsonSerializer.Serialize(string.Join(Environment.NewLine, Model.Run.Report));
 }
 <div class="page-heading">
     <div>
@@ -80,9 +82,11 @@
             <span class="muted">@Model.SubscriberCount подписчиков</span>
         </div>
         @if (Model.DatabaseError is not null) { <div class="alert alert-warning">@Model.DatabaseError</div> }
-        <textarea class="report-memo" readonly>@string.Join(Environment.NewLine, Model.Run.Report)</textarea>
-        <div class="newsmaker-progress"><div style="width:@percent%"></div></div>
-        <div class="progress-caption">@Model.Run.Current / @Model.Run.Total</div>
+        <textarea class="report-memo native-report" readonly>@string.Join(Environment.NewLine, Model.Run.Report)</textarea>
+        <div id="reportMemoDx" class="dx-host"></div>
+        <div class="newsmaker-progress native-report"><div style="width:@percent%"></div></div>
+        <div class="progress-caption native-report">@Model.Run.Current / @Model.Run.Total</div>
+        <div id="runProgressDx" class="dx-host"></div>
         <div class="newsmaker-actions">
             @if (Model.Run.Running)
             {
@@ -112,6 +116,33 @@ window.NewsWave.enhancePage(() => {
     const start = @(Model.Run.Running || Model.Run.Report.Count > 0 ? 1 : 0);
     $("#settingsTab").toggle(start === 0);
     $("#reportTab").toggle(start === 1);
+
+    $("#reportMemoDx").dxTextArea({
+        value: @Html.Raw(reportJson),
+        readOnly: true,
+        height: 330,
+        stylingMode: "outlined"
+    });
+    $("#runProgressDx").dxProgressBar({
+        min: 0,
+        max: Math.max(1, @Model.Run.Total),
+        value: @Model.Run.Current,
+        showStatus: true,
+        statusFormat: () => "@Model.Run.Current / @Model.Run.Total"
+    });
+    $(".newsmaker-actions button, #settingsForm > button, .settings-tabs details > button").each(function () {
+        const button = this;
+        const text = button.textContent.trim();
+        const danger = button.classList.contains("btn-danger");
+        const primary = button.classList.contains("btn-wave");
+        $(button).dxButton({
+            text,
+            icon: danger ? "close" : text.includes("Отправить") ? "email" : text.includes("Проверить") ? "check" : "save",
+            type: danger ? "danger" : primary ? "default" : "normal",
+            disabled: button.disabled,
+            useSubmitBehavior: true
+        });
+    });
 
     $("#settingsForm .settings-form-grid input:not([type=hidden]), #settingsForm .settings-form-grid select").each(function () {
         const input = this;

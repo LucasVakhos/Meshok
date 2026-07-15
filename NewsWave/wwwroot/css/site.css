@@ -613,3 +613,6 @@ main {
 .dx-ready .settings-form-grid input:not([type=hidden]),
 .dx-ready .settings-form-grid select { display: none; }
 .dx-ready .dx-setting-editor { display: block; }
+.dx-ready .native-report { display: none !important; }
+#reportMemoDx .dx-texteditor-input { font: .82rem/1.55 Consolas, monospace; }
+#runProgressDx { margin-top: 1rem; }
