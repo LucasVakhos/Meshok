@@ -21,7 +21,7 @@ namespace GH.Configs
                 _dataSource = value;
             }
         }
-        private string _dataSource = GH.Components.SecretProvider.IShopDataSource;
+        private string _dataSource = LB.Libs.SecretProvider.IShopDataSource;
         [DataMember]
         [DbConnectionProperty(Category = Category.Connection, Caption = "Remote",
             ToolTip = "Если подключение к серверу на другом компьютере то Remote [V]", Default = false, EditorType = EditorType.Check, SubGroup = "Server")]
@@ -79,7 +79,7 @@ namespace GH.Configs
             switch (name)
             {
                 case nameof(DataSource):
-                    return GH.Components.SecretProvider.IShopDataSource;
+                    return LB.Libs.SecretProvider.IShopDataSource;
                 case nameof(Remote):
                     return false;
                 case nameof(Port):
@@ -89,17 +89,17 @@ namespace GH.Configs
                 case nameof(Dialect):
                     return 3;
                 case nameof(Database):
-                    return Path.Combine(RunContext.ExePath + GH.Components.SecretProvider.IShopDatabasePath);
+                    return Path.Combine(RunContext.ExePath + LB.Libs.SecretProvider.IShopDatabasePath);
                 case nameof(UserID):
-                    return GH.Components.SecretProvider.IShopUserId;
+                    return LB.Libs.SecretProvider.IShopUserId;
                 case nameof(Password):
-                    return GH.Components.SecretProvider.IShopPassword;
+                    return LB.Libs.SecretProvider.IShopPassword;
                 case nameof(ServerType):
                     return FbServerType.Default;
                 case nameof(UserLogin):
-                    return GH.Components.SecretProvider.IShopUserLogin;
+                    return LB.Libs.SecretProvider.IShopUserLogin;
                 case nameof(UserPassword):
-                    return GH.Components.SecretProvider.IShopUserPassword;
+                    return LB.Libs.SecretProvider.IShopUserPassword;
                 default:
                     return null;
             }

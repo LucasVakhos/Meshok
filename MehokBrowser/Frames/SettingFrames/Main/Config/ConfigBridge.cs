@@ -5,10 +5,10 @@ namespace MeshokBrowser
 {
     public class SettingBridge : PrivateSetting
     {
-        public virtual string Server { get; set; } = GH.Components.SecretProvider.LegacyBridgeServer;
-        public virtual string Base { get; set; } = GH.Components.SecretProvider.LegacyBridgeDatabase;
-        public override string User { get; set; } = GH.Components.SecretProvider.LegacyBridgeUser;
-        public override string PassWrd { get; set; } = GH.Components.SecretProvider.LegacyBridgePassword;
+        public virtual string Server { get; set; } = LB.Libs.SecretProvider.LegacyBridgeServer;
+        public virtual string Base { get; set; } = LB.Libs.SecretProvider.LegacyBridgeDatabase;
+        public override string User { get; set; } = LB.Libs.SecretProvider.LegacyBridgeUser;
+        public override string PassWrd { get; set; } = LB.Libs.SecretProvider.LegacyBridgePassword;
     }
     public class ConfigBridge : PrivateConfig
     {
