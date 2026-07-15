@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 76" role="img" aria-labelledby="title desc">
   <title id="title">NewsWave</title>
-  <desc id="desc">Почтовая служба BridgeNote</desc>
+  <desc id="desc">bridgenote.com - с миру по нотке ♪</desc>
   <defs>
     <linearGradient id="surface" x1="7" y1="4" x2="67" y2="72" gradientUnits="userSpaceOnUse">
       <stop stop-color="#22313C"/>
@@ -17,5 +17,5 @@
   <circle cx="61" cy="22" r="5.5" fill="#C8F26B"/>
   <circle cx="61" cy="22" r="9" fill="none" stroke="#C8F26B" stroke-width="1.5" opacity=".28"/>
   <text x="91" y="44" fill="#17202A" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="34" font-weight="760" letter-spacing="-1.8">News<tspan fill="#0A7F78">Wave</tspan></text>
-  <text x="93" y="61" fill="#66727F" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9" font-weight="700" letter-spacing="2.25">BRIDGENOTE MAIL</text>
+  <text x="93" y="61" fill="#66727F" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8.7" font-weight="650" letter-spacing=".22">bridgenote.com - с миру по нотке ♪</text>
 </svg>
