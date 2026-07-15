@@ -2,7 +2,7 @@ using System.Collections;
 namespace GH.Components
 {
     public abstract class LoginFrameType<TConfig, TUser> : LoginFrame
-        where TConfig : CfgCoreConnection
+        where TConfig : LB.Libs.CfgCoreConnection
         where TUser : LB.Libs.BaseUser
     {
         private TConfig _config;

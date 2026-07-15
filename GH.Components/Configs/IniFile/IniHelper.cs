@@ -46,7 +46,7 @@
             return cfg;
         }
 
-    public static T Cfg<T>() where T : CfgCoreConnection
+    public static T Cfg<T>() where T : LB.Libs.CfgCoreConnection
         {
             return LB.Libs.IniHelper.Cfg<T>();
         }

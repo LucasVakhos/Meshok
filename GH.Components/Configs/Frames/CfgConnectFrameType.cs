@@ -3,7 +3,7 @@ using System.Collections;
 using static GH.Components.LayoutHelper;
 namespace GH.Components
 {
-    public class CfgConnectFrameType<T> : CfgConnectFrame where T : CfgCoreConnection
+    public class CfgConnectFrameType<T> : CfgConnectFrame where T : LB.Libs.CfgCoreConnection
     {
         //public const string ctrlPrefix = "edit";
     private T _cfg;
@@ -13,8 +13,6 @@ namespace GH.Components
             set
             {
                 _cfg = value;
-                if (_cfg != null)
-                    _cfg.SetFrame(this as CfgConnectFrame);
             }
         }
 
@@ -61,7 +59,7 @@ namespace GH.Components
 
     protected /*virtual*/ string[] GetExceptFields()
         {
-            return new string[] { nameof(CfgCoreConnection.AutoEntering), nameof(CfgCoreConnection.UserLogin), nameof(CfgCoreConnection.UserPassword) };
+            return new string[] { nameof(LB.Libs.CfgCoreConnection.AutoEntering), nameof(LB.Libs.CfgCoreConnection.UserLogin), nameof(LB.Libs.CfgCoreConnection.UserPassword) };
             //throw new NotImplemented(nameof(GetExceptFields), this);
         }
     protected override void OnLoad(EventArgs e)

@@ -149,7 +149,7 @@ namespace GH.Components
                 RevertControls();
                 try
                 {
-                    if (data.Current is CfgCoreConnection config)
+                    if (data.Current is LB.Libs.CfgCoreConnection config)
                     {
                         testOk = config.TestConnection();
                         if (config.IsComplete && testOk)
