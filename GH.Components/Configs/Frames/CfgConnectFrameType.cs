@@ -45,7 +45,7 @@ namespace GH.Components
         {
             if (IsDesignMode)
                 return;
-            CreateLayoutGroup<T, DbConnectionProperty>(EditGroup, GetExceptFields());
+            CreateLayoutGroup<T, LB.Libs.DbConnectionProperty>(EditGroup, GetExceptFields());
             GH.Components.ConnectButton connectButton = new GH.Components.ConnectButton();
             LayoutControlItem lcConnect = new LayoutControlItem();
             EditGroup.AddItem(lcConnect);
