@@ -76,7 +76,7 @@ namespace NewsMaker
         public SendCallBack SendAllMails()
         {
             Current = 0;
-            CfgRuSender cfgRuSender = IniHelper.CoreCfg<CfgRuSender>();
+            CfgRuSender cfgRuSender = LB.Libs.IniHelper.CoreCfg<CfgRuSender>();
             RuSender rusender = new RuSender(cfgRuSender.ID, cfgRuSender.ApiKey);
             Letter letter;
             while (GetNextLetter(out letter))

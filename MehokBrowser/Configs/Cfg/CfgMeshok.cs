@@ -1,5 +1,7 @@
-﻿using GH.Attributes;
-using GH.Configs;
+﻿using Category = LB.Libs.Category;
+using CfgCoreConnection = LB.Libs.CfgCoreConnection;
+using DbConnectionProperty = LB.Libs.DbConnectionProperty;
+using SecretProvider = LB.Libs.SecretProvider;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,10 +28,10 @@ namespace MeshokBrowser
         public static string _profile_url = $"https://{_site_name}/profile.php";
         [DataMember]
         [Display(Name = "Логин", Description = "Логин типа (email@mail.com)"), EmailAddress]
-        public override string UserLogin { get; set; } = GH.Components.SecretProvider.MeshokUserLogin;
+        public override string UserLogin { get; set; } = SecretProvider.MeshokUserLogin;
         [DataMember]
         [Display(Name = "Пароль", Description = "Пароль"), PasswordPropertyText]
-        public override string UserPassword { get; set; } = GH.Components.SecretProvider.MeshokUserPassword;
+        public override string UserPassword { get; set; } = SecretProvider.MeshokUserPassword;
         [DataMember]
         [Display(Name = "Дополнительно", Description = "Дополнительные условия доставки")]
         public string AddInfo { get; set; } = "Отправка Почтой России зависит от веса и оценочной стоимости ПО. " +

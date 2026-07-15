@@ -36,7 +36,7 @@ namespace MeshokBrowser
             InitializeComponent();
             if (!IsDesignMode)
             {
-                cfgMeshok = IniHelper.Cfg<CfgMeshok>();
+                cfgMeshok = LB.Libs.IniHelper.Cfg<CfgMeshok>();
                 сfgIShop = IniHelper.Cfg<CfgIShop>();
                 FbHelper.Init();
                 InitMainBrowser();

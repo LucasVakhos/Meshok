@@ -30,8 +30,8 @@ namespace NewsMaker
             Status++;
         }
         protected SendService sendService => SendService.Instance;
-        protected CfgRuSender ruSender => IniHelper.CoreCfg<CfgRuSender>();
-        protected CfgPost cfgPost => IniHelper.CoreCfg<CfgPost>();
+        protected CfgRuSender ruSender => LB.Libs.IniHelper.CoreCfg<CfgRuSender>();
+        protected CfgPost cfgPost => LB.Libs.IniHelper.CoreCfg<CfgPost>();
         public WorkStatuses Status
         {
             get => status;
