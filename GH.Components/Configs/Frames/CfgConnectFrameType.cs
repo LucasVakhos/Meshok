@@ -31,7 +31,7 @@ namespace GH.Components
         //    throw new NotImplemented(nameof(GetCfg), this);
         //    //return IniHelper.Cfg<T>();
         //}
-    protected Field[] GetFields()
+    protected LB.Libs.Field[] GetFields()
         {
             return Cfg.GetFields();
         }

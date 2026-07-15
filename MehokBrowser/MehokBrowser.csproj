@@ -31,6 +31,7 @@
     <Compile Remove="Workers\WorkWithLots\WorkerScanLots.cs" />
     <Compile Remove="Workers\WorkWithLots\WorkerScanLotsOld.cs" />
     <Compile Remove="Helpers\ReadHelperBaseStatus.cs" />
+    <Compile Remove="Models\User.cs" />
     <Compile Remove="Frames\SettingFrames\Main\MeshokSetting - Копировать.cs" />
     <Compile Remove="Frames\SettingFrames\Main\MeshokSetting - Копировать.Designer.cs" />
     <EmbeddedResource Remove="NewsMaker\**\*.resx" />

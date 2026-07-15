@@ -3,7 +3,7 @@ namespace GH.Components
 {
     public abstract class LoginFrameType<TConfig, TUser> : LoginFrame
         where TConfig : CfgCoreConnection
-        where TUser : BaseUser
+        where TUser : LB.Libs.BaseUser
     {
         private TConfig _config;
     private IList<TUser> _users = null;
@@ -62,7 +62,7 @@ namespace GH.Components
                 dataSource.Open();
             }
         }
-    private void LoginFrameType_GetBaseUser(ref BaseUser user)
+    private void LoginFrameType_GetBaseUser(ref LB.Libs.BaseUser? user)
         {
             user = Users.Where(x => x.Login == _config.UserLogin && x.Password == _config.UserPassword).FirstOrDefault();
         }

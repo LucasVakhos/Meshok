@@ -72,7 +72,15 @@ public class CfgCore : AbstractEntity
         foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(this, false))
         {
             if (property.Attributes[typeof(UpdatablePropertyAttribute)] is UpdatablePropertyAttribute attribute)
+            {
                 Default(property, attribute.Default);
+                continue;
+            }
+
+            Attribute? legacy = property.Attributes.Cast<Attribute>()
+                .FirstOrDefault(x => x.GetType().FullName == "GH.Components.UpdatablePropertyAttribute");
+            if (legacy is not null)
+                Default(property, legacy.GetType().GetProperty("Default")?.GetValue(legacy));
         }
     }
 

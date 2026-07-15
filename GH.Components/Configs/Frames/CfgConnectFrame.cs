@@ -12,7 +12,7 @@
         }
     private void dataSource_OnCancel(object sender, System.EventArgs e)
         {
-            if (dataSource.Current is CfgCore cfgCore)
+            if (dataSource.Current is LB.Libs.CfgCore cfgCore)
             {
                 cfgCore.CancelEdit();
             }

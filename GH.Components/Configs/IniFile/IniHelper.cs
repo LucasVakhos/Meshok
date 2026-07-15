@@ -48,29 +48,10 @@
 
     public static T Cfg<T>() where T : CfgCoreConnection
         {
-            T cfg = GetConfig<T>();
-            if (cfg == null)
-            {
-                try
-                {
-                    cfg = CreateConfig<T>();
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex);
-                }
-            }
-            return cfg;
+            return LB.Libs.IniHelper.Cfg<T>();
         }
 
     private static T GetCoreConfig<T>() where T : CfgCore
-        {
-            CfgCore ret;
-            IniFile.TryGetValue(typeof(T).Name, out ret);
-            return ret as T;
-        }
-
-    private static T GetConfig<T>() where T : CfgCoreConnection
         {
             CfgCore ret;
             IniFile.TryGetValue(typeof(T).Name, out ret);
@@ -82,17 +63,13 @@
             return (T)Activator.CreateInstance(typeof(T));
         }
 
-    private static T CreateConfig<T>() where T : CfgCoreConnection
-        {
-            return (T)Activator.CreateInstance(typeof(T));
-        }
     internal static void SaveAll()
         {
             IniFile.SaveAll();
         }
     internal static void AddInstance(CfgCoreConnection cfgCoreConnection)
         {
-            IniFile.AddInstance(cfgCoreConnection);
+            // LB.Libs.CfgCoreConnection registers itself in the shared cache.
         }
     }
 }

@@ -32,7 +32,11 @@ public class CfgCoreConnection : CfgCore
         {
             foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(this, false))
             {
-                if (property.Attributes[typeof(DbConnectionProperty)] is not DbConnectionProperty)
+                bool isConnectionProperty =
+                    property.Attributes[typeof(DbConnectionProperty)] is DbConnectionProperty ||
+                    property.Attributes.Cast<Attribute>()
+                        .Any(x => x.GetType().FullName == "GH.Components.DbConnectionProperty");
+                if (!isConnectionProperty)
                     continue;
                 if (property.Name is nameof(UserLogin) or nameof(UserPassword) or nameof(AutoEntering))
                     continue;
@@ -76,7 +80,15 @@ public class CfgCoreConnection : CfgCore
         foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(this, false))
         {
             if (property.Attributes[typeof(DbConnectionProperty)] is DbConnectionProperty attribute)
+            {
                 Default(property, attribute.Default);
+                continue;
+            }
+
+            Attribute? legacy = property.Attributes.Cast<Attribute>()
+                .FirstOrDefault(x => x.GetType().FullName == "GH.Components.DbConnectionProperty");
+            if (legacy is not null)
+                Default(property, legacy.GetType().GetProperty("Default")?.GetValue(legacy));
         }
     }
 
