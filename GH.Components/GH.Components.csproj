@@ -96,6 +96,7 @@
     		</EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LB.Libs\LB-Libs.csproj" />
     <ProjectReference Include="..\IniFile\IniFile.csproj" />
   </ItemGroup>
   <ItemGroup Condition="Exists('..\Secret.cs')">
