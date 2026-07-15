@@ -1,4 +1,30 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+window.NewsWave = {
+    showClientError(error) {
+        const banner = document.getElementById("clientError");
+        if (!banner) return;
 
-// Write your JavaScript code.
+        const message = error?.message || String(error || "Неизвестная ошибка");
+        banner.textContent = "Интерфейс DevExtreme не загрузился: " + message + ". Доступна обычная форма.";
+        banner.hidden = false;
+        console.error(error);
+    },
+
+    enhancePage(initializer) {
+        try {
+            if (!window.jQuery)
+                throw new Error("jQuery недоступен");
+            if (!window.DevExpress)
+                throw new Error("DevExtreme недоступен");
+
+            initializer();
+            document.documentElement.classList.add("dx-ready");
+        } catch (error) {
+            this.showClientError(error);
+        }
+    }
+};
+
+window.addEventListener("error", event => {
+    if (event.error)
+        window.NewsWave.showClientError(event.error);
+});

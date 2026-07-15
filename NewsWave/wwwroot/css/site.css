@@ -562,3 +562,29 @@ main {
     white-space: normal;
   }
 }
+
+
+.dx-host {
+  display: none;
+}
+
+.dx-ready .dx-host {
+  display: block;
+}
+
+.dx-ready .native-editor,
+.dx-ready .native-grid {
+  display: none !important;
+}
+
+.native-grid {
+  overflow-x: auto;
+}
+
+.native-grid table {
+  width: 100%;
+}
+
+.client-error {
+  margin-top: 1rem;
+}

@@ -29,29 +29,30 @@
             <div><span class="step-number">01</span><h2>Новый шаблон</h2></div>
         </div>
         <form method="post" asp-page-handler="Add" id="templateForm">
-            <input asp-for="Input.Name" type="hidden" />
-            <input asp-for="Input.Subject" type="hidden" />
-            <textarea asp-for="Input.Body" class="d-none"></textarea>
-            <input asp-for="Input.IsHtml" type="hidden" />
+            <input asp-for="Input.Name" class="form-control native-editor" />
+            <input asp-for="Input.Subject" class="form-control native-editor" />
+            <textarea asp-for="Input.Body" class="form-control native-editor" rows="10"></textarea>
+            <label class="form-check native-editor"><input asp-for="Input.IsHtml" class="form-check-input" /> HTML-шаблон</label>
 
             <div class="mb-3">
                 <label class="form-label">Название</label>
-                <div id="templateName"></div>
+                <div id="templateName" class="dx-host"></div>
                 <span asp-validation-for="Input.Name" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label class="form-label">Тема</label>
-                <div id="templateSubject"></div>
+                <div id="templateSubject" class="dx-host"></div>
                 <span asp-validation-for="Input.Subject" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label class="form-label">Текст</label>
-                <div id="templateBody"></div>
+                <div id="templateBody" class="dx-host"></div>
                 <span asp-validation-for="Input.Body" class="text-danger"></span>
             </div>
             <div class="d-flex align-items-center justify-content-between gap-3">
-                <div id="templateHtml"></div>
-                <div id="addTemplateButton"></div>
+                <div id="templateHtml" class="dx-host"></div>
+                <button type="submit" class="btn btn-wave native-editor">Сохранить</button>
+                <div id="addTemplateButton" class="dx-host"></div>
             </div>
         </form>
     </section>
@@ -61,7 +62,21 @@
             <div><span class="step-number">02</span><h2>Сохранённые шаблоны</h2></div>
             <span class="muted">@Model.Templates.Count шаблонов</span>
         </div>
-        <div id="templatesGrid"></div>
+        <div class="native-grid">
+    <table class="table">
+        <thead><tr><th>Название</th><th>Тема</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var template in Model.Templates)
+        {
+            <tr>
+                <td><a asp-page="/Mail/Index" asp-route-templateId="@template.Id">@template.Name</a></td><td>@template.Subject</td>
+                <td><form method="post" asp-page-handler="Delete"><button class="btn btn-sm btn-outline-danger" name="deleteId" value="@template.Id">Удалить</button></form></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<div id="templatesGrid" class="dx-host"></div>
     </section>
 </div>
 
@@ -72,6 +87,7 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
+        window.NewsWave.enhancePage(() => {
         const templates = @Html.Raw(templatesJson);
         const syncTemplate = (selector, value) => $(selector).val(value ?? "");
 
@@ -95,7 +111,7 @@
         $("#templateHtml").dxCheckBox({
             value: @Model.Input.IsHtml.ToString().ToLowerInvariant(),
             text: "HTML-шаблон",
-            onValueChanged: e => syncTemplate("#Input_IsHtml", e.value ? "true" : "false")
+            onValueChanged: e => $("#Input_IsHtml").prop("checked", e.value)
         });
         $("#addTemplateButton").dxButton({
             text: "Сохранить",
@@ -137,6 +153,7 @@
                     ]
                 }
             ]
+        });
         });
     </script>
 }

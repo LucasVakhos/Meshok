@@ -48,7 +48,7 @@ public sealed class NewsWaveStore
             return _data.Dispatches.OrderByDescending(x => x.CreatedAt).Take(Math.Clamp(count, 1, 200)).ToArray();
     }
 
-    public async Task AddContactAsync(string name, string email, string group, bool isActive, CancellationToken cancellationToken)
+    public async Task AddContactAsync(string name, string email, string? group, bool isActive, CancellationToken cancellationToken)
     {
         await _writeGate.WaitAsync(cancellationToken);
         try
@@ -58,7 +58,7 @@ public sealed class NewsWaveStore
                 if (_data.Contacts.Any(x => string.Equals(x.Email, email, StringComparison.OrdinalIgnoreCase)))
                     throw new InvalidOperationException("Такой email уже есть в адресной книге.");
 
-                _data.Contacts.Add(new ContactRecord(Guid.NewGuid(), name.Trim(), email.Trim(), group.Trim(), isActive, DateTimeOffset.Now));
+                _data.Contacts.Add(new ContactRecord(Guid.NewGuid(), name.Trim(), email.Trim(), group?.Trim() ?? string.Empty, isActive, DateTimeOffset.Now));
             }
 
             await SaveAsync(cancellationToken);

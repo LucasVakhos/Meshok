@@ -14,7 +14,7 @@ public sealed class ContactInput
     public string Email { get; set; } = string.Empty;
 
     [StringLength(80)]
-    public string Group { get; set; } = string.Empty;
+    public string? Group { get; set; }
 
     public bool IsActive { get; set; } = true;
 }

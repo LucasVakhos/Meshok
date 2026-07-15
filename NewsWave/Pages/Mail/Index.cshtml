@@ -53,30 +53,31 @@
         <form method="post" id="mailForm">
             <div class="mb-4">
                 <label asp-for="Input.Recipients" class="form-label"></label>
-                <textarea asp-for="Input.Recipients" class="d-none"></textarea>
-                <div id="recipientsEditor"></div>
+                <textarea asp-for="Input.Recipients" class="form-control native-editor" rows="6"></textarea>
+                <div id="recipientsEditor" class="dx-host"></div>
                 <span asp-validation-for="Input.Recipients" class="text-danger"></span>
                 <div class="form-hint">По одному адресу в строке; также можно разделять запятой или точкой с запятой.</div>
             </div>
 
             <div class="mb-4">
                 <label asp-for="Input.Subject" class="form-label"></label>
-                <input asp-for="Input.Subject" type="hidden" />
-                <div id="subjectEditor"></div>
+                <input asp-for="Input.Subject" class="form-control native-editor" />
+                <div id="subjectEditor" class="dx-host"></div>
                 <span asp-validation-for="Input.Subject" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label asp-for="Input.Body" class="form-label"></label>
-                <textarea asp-for="Input.Body" class="d-none"></textarea>
-                <div id="bodyEditor"></div>
+                <textarea asp-for="Input.Body" class="form-control native-editor" rows="12"></textarea>
+                <div id="bodyEditor" class="dx-host"></div>
                 <span asp-validation-for="Input.Body" class="text-danger"></span>
             </div>
 
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                <input asp-for="Input.IsHtml" type="hidden" />
-                <div id="htmlSwitch"></div>
-                <div id="queueButton"></div>
+                <label class="form-check native-editor"><input asp-for="Input.IsHtml" class="form-check-input" /> HTML-письмо</label>
+                <div id="htmlSwitch" class="dx-host"></div>
+                <button type="submit" class="btn btn-wave native-editor">Поставить в очередь</button>
+                <div id="queueButton" class="dx-host"></div>
             </div>
         </form>
     </section>
@@ -127,12 +128,24 @@
         </div>
         <span class="muted">сохраняется между перезапусками</span>
     </div>
-    <div id="dispatchGrid"></div>
+    <div class="native-grid">
+    <table class="table">
+        <thead><tr><th>Время</th><th>Тема</th><th>Прогресс</th><th>Статус</th></tr></thead>
+        <tbody>
+        @foreach (MailDispatchSnapshot item in Model.Dispatches)
+        {
+            <tr><td>@item.CreatedAt.ToString("dd.MM HH:mm")</td><td>@item.Subject</td><td>@item.SentCount / @item.RecipientCount</td><td>@item.Status</td></tr>
+        }
+        </tbody>
+    </table>
+</div>
+<div id="dispatchGrid" class="dx-host"></div>
 </section>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
+        window.NewsWave.enhancePage(() => {
         DevExpress.localization.locale("ru");
 
         const dispatchStatuses = {
@@ -169,7 +182,7 @@
         $("#htmlSwitch").dxCheckBox({
             value: @Model.Input.IsHtml.ToString().ToLowerInvariant(),
             text: "HTML-письмо",
-            onValueChanged: e => $("#Input_IsHtml").val(e.value ? "true" : "false")
+            onValueChanged: e => $("#Input_IsHtml").prop("checked", e.value)
         });
 
         $("#queueButton").dxButton({
@@ -216,6 +229,7 @@
                     }
                 }
             ]
+        });
         });
     </script>
 }
