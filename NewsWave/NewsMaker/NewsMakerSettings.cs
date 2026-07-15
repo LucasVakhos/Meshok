@@ -12,9 +12,7 @@ public sealed class NewsMakerSettings
     public string ExportPath { get; set; } = "App_Data/exports";
 }
 public sealed class ProgramSettings
-{
-    public bool Autorun { get; set; }
-    public bool RunCollapced { get; set; }
+{    public bool RunCollapced { get; set; }
     [Range(0, 7)] public int RunDay { get; set; } = 7;
     public TimeSpan RunTime { get; set; } = TimeSpan.FromHours(18);
 }
