@@ -112,6 +112,45 @@ window.NewsWave.enhancePage(() => {
     const start = @(Model.Run.Running || Model.Run.Report.Count > 0 ? 1 : 0);
     $("#settingsTab").toggle(start === 0);
     $("#reportTab").toggle(start === 1);
+
+    $("#settingsForm .settings-form-grid input:not([type=hidden]), #settingsForm .settings-form-grid select").each(function () {
+        const input = this;
+        const editor = $("<div>").addClass("dx-setting-editor").insertAfter(input);
+        const sync = value => {
+            if (input.type === "checkbox")
+                $(input).prop("checked", Boolean(value));
+            else
+                $(input).val(value ?? "");
+        };
+
+        if (input.tagName === "SELECT") {
+            const items = Array.from(input.options).map(option => ({ value: option.value, text: option.text }));
+            editor.dxSelectBox({
+                items,
+                valueExpr: "value",
+                displayExpr: "text",
+                value: input.value,
+                searchEnabled: items.length > 8,
+                onValueChanged: e => sync(e.value)
+            });
+        } else if (input.type === "checkbox") {
+            editor.dxCheckBox({ value: input.checked, onValueChanged: e => sync(e.value) });
+        } else if (input.type === "number") {
+            editor.dxNumberBox({
+                value: input.value === "" ? null : Number(input.value),
+                min: input.min === "" ? undefined : Number(input.min),
+                showSpinButtons: true,
+                onValueChanged: e => sync(e.value)
+            });
+        } else {
+            editor.dxTextBox({
+                value: input.value,
+                mode: input.type === "password" ? "password" : input.type === "email" ? "email" : "text",
+                showClearButton: input.type !== "password",
+                onValueChanged: e => sync(e.value)
+            });
+        }
+    });
 });
 @if (Model.Run.Running) { <text>setTimeout(() => location.reload(), 2000);</text> }
 </script>
