@@ -1,3 +1,4 @@
+using DevExpress.Export.Xl;
 using HtmlAgilityPack;
 using System.Data;
 using System.Globalization;
@@ -34,7 +35,7 @@ public sealed class NewsletterArchiveBuilder
         Directory.CreateDirectory(directory);
         string baseName = $"news{date:d}".Replace('.', '_');
         string excelPath = Path.Combine(directory, baseName + ".xls");
-        File.WriteAllText(excelPath, BuildExcelHtml(table), Encoding.UTF8);
+        WriteExcel(table, excelPath);
 
         string zipName = baseName + ".zip";
         using MemoryStream output = new();
@@ -79,37 +80,101 @@ public sealed class NewsletterArchiveBuilder
             .Trim();
     }
 
-    private static string BuildExcelHtml(DataTable table)
+    private static void WriteExcel(DataTable table, string path)
     {
-        string[] columns = Columns.Where(table.Columns.Contains).ToArray();
-        StringBuilder html = new();
-        html.AppendLine("<html><head><meta charset=\"utf-8\"><style>table{border-collapse:collapse;font-family:Arial}th{background:#c0504d;color:white;font-weight:bold}th,td{border:1px solid #bbb;padding:4px}tr:nth-child(even){background:#eaf2f8}</style></head><body><table>");
-        html.Append("<tr>");
-        foreach (string column in columns)
-            html.Append("<th>").Append(WebUtility.HtmlEncode(table.Columns[column]!.Caption)).Append("</th>");
-        html.AppendLine("</tr>");
-        foreach (DataRow row in table.Rows)
+        (string Name, int Length, bool Link)[] columns =
+        [
+            ("Here", 10, false),
+            ("Barcode", 13, false),
+            ("Artist", 80, false),
+            ("Title", 80, true),
+            ("Year_of", 4, false),
+            ("Media", 10, false),
+            ("Label_name", 20, false),
+            ("Origin", 5, false),
+            ("Genere", 20, false),
+            ("Quality", 10, false)
+        ];
+        var selected = columns.Where(x => table.Columns.Contains(x.Name)).ToArray();
+        IXlExporter exporter = XlExport.CreateExporter(XlDocumentFormat.Xls);
+        using FileStream stream = new(path, FileMode.Create, FileAccess.ReadWrite);
+        using IXlDocument document = exporter.CreateDocument(stream);
+        using IXlSheet sheet = document.CreateSheet();
+        sheet.Name = table.TableName;
+
+        List<XlCellFormatting> rowFormats = [];
+        for (int index = 0; index < 3; index++)
         {
-            html.Append("<tr>");
-            string link = Convert.ToString(row.ItemArray.LastOrDefault()) ?? string.Empty;
-            foreach (string column in columns)
-            {
-                string value = Convert.ToString(row[column], CultureInfo.CurrentCulture) ?? string.Empty;
-                html.Append("<td>");
-                if (column == "Title" && Uri.TryCreate(link, UriKind.Absolute, out _))
-                    html.Append("<a href=\"").Append(WebUtility.HtmlEncode(link)).Append("\">").Append(WebUtility.HtmlEncode(value)).Append("</a>");
-                else
-                    html.Append(WebUtility.HtmlEncode(value));
-                html.Append("</td>");
-            }
-            html.AppendLine("</tr>");
+            XlCellFormatting formatting = new();
+            formatting.Font = new XlFont { Name = "Arial Cyr", SchemeStyle = XlFontSchemeStyles.None };
+            rowFormats.Add(formatting);
         }
-        html.AppendLine("</table></body></html>");
-        return html.ToString();
+        rowFormats[0].Fill = XlFill.SolidFill(XlColor.FromTheme(XlThemeColor.Accent4, 0.7));
+        rowFormats[1].Fill = XlFill.SolidFill(XlColor.FromTheme(XlThemeColor.Accent6, 0.8));
+
+        XlCellFormatting header = new();
+        header.CopyFrom(rowFormats[2]);
+        header.Font.Bold = true;
+        header.Font.Color = XlColor.FromTheme(XlThemeColor.Light1, 0.0);
+        header.Fill = XlFill.SolidFill(XlColor.FromTheme(XlThemeColor.Accent2, 0.0));
+
+        foreach (var columnInfo in selected)
+        {
+            using IXlColumn column = sheet.CreateColumn();
+            column.WidthInPixels = Math.Min(255, columnInfo.Length * 10);
+            DataColumn dataColumn = table.Columns[columnInfo.Name]!;
+            if (dataColumn.DataType == typeof(int))
+                column.Formatting = new XlCellFormatting { NumberFormat = "#,##0" };
+            else if (dataColumn.DataType == typeof(double))
+                column.Formatting = new XlCellFormatting { NumberFormat = "#,##0.00" };
+            else if (dataColumn.DataType == typeof(DateTime))
+                column.Formatting = new XlCellFormatting
+                {
+                    NumberFormat = "dd.mm.yyyy",
+                    Alignment = new XlCellAlignment { HorizontalAlignment = XlHorizontalAlignment.Left }
+                };
+        }
+
+        using (IXlRow row = sheet.CreateRow())
+        {
+            foreach (var columnInfo in selected)
+            {
+                using IXlCell cell = row.CreateCell();
+                cell.Value = table.Columns[columnInfo.Name]!.Caption;
+                cell.ApplyFormatting(header);
+            }
+        }
+
+        foreach (DataRow dataRow in table.Rows)
+        {
+            object?[] values = dataRow.ItemArray;
+            string link = Convert.ToString(values[^1]) ?? string.Empty;
+            int formatIndex = Convert.ToInt32(values[0]);
+            using IXlRow row = sheet.CreateRow();
+            foreach (var columnInfo in selected)
+            {
+                using IXlCell cell = row.CreateCell();
+                cell.Value = XlVariantValue.FromObject(dataRow[columnInfo.Name]);
+                cell.ApplyFormatting(rowFormats[formatIndex]);
+                if (columnInfo.Link)
+                {
+                    cell.Formatting.Font.Underline = XlUnderlineType.Single;
+                    cell.Formatting.Font.Color = XlColor.FromArgb(0, 0, 255);
+                    sheet.Hyperlinks.Add(new XlHyperlink
+                    {
+                        DisplayText = cell.Value.TextValue,
+                        Reference = new XlCellRange(cell.Position),
+                        TargetUri = link,
+                        Tooltip = "Перейти на сайт"
+                    });
+                }
+            }
+        }
+        sheet.AutoFilterRange = sheet.DataRange;
+        sheet.SplitPosition = new XlCellPosition(0, 1);
     }
 
-    private static string ReadTemplate()
-    {
+    private static string ReadTemplate()    {
         ResourceManager resources = new("NewsWave.NewsMakerResources", typeof(NewsletterArchiveBuilder).Assembly);
         return resources.GetString("html_code") ?? throw new InvalidOperationException("В ресурсах NewsMaker не найден html_code.");
     }

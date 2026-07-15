@@ -12,6 +12,7 @@
     <Error Condition="!Exists('wwwroot\vendor\devextreme\dx.all.js')" Text="Клиентские файлы NewsWave не подготовлены. Выполните npm install в каталоге NewsWave." />
   </Target>
   <ItemGroup>
+    <PackageReference Include="DevExpress.Printing.Core" Version="25.2.7" />
     <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
     <PackageReference Include="MySql.Data" Version="9.7.0" />
   </ItemGroup>
