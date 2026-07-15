@@ -1,6 +1,10 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
 using GH.Attributes;
 using GH.Utils;
+using Category = LB.Libs.Category;
+using CfgCoreConnection = LB.Libs.CfgCoreConnection;
+using DbConnectionProperty = LB.Libs.DbConnectionProperty;
+using EditorType = LB.Libs.EditorType;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
