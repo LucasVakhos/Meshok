@@ -9,7 +9,7 @@ namespace MeshokBrowser.Workers
     public class Worker : AbstractWorker
     {
         protected string ExportPath => Path.Combine(Application.StartupPath, RunContext.AppCfg.ExportPath);
-        protected CfgMeshok cfgMeshok = IniHelper.Cfg<CfgMeshok>();
+        protected CfgMeshok cfgMeshok = LB.Libs.IniHelper.Cfg<CfgMeshok>();
         protected string Begin_url { get; set; } = string.Empty;
         public Worker(IMainForm form) : base(form)
         {

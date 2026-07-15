@@ -12,9 +12,9 @@ namespace NewsMaker.Common
     {
         public static SendService Instance { get; private set; }
         private static readonly CfgApp cfgApp = IniHelper.CfgAppForm();
-        private static readonly CfgRuSender cfgRuSender = IniHelper.CoreCfg<CfgRuSender>();
-        private static readonly CfgProgram cfgProgram = IniHelper.CoreCfg<CfgProgram>();
-        private static readonly CfgPost cfgPost = IniHelper.CoreCfg<CfgPost>();
+        private static readonly CfgRuSender cfgRuSender = LB.Libs.IniHelper.CoreCfg<CfgRuSender>();
+        private static readonly CfgProgram cfgProgram = LB.Libs.IniHelper.CoreCfg<CfgProgram>();
+        private static readonly CfgPost cfgPost = LB.Libs.IniHelper.CoreCfg<CfgPost>();
         private int _hasData;
         private bool _dataLoaded;
         public int RunDay

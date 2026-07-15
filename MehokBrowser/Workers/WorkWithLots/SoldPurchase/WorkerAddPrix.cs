@@ -19,8 +19,6 @@ namespace MeshokBrowser.Workers
         private const string compare_url = meshok_url + "/profile.php?submit=1&what=bulk";
         private readonly List<string> files = new List<string>();
         private ProcStep curSettingStep = ProcStep.Setting;
-        private string bridgenoteUrl = string.Empty;
-        private bool bridgenoteLoaded = false;
         public WorkerAddPrix(IMainForm form) : base(form)
         {
             ProcessName = "Загрузка лотов";
@@ -43,10 +41,7 @@ namespace MeshokBrowser.Workers
         {
             if (Begin_url == url)
             {
-                if (Begin_url == bridgenoteUrl)
-                    bridgenoteLoaded = true;
-                else if (Begin_url == loading_start_url)
-                    await FillPageAndPostAsync();
+                await FillPageAndPostAsync();
             }
             else if (url == compare_url)
             {

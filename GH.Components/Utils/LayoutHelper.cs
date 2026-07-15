@@ -6,8 +6,8 @@ namespace GH.Components
     public static class LayoutHelper
     {
         public static void CreateLayoutGroup<TEntity, TAttribute>(LayoutControlGroup EditGroup, string[] except = null, bool withKey = false)
-            where TEntity : AbstractEntity
-            where TAttribute : UpdatablePropertyAttribute
+            where TEntity : LB.Libs.AbstractEntity
+            where TAttribute : LB.Libs.UpdatablePropertyAttribute
         {
             LayoutControl layoutControl = EditGroup.Owner.Control as LayoutControl;
             if (layoutControl == null)
@@ -23,7 +23,7 @@ namespace GH.Components
             if (dataSource == null)
                 throw new Exception("не найден ВataSource!!!");
             LayoutControlGroup group = null;
-            foreach (Field field in Field.GetFields<TEntity, TAttribute>(except, withKey))
+            foreach (LB.Libs.Field field in LB.Libs.Field.GetFields<TEntity, TAttribute>(except, withKey))
             {
                 if (field.Group != null)
                 {

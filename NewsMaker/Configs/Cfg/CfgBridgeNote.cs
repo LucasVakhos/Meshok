@@ -16,13 +16,13 @@ namespace GH.Configs
             switch (name)
             {
                 case nameof(Server):
-                    return GH.Components.SecretProvider.CoreNewsBridgeServer;
+                    return LB.Libs.SecretProvider.CoreNewsBridgeServer;
                 case nameof(Database):
-                    return GH.Components.SecretProvider.CoreNewsBridgeDatabase;
+                    return LB.Libs.SecretProvider.CoreNewsBridgeDatabase;
                 case nameof(UserID):
-                    return GH.Components.SecretProvider.CoreNewsBridgeUserId;
+                    return LB.Libs.SecretProvider.CoreNewsBridgeUserId;
                 case nameof(Password):
-                    return GH.Components.SecretProvider.CoreNewsBridgePassword;
+                    return LB.Libs.SecretProvider.CoreNewsBridgePassword;
                 default:
                     return null;
             }

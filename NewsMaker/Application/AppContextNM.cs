@@ -6,7 +6,7 @@ namespace NewsMaker
     public class AppContextNM : AppContext<AppContextNM>
     {
         public static bool Executing { get; set; } = false;
-        public static readonly string MyEmail = GH.Components.SecretProvider.NewsMyEmail;
+        public static readonly string MyEmail = LB.Libs.SecretProvider.NewsMyEmail;
         protected override void InitializeSomething()
         {
             //заглушка

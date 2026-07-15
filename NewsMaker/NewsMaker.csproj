@@ -18,6 +18,8 @@
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="NHibernate\**\*.cs" />
+    <EmbeddedResource Remove="NHibernate\**\*.resx" />
     <Compile Remove="Default.cs" />
     <Compile Remove="Common\ISendpulse.cs" />
     <Compile Remove="Common\Sendpulse.cs" />
@@ -30,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GH.Components\GH.Components.csproj" />
     <ProjectReference Include="..\IniFile\IniFile.csproj" />
+    <ProjectReference Include="..\LB.Libs\LB-Libs.csproj" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Configs\Frames\CfgFrameBridgeNote.resx">

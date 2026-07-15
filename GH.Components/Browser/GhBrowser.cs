@@ -15,11 +15,20 @@ namespace GH.Components
             </html>
             """;
 
+        private const string DomSubmitMessage = "gh-dom-submit";
+        private const string DomSubmitScript = """
+            document.addEventListener('submit', () =>
+                chrome.webview.postMessage('gh-dom-submit'), true);
+            """;
+
         private bool _noDefaultContextMenu;
+        private Task<string> _domSubmitBridgeReady;
 
         public event EventHandler DocumentCompleted;
         public event EventHandler CreateWindow;
         public event EventHandler DomSubmit;
+
+        protected virtual void OnDomSubmit(EventArgs e) => DomSubmit?.Invoke(this, e);
 
         public bool IsBusy { get; private set; }
 
@@ -53,7 +62,7 @@ namespace GH.Components
             if (DesignMode)
                 return;
 
-            await EnsureCoreWebView2Async();
+            await EnsureDomSubmitBridgeAsync();
             NavigateToString(LoadingHtml);
         }
 
@@ -65,12 +74,33 @@ namespace GH.Components
                 return;
 
             ApplySettings();
+            CoreWebView2.WebMessageReceived += OnWebMessageReceived;
+            _domSubmitBridgeReady = CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(DomSubmitScript);
             CoreWebView2.NewWindowRequested += (_, args) =>
             {
                 args.Handled = true;
                 CreateWindow?.Invoke(this, EventArgs.Empty);
                 Navigate(args.Uri);
             };
+        }
+
+        private void OnWebMessageReceived(
+            object sender,
+            CoreWebView2WebMessageReceivedEventArgs e)
+        {
+            string message;
+            try { message = e.TryGetWebMessageAsString(); }
+            catch (ArgumentException) { return; }
+
+            if (message == DomSubmitMessage)
+                OnDomSubmit(EventArgs.Empty);
+        }
+
+        private async Task EnsureDomSubmitBridgeAsync()
+        {
+            await EnsureCoreWebView2Async();
+            if (_domSubmitBridgeReady != null)
+                await _domSubmitBridgeReady;
         }
 
         private void ApplySettings()
@@ -90,7 +120,7 @@ namespace GH.Components
             if (string.IsNullOrWhiteSpace(url))
                 return;
 
-            await EnsureCoreWebView2Async();
+            await EnsureDomSubmitBridgeAsync();
             CoreWebView2.Navigate(url);
         }
 

@@ -199,7 +199,6 @@ namespace GH.Components
         public GH.Components.ActionGh actEnter;
         public GH.Components.ActionGh actCancel;
         public GH.Components.LayoutControlGh layoutControl;
-        private GH.Components.LayoutControlGh layoutControlGh1;
         public SimpleButton btnEnter;
         public SimpleButton btnCancel;
         public LayoutControlGroup rootGroup;

@@ -29,7 +29,7 @@ namespace GH.Components
             }
         }
 
-    private XtraOpenFileDialog openFileDialog;
+    private OpenFileDialog openFileDialog;
     private ContainerControl _owner;
         [GHProperty, DefaultValue(null)]
         public ContainerControl Owner
@@ -206,7 +206,8 @@ namespace GH.Components
     private void InitializeComponent()
         {
             this.components = new Container();
-            this.openFileDialog = new XtraOpenFileDialog(this.components);
+            this.openFileDialog = new OpenFileDialog();
+            this.components.Add(this.openFileDialog);
             ((System.ComponentModel.ISupportInitialize)(this.fProperties)).BeginInit();
             ((ISupportInitialize)(this.Properties)).BeginInit();
             this.SuspendLayout();

@@ -12,7 +12,7 @@
         }
     public void Save()
         {
-            if (dataSource.Current is CfgCore cfgCore)
+            if (dataSource.Current is LB.Libs.CfgCore cfgCore)
             {
                 cfgCore.Save(true);
             }

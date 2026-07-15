@@ -134,8 +134,6 @@ namespace GH.Components
                             Label.Appearance.Image = images.Images["check_fault"];
                         }
                     break;
-                default:
-                    break;
             }
             Label.Invalidate();
             Invalidate();
@@ -149,7 +147,7 @@ namespace GH.Components
                 RevertControls();
                 try
                 {
-                    if (data.Current is CfgCoreConnection config)
+                    if (data.Current is LB.Libs.CfgCoreConnection config)
                     {
                         testOk = config.TestConnection();
                         if (config.IsComplete && testOk)

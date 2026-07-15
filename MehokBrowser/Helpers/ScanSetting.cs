@@ -9,7 +9,7 @@ namespace MeshokBrowser.Helpers
     [Serializable]
     public class ScanSetting
     {
-        CfgMeshok cfgMeshok = IniHelper.Cfg<CfgMeshok>();
+        CfgMeshok cfgMeshok = LB.Libs.IniHelper.Cfg<CfgMeshok>();
         public int ShowOnPage { get; set; } = 20;
         public bool AddLostDeals
         {

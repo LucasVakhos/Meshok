@@ -22,7 +22,7 @@ namespace MeshokBrowser
 
         private static void SetSiteNo()
         {
-            _siteNo = DapperLookupRepository.FindSiteId(IniHelper.Cfg<CfgMeshok>().SiteName)
+            _siteNo = DapperLookupRepository.FindSiteId(LB.Libs.IniHelper.Cfg<CfgMeshok>().SiteName)
                 ?? throw new InvalidOperationException("Site is not registered in the database.");
         }
 

@@ -1,4 +1,4 @@
-﻿using GH.Configs;
+﻿using CfgCore = LB.Libs.CfgCore;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 namespace GH.Components
 {
-    public class CfgCoreFrameType<T> : CfgCoreFrame where T : CfgCore
+    public class CfgCoreFrameType<T> : CfgCoreFrame where T : LB.Libs.CfgCore
     {
         public CfgCoreFrameType()
         {
@@ -24,7 +24,7 @@ namespace GH.Components
     private void DataSource_OnOpen(out IList list)
         {
             list = new List<T>();
-            list.Add(IniHelper.CoreCfg<T>());
+            list.Add(LB.Libs.IniHelper.CoreCfg<T>());
         }
     }
 }

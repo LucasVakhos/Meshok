@@ -1,0 +1,5 @@
+<Project>
+  <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'Windows'">
+    <Compile Include="$(MSBuildThisFileDirectory)WindowsPlatform.cs" Link="Properties\WindowsPlatform.cs" />
+  </ItemGroup>
+</Project>

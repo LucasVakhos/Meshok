@@ -34,8 +34,8 @@ namespace GH.Components
             }
         }
 
-    private static BaseUser _user = null;
-    public static BaseUser SystemUser
+    private static LB.Libs.BaseUser _user = null;
+    public static LB.Libs.BaseUser SystemUser
         {
             get
             {

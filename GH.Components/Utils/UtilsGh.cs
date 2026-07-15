@@ -291,7 +291,7 @@ namespace GH.Components
         //    PrFolder.Start();
         //}
 
-    private static string pass = GH.Components.SecretProvider.EncryptionPass;
+    private static string pass = LB.Libs.SecretProvider.EncryptionPass;
     public static string DeCrypt(string filePath)
         {
             string result = null;

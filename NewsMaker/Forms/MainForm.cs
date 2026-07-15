@@ -26,7 +26,7 @@ namespace NewsMaker
         private readonly Informator Info;
         private SendService sendService;
         public TabbedControlGroup PagesGroup { get; set; }
-        public CfgProgram cfgProgram => IniHelper.CoreCfg<CfgProgram>();
+        public CfgProgram cfgProgram => LB.Libs.IniHelper.CoreCfg<CfgProgram>();
         public CfgBridgeNote cfgBridgeNote => IniHelper.Cfg<CfgBridgeNote>();
         public NewsMakerForm(bool autorun)
         {

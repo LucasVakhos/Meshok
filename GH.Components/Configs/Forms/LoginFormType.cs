@@ -4,7 +4,7 @@
     {
     protected override bool EnterEnabled()
         {
-            return CfgFrame.dataSource.Current is CfgCoreConnection cfg && cfg.UserIsValid;
+            return CfgFrame.dataSource.Current is LB.Libs.CfgCoreConnection cfg && cfg.UserIsValid;
         }
     }
 }

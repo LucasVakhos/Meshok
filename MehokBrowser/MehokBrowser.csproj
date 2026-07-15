@@ -15,6 +15,10 @@
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
   <ItemGroup>
+    <!-- Prevent stale, untracked FluentNHibernate sources from reappearing in
+         SDK-style builds after git pull. -->
+    <Compile Remove="NHibernate\**\*.cs" />
+    <EmbeddedResource Remove="NHibernate\**\*.resx" />
     <Compile Remove="NewsMaker\**\*.cs" />
     <Compile Remove="Frames\SettingFrames\Main\**\*.cs" />
     <EmbeddedResource Remove="Frames\SettingFrames\Main\**\*.resx" />
@@ -27,6 +31,7 @@
     <Compile Remove="Workers\WorkWithLots\WorkerScanLots.cs" />
     <Compile Remove="Workers\WorkWithLots\WorkerScanLotsOld.cs" />
     <Compile Remove="Helpers\ReadHelperBaseStatus.cs" />
+    <Compile Remove="Models\User.cs" />
     <Compile Remove="Frames\SettingFrames\Main\MeshokSetting - Копировать.cs" />
     <Compile Remove="Frames\SettingFrames\Main\MeshokSetting - Копировать.Designer.cs" />
     <EmbeddedResource Remove="NewsMaker\**\*.resx" />
@@ -160,5 +165,6 @@
   <ItemGroup>
     <ProjectReference Include="..\GH.Components\GH.Components.csproj" />
     <ProjectReference Include="..\IniFile\IniFile.csproj" />
+    <ProjectReference Include="..\LB.Libs\LB-Libs.csproj" />
   </ItemGroup>
 </Project>

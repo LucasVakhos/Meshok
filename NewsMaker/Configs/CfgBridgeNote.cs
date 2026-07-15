@@ -7,10 +7,10 @@ namespace NewsMaker
     {
         protected override void CreateSomething()
         {
-            Server = GH.Components.SecretProvider.NewsBridgeServer;
-            Database = GH.Components.SecretProvider.NewsBridgeDatabase;
-            UserID = GH.Components.SecretProvider.NewsBridgeUserId;
-            Password = GH.Components.SecretProvider.NewsBridgePassword;
+            Server = LB.Libs.SecretProvider.NewsBridgeServer;
+            Database = LB.Libs.SecretProvider.NewsBridgeDatabase;
+            UserID = LB.Libs.SecretProvider.NewsBridgeUserId;
+            Password = LB.Libs.SecretProvider.NewsBridgePassword;
         }
         public static MySqlConnection CreateConnection()
         {

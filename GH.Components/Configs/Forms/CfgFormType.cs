@@ -30,7 +30,7 @@ namespace GH.Components
                         {
                             while (_cfgFrame != null && !Disposing)
                             {
-                                if (CfgFrame.dataSource.Current is CfgCoreConnection cfg)
+                                if (CfgFrame.dataSource.Current is LB.Libs.CfgCoreConnection cfg)
                                     IsConnect = cfg.IsComplete && cfg.TestConnection();
                                 Thread.Sleep(250);
                             }
