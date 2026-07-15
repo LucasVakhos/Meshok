@@ -375,3 +375,4 @@ temp_inspect.*
 _VS.Helper.ZipManifest.txt
 _zip/
 NewsWave/wwwroot/vendor/
+NewsWave/App_Data/

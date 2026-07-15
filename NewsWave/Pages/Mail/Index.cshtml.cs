@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
+using NewsWave.Data;
 using NewsWave.Mail;
 using System.Net.Mail;
 
@@ -11,13 +12,16 @@ public sealed class IndexModel : PageModel
     private const int MaxRecipients = 500;
     private readonly IMailQueue _mailQueue;
     private readonly IOptionsSnapshot<MailOptions> _options;
+    private readonly NewsWaveStore _store;
 
     public IndexModel(
         IMailQueue mailQueue,
-        IOptionsSnapshot<MailOptions> options)
+        IOptionsSnapshot<MailOptions> options,
+        NewsWaveStore store)
     {
         _mailQueue = mailQueue;
         _options = options;
+        _store = store;
     }
 
     [BindProperty]
@@ -25,12 +29,26 @@ public sealed class IndexModel : PageModel
 
     public MailOptions Settings => _options.Value;
     public IReadOnlyList<MailDispatchSnapshot> Dispatches => _mailQueue.Recent();
+    public int ActiveContactsCount => _store.GetContacts().Count(x => x.IsActive);
 
-    public void OnGet()
+    public void OnGet(Guid? templateId, bool contacts = false)
     {
+        if (templateId.HasValue && _store.FindTemplate(templateId.Value) is MailTemplateRecord template)
+        {
+            Input.Subject = template.Subject;
+            Input.Body = template.Body;
+            Input.IsHtml = template.IsHtml;
+        }
+
+        if (contacts)
+        {
+            Input.Recipients = string.Join(
+                Environment.NewLine,
+                _store.GetContacts().Where(x => x.IsActive).Select(x => x.Email));
+        }
     }
 
-    public IActionResult OnPost()
+    public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
     {
         IReadOnlyList<string> recipients = ParseRecipients(Input.Recipients);
         if (recipients.Count == 0)
@@ -43,11 +61,9 @@ public sealed class IndexModel : PageModel
         if (!ModelState.IsValid)
             return Page();
 
-        Guid dispatchId = _mailQueue.Enqueue(new MailRequest(
-            recipients,
-            Input.Subject.Trim(),
-            Input.Body,
-            Input.IsHtml));
+        Guid dispatchId = await _mailQueue.EnqueueAsync(
+            new MailRequest(recipients, Input.Subject.Trim(), Input.Body, Input.IsHtml),
+            cancellationToken);
 
         TempData["MailSuccess"] =
             $"Рассылка на {recipients.Count} адресов поставлена в очередь. Код: {dispatchId.ToString()[..8]}.";

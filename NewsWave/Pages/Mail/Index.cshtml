@@ -27,6 +27,18 @@
 }
 
 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+<div class="mail-shortcuts">
+    <a asp-page="/Mail/Index" asp-route-contacts="true" class="shortcut-card">
+        <span>Адресная книга</span>
+        <strong>@Model.ActiveContactsCount активных</strong>
+        <small>Подставить всех в письмо →</small>
+    </a>
+    <a asp-page="/Templates/Index" class="shortcut-card">
+        <span>Библиотека</span>
+        <strong>Шаблоны писем</strong>
+        <small>Выбрать заготовку →</small>
+    </a>
+</div>
 
 <div class="mail-grid">
     <section class="panel compose-panel">
@@ -113,7 +125,7 @@
             <span class="step-number">03</span>
             <h2>Последние отправки</h2>
         </div>
-        <span class="muted">история текущего запуска</span>
+        <span class="muted">сохраняется между перезапусками</span>
     </div>
     <div id="dispatchGrid"></div>
 </section>

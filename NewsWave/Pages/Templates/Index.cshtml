@@ -1,0 +1,142 @@
+@page
+@model NewsWave.Pages.Templates.IndexModel
+@using System.Text.Json
+@{
+    ViewData["Title"] = "Шаблоны";
+    string templatesJson = JsonSerializer.Serialize(Model.Templates);
+    string nameJson = JsonSerializer.Serialize(Model.Input.Name);
+    string subjectJson = JsonSerializer.Serialize(Model.Input.Subject);
+    string bodyJson = JsonSerializer.Serialize(Model.Input.Body);
+}
+
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Библиотека писем</span>
+        <h1>Шаблоны</h1>
+        <p>Сохраняйте удачные письма и запускайте новую волну без копирования.</p>
+    </div>
+</div>
+
+@if (TempData["TemplateSuccess"] is string success)
+{
+    <div class="alert alert-success">@success</div>
+}
+<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+<div class="directory-grid template-layout">
+    <section class="panel">
+        <div class="panel-title">
+            <div><span class="step-number">01</span><h2>Новый шаблон</h2></div>
+        </div>
+        <form method="post" asp-page-handler="Add" id="templateForm">
+            <input asp-for="Input.Name" type="hidden" />
+            <input asp-for="Input.Subject" type="hidden" />
+            <textarea asp-for="Input.Body" class="d-none"></textarea>
+            <input asp-for="Input.IsHtml" type="hidden" />
+
+            <div class="mb-3">
+                <label class="form-label">Название</label>
+                <div id="templateName"></div>
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Тема</label>
+                <div id="templateSubject"></div>
+                <span asp-validation-for="Input.Subject" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Текст</label>
+                <div id="templateBody"></div>
+                <span asp-validation-for="Input.Body" class="text-danger"></span>
+            </div>
+            <div class="d-flex align-items-center justify-content-between gap-3">
+                <div id="templateHtml"></div>
+                <div id="addTemplateButton"></div>
+            </div>
+        </form>
+    </section>
+
+    <section class="panel directory-panel">
+        <div class="panel-title">
+            <div><span class="step-number">02</span><h2>Сохранённые шаблоны</h2></div>
+            <span class="muted">@Model.Templates.Count шаблонов</span>
+        </div>
+        <div id="templatesGrid"></div>
+    </section>
+</div>
+
+<form method="post" asp-page-handler="Delete" id="deleteTemplateForm">
+    <input type="hidden" name="deleteId" id="deleteTemplateId" />
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const templates = @Html.Raw(templatesJson);
+        const syncTemplate = (selector, value) => $(selector).val(value ?? "");
+
+        $("#templateName").dxTextBox({
+            value: @Html.Raw(nameJson),
+            placeholder: "Например, еженедельный дайджест",
+            onValueChanged: e => syncTemplate("#Input_Name", e.value)
+        });
+        $("#templateSubject").dxTextBox({
+            value: @Html.Raw(subjectJson),
+            placeholder: "Тема письма",
+            onValueChanged: e => syncTemplate("#Input_Subject", e.value)
+        });
+        $("#templateBody").dxTextArea({
+            value: @Html.Raw(bodyJson),
+            minHeight: 220,
+            autoResizeEnabled: true,
+            placeholder: "Текст шаблона",
+            onValueChanged: e => syncTemplate("#Input_Body", e.value)
+        });
+        $("#templateHtml").dxCheckBox({
+            value: @Model.Input.IsHtml.ToString().ToLowerInvariant(),
+            text: "HTML-шаблон",
+            onValueChanged: e => syncTemplate("#Input_IsHtml", e.value ? "true" : "false")
+        });
+        $("#addTemplateButton").dxButton({
+            text: "Сохранить",
+            icon: "save",
+            type: "default",
+            onClick: () => document.getElementById("templateForm").requestSubmit()
+        });
+
+        $("#templatesGrid").dxDataGrid({
+            dataSource: templates,
+            keyExpr: "Id",
+            showBorders: false,
+            rowAlternationEnabled: true,
+            noDataText: "Шаблонов пока нет.",
+            searchPanel: { visible: true, placeholder: "Найти шаблон…" },
+            paging: { pageSize: 12 },
+            columns: [
+                { dataField: "Name", caption: "Название", minWidth: 180 },
+                { dataField: "Subject", caption: "Тема", minWidth: 230 },
+                { dataField: "IsHtml", caption: "HTML", dataType: "boolean", width: 75 },
+                {
+                    type: "buttons",
+                    width: 112,
+                    buttons: [
+                        {
+                            icon: "email",
+                            hint: "Создать письмо",
+                            onClick: e => window.location.href = `/Mail?templateId=${e.row.data.Id}`
+                        },
+                        {
+                            icon: "trash",
+                            hint: "Удалить",
+                            onClick: e => {
+                                if (!confirm(`Удалить шаблон «${e.row.data.Name}»?`)) return;
+                                $("#deleteTemplateId").val(e.row.data.Id);
+                                document.getElementById("deleteTemplateForm").requestSubmit();
+                            }
+                        }
+                    ]
+                }
+            ]
+        });
+    </script>
+}

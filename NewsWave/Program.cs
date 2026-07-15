@@ -1,3 +1,4 @@
+using NewsWave.Data;
 using NewsWave.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddOptions<MailOptions>()
     .Bind(builder.Configuration.GetSection(MailOptions.SectionName))
     .Validate(x => x.Port is > 0 and <= 65535, "SMTP port is invalid.");
+builder.Services.AddSingleton<NewsWaveStore>();
 builder.Services.AddSingleton<MailOutbox>();
 builder.Services.AddSingleton<IMailQueue>(services => services.GetRequiredService<MailOutbox>());
 builder.Services.AddHostedService(services => services.GetRequiredService<MailOutbox>());

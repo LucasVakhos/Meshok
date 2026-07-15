@@ -1,0 +1,137 @@
+@page
+@model NewsWave.Pages.Contacts.IndexModel
+@using System.Text.Json
+@{
+    ViewData["Title"] = "Адресаты";
+    string contactsJson = JsonSerializer.Serialize(Model.Contacts);
+    string nameJson = JsonSerializer.Serialize(Model.Input.Name);
+    string emailJson = JsonSerializer.Serialize(Model.Input.Email);
+    string groupJson = JsonSerializer.Serialize(Model.Input.Group);
+}
+
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Адресная книга</span>
+        <h1>Адресаты</h1>
+        <p>Храните получателей и собирайте рассылку одним кликом.</p>
+    </div>
+    <a asp-page="/Mail/Index" asp-route-contacts="true" class="hero-action compact-action">
+        Письмо всем активным <span>→</span>
+    </a>
+</div>
+
+@if (TempData["ContactSuccess"] is string success)
+{
+    <div class="alert alert-success">@success</div>
+}
+<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+<div class="directory-grid">
+    <section class="panel">
+        <div class="panel-title">
+            <div><span class="step-number">01</span><h2>Новый получатель</h2></div>
+        </div>
+        <form method="post" asp-page-handler="Add" id="contactForm">
+            <input asp-for="Input.Name" type="hidden" />
+            <input asp-for="Input.Email" type="hidden" />
+            <input asp-for="Input.Group" type="hidden" />
+            <input asp-for="Input.IsActive" type="hidden" />
+
+            <div class="mb-3">
+                <label class="form-label">Имя</label>
+                <div id="contactName"></div>
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <div id="contactEmail"></div>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Группа</label>
+                <div id="contactGroup"></div>
+            </div>
+            <div class="d-flex align-items-center justify-content-between gap-3">
+                <div id="contactActive"></div>
+                <div id="addContactButton"></div>
+            </div>
+        </form>
+    </section>
+
+    <section class="panel directory-panel">
+        <div class="panel-title">
+            <div><span class="step-number">02</span><h2>Получатели</h2></div>
+            <span class="muted">@Model.Contacts.Count записей</span>
+        </div>
+        <div id="contactsGrid"></div>
+    </section>
+</div>
+
+<form method="post" asp-page-handler="Delete" id="deleteContactForm">
+    <input type="hidden" name="deleteId" id="deleteContactId" />
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const contacts = @Html.Raw(contactsJson);
+        const sync = (selector, value) => $(selector).val(value ?? "");
+
+        $("#contactName").dxTextBox({
+            value: @Html.Raw(nameJson),
+            placeholder: "Имя или компания",
+            onValueChanged: e => sync("#Input_Name", e.value)
+        });
+        $("#contactEmail").dxTextBox({
+            value: @Html.Raw(emailJson),
+            mode: "email",
+            placeholder: "mail@example.ru",
+            onValueChanged: e => sync("#Input_Email", e.value)
+        });
+        $("#contactGroup").dxTextBox({
+            value: @Html.Raw(groupJson),
+            placeholder: "Клиенты, партнёры…",
+            onValueChanged: e => sync("#Input_Group", e.value)
+        });
+        $("#contactActive").dxCheckBox({
+            value: @Model.Input.IsActive.ToString().ToLowerInvariant(),
+            text: "Участвует в рассылках",
+            onValueChanged: e => sync("#Input_IsActive", e.value ? "true" : "false")
+        });
+        $("#addContactButton").dxButton({
+            text: "Добавить",
+            icon: "add",
+            type: "default",
+            onClick: () => document.getElementById("contactForm").requestSubmit()
+        });
+
+        $("#contactsGrid").dxDataGrid({
+            dataSource: contacts,
+            keyExpr: "Id",
+            showBorders: false,
+            rowAlternationEnabled: true,
+            noDataText: "Адресная книга пока пуста.",
+            searchPanel: { visible: true, placeholder: "Найти получателя…" },
+            paging: { pageSize: 15 },
+            columns: [
+                { dataField: "Name", caption: "Имя", minWidth: 160 },
+                { dataField: "Email", caption: "Email", minWidth: 210 },
+                { dataField: "Group", caption: "Группа", width: 140 },
+                { dataField: "IsActive", caption: "Активен", dataType: "boolean", width: 90 },
+                {
+                    type: "buttons",
+                    width: 72,
+                    buttons: [{
+                        icon: "trash",
+                        hint: "Удалить",
+                        onClick: e => {
+                            if (!confirm(`Удалить ${e.row.data.Name}?`)) return;
+                            $("#deleteContactId").val(e.row.data.Id);
+                            document.getElementById("deleteContactForm").requestSubmit();
+                        }
+                    }]
+                }
+            ]
+        });
+    </script>
+}

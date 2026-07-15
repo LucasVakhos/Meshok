@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Options;
-using System.Collections.Concurrent;
+using NewsWave.Data;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
@@ -9,7 +9,7 @@ namespace NewsWave.Mail;
 
 public interface IMailQueue
 {
-    Guid Enqueue(MailRequest request);
+    Task<Guid> EnqueueAsync(MailRequest request, CancellationToken cancellationToken = default);
     IReadOnlyList<MailDispatchSnapshot> Recent(int count = 20);
 }
 
@@ -34,62 +34,55 @@ public sealed record MailDispatchSnapshot(
 public sealed class MailOutbox : BackgroundService, IMailQueue
 {
     private readonly Channel<MailDispatch> _queue =
-        Channel.CreateUnbounded<MailDispatch>(
-            new UnboundedChannelOptions { SingleReader = true });
-    private readonly ConcurrentDictionary<Guid, MailDispatch> _dispatches = new();
+        Channel.CreateUnbounded<MailDispatch>(new UnboundedChannelOptions { SingleReader = true });
     private readonly IOptionsMonitor<MailOptions> _options;
+    private readonly NewsWaveStore _store;
     private readonly ILogger<MailOutbox> _logger;
 
     public MailOutbox(
         IOptionsMonitor<MailOptions> options,
+        NewsWaveStore store,
         ILogger<MailOutbox> logger)
     {
         _options = options;
+        _store = store;
         _logger = logger;
     }
 
-    public Guid Enqueue(MailRequest request)
+    public async Task<Guid> EnqueueAsync(MailRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
 
         MailDispatch dispatch = new(request);
-        _dispatches[dispatch.Id] = dispatch;
+        await _store.UpsertDispatchAsync(dispatch.Snapshot(), cancellationToken);
         if (!_queue.Writer.TryWrite(dispatch))
             throw new InvalidOperationException("Очередь почты недоступна.");
 
-        TrimHistory();
         return dispatch.Id;
     }
 
-    public IReadOnlyList<MailDispatchSnapshot> Recent(int count = 20)
-    {
-        return _dispatches.Values
-            .OrderByDescending(x => x.CreatedAt)
-            .Take(Math.Clamp(count, 1, 100))
-            .Select(x => x.Snapshot())
-            .ToArray();
-    }
+    public IReadOnlyList<MailDispatchSnapshot> Recent(int count = 20) =>
+        _store.GetDispatches(count);
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await foreach (MailDispatch dispatch in _queue.Reader.ReadAllAsync(stoppingToken))
-        {
             await SendAsync(dispatch, stoppingToken);
-        }
     }
 
-    private async Task SendAsync(
-        MailDispatch dispatch,
-        CancellationToken cancellationToken)
+    private async Task SendAsync(MailDispatch dispatch, CancellationToken cancellationToken)
     {
         MailOptions options = _options.CurrentValue;
         if (!options.IsConfigured)
         {
             dispatch.Fail("SMTP не настроен.");
+            await PersistSafeAsync(dispatch);
             return;
         }
 
         dispatch.Start();
+        await PersistSafeAsync(dispatch);
+
         try
         {
             using SmtpClient client = new(options.Host, options.Port)
@@ -102,10 +95,7 @@ public sealed class MailOutbox : BackgroundService, IMailQueue
             if (!string.IsNullOrWhiteSpace(options.UserName))
                 client.Credentials = new NetworkCredential(options.UserName, options.Password);
 
-            MailAddress sender = new(
-                options.FromAddress,
-                options.FromName,
-                Encoding.UTF8);
+            MailAddress sender = new(options.FromAddress, options.FromName, Encoding.UTF8);
 
             foreach (string recipient in dispatch.Request.Recipients)
             {
@@ -127,27 +117,31 @@ public sealed class MailOutbox : BackgroundService, IMailQueue
             }
 
             dispatch.Complete();
+            await PersistSafeAsync(dispatch);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             dispatch.Fail("Отправка остановлена вместе с приложением.");
+            await PersistSafeAsync(dispatch);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Не удалось выполнить рассылку {DispatchId}", dispatch.Id);
             dispatch.Fail(ex.Message);
+            await PersistSafeAsync(dispatch);
         }
     }
 
-    private void TrimHistory()
+    private async Task PersistSafeAsync(MailDispatch dispatch)
     {
-        MailDispatch[] overflow = _dispatches.Values
-            .OrderByDescending(x => x.CreatedAt)
-            .Skip(100)
-            .ToArray();
-
-        foreach (MailDispatch dispatch in overflow)
-            _dispatches.TryRemove(dispatch.Id, out _);
+        try
+        {
+            await _store.UpsertDispatchAsync(dispatch.Snapshot());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Не удалось сохранить состояние рассылки {DispatchId}", dispatch.Id);
+        }
     }
 
     private sealed class MailDispatch
