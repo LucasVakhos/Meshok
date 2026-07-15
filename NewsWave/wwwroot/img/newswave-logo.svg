@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 76" role="img" aria-labelledby="title desc">
+  <title id="title">NewsWave</title>
+  <desc id="desc">Почтовая служба BridgeNote</desc>
+  <defs>
+    <linearGradient id="surface" x1="7" y1="4" x2="67" y2="72" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22313C"/>
+      <stop offset="1" stop-color="#11191F"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="12" y1="50" x2="65" y2="25" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A7F78"/>
+      <stop offset="1" stop-color="#39C5AE"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="72" height="72" rx="21" fill="url(#surface)"/>
+  <path d="M14 49c7-12.8 14.6-12.8 21.6 0s14.6 12.8 26.4-7.2" fill="none" stroke="url(#wave)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M15 31c6.7-9.4 13.8-9.4 20.6 0s13.9 9.4 22.2-2.2" fill="none" stroke="#F4F7F5" stroke-width="4.5" stroke-linecap="round" opacity=".96"/>
+  <circle cx="61" cy="22" r="5.5" fill="#C8F26B"/>
+  <circle cx="61" cy="22" r="9" fill="none" stroke="#C8F26B" stroke-width="1.5" opacity=".28"/>
+  <text x="91" y="44" fill="#17202A" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="34" font-weight="760" letter-spacing="-1.8">News<tspan fill="#0A7F78">Wave</tspan></text>
+  <text x="93" y="61" fill="#66727F" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9" font-weight="700" letter-spacing="2.25">BRIDGENOTE MAIL</text>
+</svg>

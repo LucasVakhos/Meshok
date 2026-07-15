@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">NewsWave</title>
+  <desc id="desc">Волна новостей и точка сигнала</desc>
+  <defs>
+    <linearGradient id="surface" x1="8" y1="5" x2="58" y2="61" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22313C"/>
+      <stop offset="1" stop-color="#11191F"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="10" y1="42" x2="54" y2="21" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A7F78"/>
+      <stop offset="1" stop-color="#39C5AE"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="18" fill="url(#surface)"/>
+  <path d="M12 40.5c5.8-10.7 12.2-10.7 18 0s12.2 10.7 22-6" fill="none" stroke="url(#wave)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M13 25.5c5.6-7.8 11.5-7.8 17.2 0s11.6 7.8 18.5-1.8" fill="none" stroke="#F4F7F5" stroke-width="4" stroke-linecap="round" opacity=".96"/>
+  <circle cx="51" cy="18" r="5" fill="#C8F26B"/>
+  <circle cx="51" cy="18" r="8" fill="none" stroke="#C8F26B" stroke-width="1.5" opacity=".28"/>
+</svg>

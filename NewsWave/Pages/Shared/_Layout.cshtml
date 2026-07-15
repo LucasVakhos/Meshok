@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - NewsWave</title>
+    <link rel="icon" type="image/svg+xml" href="~/img/newswave-mark.svg" />
+    <meta name="theme-color" content="#17202a" />
     <link rel="stylesheet" href="~/vendor/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="~/vendor/devextreme/dx.fluent.blue.light.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -13,7 +15,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand wave-brand" asp-page="/Mail/Index"><span>NM</span> NewsMaker</a>
+                <a class="navbar-brand wave-brand" asp-page="/Mail/Index" aria-label="NewsWave — Почта"><img src="~/img/newswave-logo.svg" alt="NewsWave" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                         aria-expanded="false" aria-label="Открыть навигацию">
                     <span class="navbar-toggler-icon"></span>
@@ -37,7 +39,7 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">&copy; 2026 NewsMaker · веб-версия</div>
+        <div class="container">&copy; 2026 NewsWave · почтовая служба BridgeNote</div>
     </footer>
 
     <script src="~/vendor/jquery/jquery.min.js"></script>
