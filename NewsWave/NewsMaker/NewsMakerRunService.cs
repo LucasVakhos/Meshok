@@ -214,6 +214,8 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
         AddReport("Подключение к базе данных установлено.");
 
         SendInterval interval = await _database.ReadIntervalAsync(token);
+        int buffered = await _database.BufferCountAsync(token);
+        bool resumeExisting = buffered > 0 || interval.Begin < interval.End;
         if (interval.Begin == interval.End)
         {
             interval = interval with { End = DateTime.Today };
@@ -238,18 +240,27 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
             return;
         }
 
-        AddReport("Создание списка новинок...");
-        using DataTable news = await _database.GetNewsAsync(token);
-        if (news.Rows.Count == 0)
+        NewsletterArchive archive;
+        if (resumeExisting && _archiveBuilder.Exists(interval.End))
         {
-            await _database.ClearBufferAsync(token);
-            await ResetIntervalAsync(interval, token);
-            SetStatus(NewsMakerRunStatus.Completed, "Список новинок пуст.");
-            return;
+            archive = _archiveBuilder.Reuse(interval.End);
+            AddReport($"Уже создан - {Path.ChangeExtension(archive.FileName, ".xls")}");
         }
-        AddReport($"Всего новинок {news.Rows.Count}");
-        NewsletterArchive archive = _archiveBuilder.Build(news, interval.End);
-        AddReport($"Создан {archive.FileName}");
+        else
+        {
+            AddReport("Создание списка новинок...");
+            using DataTable news = await _database.GetNewsAsync(token);
+            if (news.Rows.Count == 0)
+            {
+                await _database.ClearBufferAsync(token);
+                await ResetIntervalAsync(interval, token);
+                SetStatus(NewsMakerRunStatus.Completed, "Список новинок пуст.");
+                return;
+            }
+            AddReport($"Всего новинок {news.Rows.Count}");
+            archive = _archiveBuilder.Build(news, interval.End);
+            AddReport($"Создан {archive.FileName}");
+        }
 
         AddReport("Получаем список подписчиков...");
         await _database.PrepareSubscribersAsync(token);

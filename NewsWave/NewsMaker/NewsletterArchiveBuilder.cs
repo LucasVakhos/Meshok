@@ -28,21 +28,47 @@ public sealed class NewsletterArchiveBuilder
 
     public NewsletterArchive Build(DataTable table, DateTime date)
     {
-        NewsMakerSettings settings = _settings.Current;
-        string directory = Path.IsPathRooted(settings.ExportPath)
-            ? settings.ExportPath
-            : Path.Combine(_environment.ContentRootPath, settings.ExportPath);
+        string excelPath = PrepareExcelPath(date);
+        WriteExcel(table, excelPath);
+        return CreateArchive(excelPath);
+    }
+
+    public bool Exists(DateTime date) => File.Exists(GetExcelPath(date));
+
+    public NewsletterArchive Reuse(DateTime date)
+    {
+        string excelPath = PrepareExcelPath(date);
+        if (!File.Exists(excelPath))
+            throw new FileNotFoundException("Созданный ранее список новинок не найден.", excelPath);
+        return CreateArchive(excelPath);
+    }
+
+    private string PrepareExcelPath(DateTime date)
+    {
+        string excelPath = GetExcelPath(date);
+        string directory = Path.GetDirectoryName(excelPath)!;
         Directory.CreateDirectory(directory);
-        string baseName = $"news{date:d}".Replace('.', '_');
-        string excelPath = Path.Combine(directory, baseName + ".xls");
         foreach (string oldFile in Directory.GetFiles(directory, "*.xls"))
         {
             if (!Path.GetFullPath(oldFile).Equals(Path.GetFullPath(excelPath), StringComparison.OrdinalIgnoreCase))
                 File.Delete(oldFile);
         }
-        WriteExcel(table, excelPath);
+        return excelPath;
+    }
 
-        string zipName = baseName + ".zip";
+    private string GetExcelPath(DateTime date)
+    {
+        NewsMakerSettings settings = _settings.Current;
+        string directory = Path.IsPathRooted(settings.ExportPath)
+            ? settings.ExportPath
+            : Path.Combine(_environment.ContentRootPath, settings.ExportPath);
+        string baseName = $"news{date:d}".Replace('.', '_');
+        return Path.Combine(directory, baseName + ".xls");
+    }
+
+    private static NewsletterArchive CreateArchive(string excelPath)
+    {
+        string zipName = Path.GetFileNameWithoutExtension(excelPath) + ".zip";
         using MemoryStream output = new();
         using (ZipArchive archive = new(output, ZipArchiveMode.Create, true))
         {
