@@ -1,0 +1,68 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Обзор";
+}
+
+<section class="hero">
+    <div class="hero-copy">
+        <span class="eyebrow">NewsMaker становится веб-сервисом</span>
+        <h1>Новости приходят волнами.<br />Управляйте каждой.</h1>
+        <p>
+            NewsWave переносит подготовку и рассылку новостей в браузер.
+            Первый готовый модуль — собственное почтовое отделение.
+        </p>
+        <a asp-page="/Mail/Index" class="hero-action">Открыть почту <span>→</span></a>
+    </div>
+    <div class="wave-orbit" aria-hidden="true">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="orbit-core">NW</div>
+    </div>
+</section>
+
+<section class="metric-grid">
+    <article class="metric-card">
+        <span>SMTP</span>
+        <strong>@(Model.MailConfigured ? "готов" : "настройте")</strong>
+        <small>@(Model.MailConfigured ? "Канал отправки подключён" : "Нужны сервер и адрес отправителя")</small>
+    </article>
+    <article class="metric-card">
+        <span>В работе</span>
+        <strong>@Model.ActiveCount</strong>
+        <small>очередь текущего запуска</small>
+    </article>
+    <article class="metric-card">
+        <span>Завершено</span>
+        <strong>@Model.SentCount</strong>
+        <small>успешных рассылок</small>
+    </article>
+    <article class="metric-card">
+        <span>Требуют внимания</span>
+        <strong>@Model.FailedCount</strong>
+        <small>ошибок отправки</small>
+    </article>
+</section>
+
+<section class="panel roadmap-panel">
+    <div class="panel-title">
+        <div>
+            <span class="step-number">Маршрут</span>
+            <h2>Развитие NewsWave</h2>
+        </div>
+    </div>
+    <div class="roadmap">
+        <div class="roadmap-item complete">
+            <span>01</span>
+            <div><strong>Почтовое отделение</strong><small>SMTP, очередь, статусы</small></div>
+        </div>
+        <div class="roadmap-item">
+            <span>02</span>
+            <div><strong>Подготовка новостей</strong><small>перенос сценариев NewsMaker</small></div>
+        </div>
+        <div class="roadmap-item">
+            <span>03</span>
+            <div><strong>Подписчики и расписание</strong><small>автоматические волны</small></div>
+        </div>
+    </div>
+</section>

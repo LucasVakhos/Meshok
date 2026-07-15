@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWindowsForms>false</UseWindowsForms>
+    <EnableWindowsTargeting>false</EnableWindowsTargeting>
+    <EnableDefaultEmbeddedResourceItems>true</EnableDefaultEmbeddedResourceItems>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <Target Name="EnsureClientAssets" BeforeTargets="Build">
+    <Error Condition="!Exists('wwwroot\vendor\devextreme\dx.all.js')"
+           Text="Клиентские файлы NewsWave не подготовлены. Выполните npm install в каталоге NewsWave." />
+  </Target>
+
+</Project>

@@ -1,0 +1,209 @@
+@page
+@model NewsWave.Pages.Mail.IndexModel
+@using NewsWave.Mail
+@using System.Text.Json
+@{
+    ViewData["Title"] = "Почта";
+    string dispatchJson = JsonSerializer.Serialize(Model.Dispatches);
+    string recipientsJson = JsonSerializer.Serialize(Model.Input.Recipients);
+    string subjectJson = JsonSerializer.Serialize(Model.Input.Subject);
+    string bodyJson = JsonSerializer.Serialize(Model.Input.Body);
+}
+
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Почтовое отделение</span>
+        <h1>Почта</h1>
+        <p>Подготовьте письмо и поставьте персональную рассылку в очередь.</p>
+    </div>
+    <span class="status-pill @(Model.Settings.IsConfigured ? "status-ready" : "status-warning")">
+        @(Model.Settings.IsConfigured ? "SMTP готов" : "SMTP не настроен")
+    </span>
+</div>
+
+@if (TempData["MailSuccess"] is string success)
+{
+    <div class="alert alert-success">@success</div>
+}
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+<div class="mail-grid">
+    <section class="panel compose-panel">
+        <div class="panel-title">
+            <div>
+                <span class="step-number">01</span>
+                <h2>Новое письмо</h2>
+            </div>
+            <span class="muted">до 500 адресатов</span>
+        </div>
+
+        <form method="post" id="mailForm">
+            <div class="mb-4">
+                <label asp-for="Input.Recipients" class="form-label"></label>
+                <textarea asp-for="Input.Recipients" class="d-none"></textarea>
+                <div id="recipientsEditor"></div>
+                <span asp-validation-for="Input.Recipients" class="text-danger"></span>
+                <div class="form-hint">По одному адресу в строке; также можно разделять запятой или точкой с запятой.</div>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Input.Subject" class="form-label"></label>
+                <input asp-for="Input.Subject" type="hidden" />
+                <div id="subjectEditor"></div>
+                <span asp-validation-for="Input.Subject" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Input.Body" class="form-label"></label>
+                <textarea asp-for="Input.Body" class="d-none"></textarea>
+                <div id="bodyEditor"></div>
+                <span asp-validation-for="Input.Body" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <input asp-for="Input.IsHtml" type="hidden" />
+                <div id="htmlSwitch"></div>
+                <div id="queueButton"></div>
+            </div>
+        </form>
+    </section>
+
+    <aside class="panel settings-panel">
+        <div class="panel-title">
+            <div>
+                <span class="step-number">02</span>
+                <h2>Отправитель</h2>
+            </div>
+        </div>
+
+        <dl class="settings-list">
+            <div>
+                <dt>Сервер</dt>
+                <dd>@(string.IsNullOrWhiteSpace(Model.Settings.Host) ? "не задан" : Model.Settings.Host)</dd>
+            </div>
+            <div>
+                <dt>Порт</dt>
+                <dd>@Model.Settings.Port</dd>
+            </div>
+            <div>
+                <dt>Шифрование</dt>
+                <dd>@(Model.Settings.UseSsl ? "SSL/TLS" : "выключено")</dd>
+            </div>
+            <div>
+                <dt>От кого</dt>
+                <dd>@(string.IsNullOrWhiteSpace(Model.Settings.FromAddress) ? "не задано" : Model.Settings.FromAddress)</dd>
+            </div>
+            <div>
+                <dt>Пароль</dt>
+                <dd>@(string.IsNullOrEmpty(Model.Settings.Password) ? "не задан" : "задан безопасно")</dd>
+            </div>
+        </dl>
+
+        <div class="config-note">
+            Настройки читаются из секции <code>Mail</code>. Пароль задавайте переменной
+            <code>Mail__Password</code>, не храните его в репозитории.
+        </div>
+    </aside>
+</div>
+
+<section class="panel history-panel">
+    <div class="panel-title">
+        <div>
+            <span class="step-number">03</span>
+            <h2>Последние отправки</h2>
+        </div>
+        <span class="muted">история текущего запуска</span>
+    </div>
+    <div id="dispatchGrid"></div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        DevExpress.localization.locale("ru");
+
+        const dispatchStatuses = {
+            0: { text: "В очереди", css: "status-queued" },
+            1: { text: "Отправляется", css: "status-sending" },
+            2: { text: "Отправлено", css: "status-sent" },
+            3: { text: "Ошибка", css: "status-failed" }
+        };
+
+        $("#recipientsEditor").dxTextArea({
+            value: @Html.Raw(recipientsJson),
+            minHeight: 132,
+            autoResizeEnabled: true,
+            placeholder: "mail@example.ru\nfriend@example.ru",
+            onValueChanged: e => $("#Input_Recipients").val(e.value)
+        });
+
+        $("#subjectEditor").dxTextBox({
+            value: @Html.Raw(subjectJson),
+            placeholder: "Тема новой волны",
+            stylingMode: "outlined",
+            onValueChanged: e => $("#Input_Subject").val(e.value)
+        });
+
+        $("#bodyEditor").dxTextArea({
+            value: @Html.Raw(bodyJson),
+            minHeight: 260,
+            autoResizeEnabled: true,
+            placeholder: "Текст письма",
+            stylingMode: "outlined",
+            onValueChanged: e => $("#Input_Body").val(e.value)
+        });
+
+        $("#htmlSwitch").dxCheckBox({
+            value: @Model.Input.IsHtml.ToString().ToLowerInvariant(),
+            text: "HTML-письмо",
+            onValueChanged: e => $("#Input_IsHtml").val(e.value ? "true" : "false")
+        });
+
+        $("#queueButton").dxButton({
+            text: "Поставить в очередь",
+            icon: "email",
+            type: "default",
+            stylingMode: "contained",
+            width: 220,
+            onClick: () => document.getElementById("mailForm").requestSubmit()
+        });
+
+        $("#dispatchGrid").dxDataGrid({
+            dataSource: @Html.Raw(dispatchJson),
+            keyExpr: "Id",
+            showBorders: false,
+            rowAlternationEnabled: true,
+            noDataText: "Очередь пока пуста. Первая рассылка появится здесь.",
+            columnAutoWidth: true,
+            wordWrapEnabled: true,
+            columns: [
+                { dataField: "CreatedAt", caption: "Время", dataType: "datetime", format: "dd.MM HH:mm", width: 130 },
+                {
+                    dataField: "Subject",
+                    caption: "Тема",
+                    minWidth: 240,
+                    cellTemplate: (container, info) => {
+                        $("<strong>").text(info.data.Subject).appendTo(container);
+                        if (info.data.Error)
+                            $("<div>").addClass("text-danger small").text(info.data.Error).appendTo(container);
+                    }
+                },
+                {
+                    caption: "Прогресс",
+                    width: 120,
+                    calculateCellValue: row => `${row.SentCount} / ${row.RecipientCount}`
+                },
+                {
+                    dataField: "Status",
+                    caption: "Статус",
+                    width: 150,
+                    cellTemplate: (container, info) => {
+                        const status = dispatchStatuses[info.value] || { text: info.value, css: "" };
+                        $("<span>").addClass("dispatch-status " + status.css).text(status.text).appendTo(container);
+                    }
+                }
+            ]
+        });
+    </script>
+}
