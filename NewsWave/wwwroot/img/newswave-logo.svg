@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 76" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 76" role="img" aria-labelledby="title desc">
   <title id="title">NewsWave</title>
-  <desc id="desc">bridgenote.com - с миру по нотке ♪</desc>
+  <desc id="desc">bridgenote.com - с миру по нотке, несколько разных нот на нотном стане</desc>
   <defs>
     <linearGradient id="surface" x1="7" y1="4" x2="67" y2="72" gradientUnits="userSpaceOnUse">
       <stop stop-color="#22313C"/>
@@ -17,5 +17,19 @@
   <circle cx="61" cy="22" r="5.5" fill="#C8F26B"/>
   <circle cx="61" cy="22" r="9" fill="none" stroke="#C8F26B" stroke-width="1.5" opacity=".28"/>
   <text x="91" y="44" fill="#17202A" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="34" font-weight="760" letter-spacing="-1.8">News<tspan fill="#0A7F78">Wave</tspan></text>
-  <text x="93" y="61" fill="#66727F" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8.7" font-weight="650" letter-spacing=".22">bridgenote.com - с миру по нотке ♪</text>
+  <text x="93" y="61" fill="#66727F" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8.7" font-weight="650" letter-spacing=".22">bridgenote.com - с миру по нотке</text>
+  <g transform="translate(294 48)">
+    <g fill="none" stroke="#9AA7AE" stroke-width=".8" opacity=".8">
+      <path d="M1 4H63M1 7H63M1 10H63M1 13H63M1 16H63"/>
+    </g>
+    <g stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="10" cy="14.5" rx="3.6" ry="2.5" transform="rotate(-18 10 14.5)" fill="#0A7F78"/>
+      <path d="M13.3 14V2.5" stroke="#0A7F78" stroke-width="1.8"/>
+      <ellipse cx="28" cy="10" rx="3.6" ry="2.5" transform="rotate(-18 28 10)" fill="#C8F26B" stroke="#7D9D3D" stroke-width=".5"/>
+      <path d="M31.3 9.5V1.5c5 1.2 6.1 4.4 2.2 6.6" fill="none" stroke="#7D9D3D" stroke-width="1.8"/>
+      <ellipse cx="45" cy="16" rx="3.7" ry="2.5" transform="rotate(-18 45 16)" fill="#17202A"/>
+      <ellipse cx="56" cy="12" rx="3.7" ry="2.5" transform="rotate(-18 56 12)" fill="#17202A"/>
+      <path d="M48.4 15.4V4.2M59.4 11.4V.2M48.4 4.2L59.4.2V4.1L48.4 8.1Z" fill="#17202A" stroke="#17202A" stroke-width="1.2"/>
+    </g>
+  </g>
 </svg>

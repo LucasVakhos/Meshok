@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 22" role="img" aria-labelledby="title desc">
+  <title id="title">Ноты на нотном стане</title>
+  <desc id="desc">Несколько разных музыкальных нот на пяти линиях</desc>
+  <g fill="none" stroke="#9AA7AE" stroke-width=".8" opacity=".8">
+    <path d="M1 4H63M1 7H63M1 10H63M1 13H63M1 16H63"/>
+  </g>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="10" cy="14.5" rx="3.6" ry="2.5" transform="rotate(-18 10 14.5)" fill="#0A7F78"/>
+    <path d="M13.3 14V2.5" stroke="#0A7F78" stroke-width="1.8"/>
+    <ellipse cx="28" cy="10" rx="3.6" ry="2.5" transform="rotate(-18 28 10)" fill="#C8F26B" stroke="#7D9D3D" stroke-width=".5"/>
+    <path d="M31.3 9.5V1.5c5 1.2 6.1 4.4 2.2 6.6" fill="none" stroke="#7D9D3D" stroke-width="1.8"/>
+    <ellipse cx="45" cy="16" rx="3.7" ry="2.5" transform="rotate(-18 45 16)" fill="#17202A"/>
+    <ellipse cx="56" cy="12" rx="3.7" ry="2.5" transform="rotate(-18 56 12)" fill="#17202A"/>
+    <path d="M48.4 15.4V4.2M59.4 11.4V.2M48.4 4.2L59.4.2V4.1L48.4 8.1Z" fill="#17202A" stroke="#17202A" stroke-width="1.2"/>
+  </g>
+</svg>

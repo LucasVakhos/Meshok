@@ -38,7 +38,7 @@ body {
 .wave-brand {
   display: inline-flex;
   align-items: center;
-  width: 188px;
+  width: 210px;
   margin-right: 1.2rem;
   padding: 0;
 }
@@ -618,6 +618,13 @@ main {
 
 @media (max-width: 560px) {
   .wave-brand {
-    width: 164px;
+    width: 184px;
   }
+}
+
+.footer-staff {
+  width: 58px;
+  height: auto;
+  margin-left: .2rem;
+  vertical-align: middle;
 }
