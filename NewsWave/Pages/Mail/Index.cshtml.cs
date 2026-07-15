@@ -1,103 +1,86 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Options;
-using NewsWave.Data;
-using NewsWave.Mail;
-using System.Net.Mail;
+using NewsWave.NewsMaker;
 
 namespace NewsWave.Pages.Mail;
 
 public sealed class IndexModel : PageModel
 {
-    private const int MaxRecipients = 500;
-    private readonly IMailQueue _mailQueue;
-    private readonly IOptionsSnapshot<MailOptions> _options;
-    private readonly NewsWaveStore _store;
+    private readonly NewsMakerSettingsStore _settingsStore;
+    private readonly BridgeNoteRepository _database;
+    private readonly INewsMakerRunner _runner;
 
-    public IndexModel(
-        IMailQueue mailQueue,
-        IOptionsSnapshot<MailOptions> options,
-        NewsWaveStore store)
+    public IndexModel(NewsMakerSettingsStore settingsStore, BridgeNoteRepository database, INewsMakerRunner runner)
     {
-        _mailQueue = mailQueue;
-        _options = options;
-        _store = store;
+        _settingsStore = settingsStore;
+        _database = database;
+        _runner = runner;
     }
 
-    [BindProperty]
-    public MailComposeInput Input { get; set; } = new();
+    [BindProperty] public NewsMakerSettings Settings { get; set; } = new();
+    public NewsMakerSnapshot Run { get; private set; } =
+        new(NewsMakerRunStatus.Idle, "", 0, 0, null, null, []);
+    public int SubscriberCount { get; private set; }
+    public string? DatabaseError { get; private set; }
 
-    public MailOptions Settings => _options.Value;
-    public IReadOnlyList<MailDispatchSnapshot> Dispatches => _mailQueue.Recent();
-    public int ActiveContactsCount => _store.GetContacts().Count(x => x.IsActive);
-
-    public void OnGet(Guid? templateId, bool contacts = false)
+    public async Task OnGetAsync(CancellationToken token)
     {
-        if (templateId.HasValue && _store.FindTemplate(templateId.Value) is MailTemplateRecord template)
-        {
-            Input.Subject = template.Subject;
-            Input.Body = template.Body;
-            Input.IsHtml = template.IsHtml;
-        }
-
-        if (contacts)
-        {
-            Input.Recipients = string.Join(
-                Environment.NewLine,
-                _store.GetContacts().Where(x => x.IsActive).Select(x => x.Email));
-        }
+        Settings = _settingsStore.Current;
+        Run = _runner.Snapshot();
+        try { SubscriberCount = (await _database.GetEmailsAsync(token)).Count; }
+        catch (Exception ex) { DatabaseError = ex.Message; }
     }
 
-    public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
+    public async Task<IActionResult> OnPostSaveAsync(CancellationToken token)
     {
-        IReadOnlyList<string> recipients = ParseRecipients(Input.Recipients);
-        if (recipients.Count == 0)
-            ModelState.AddModelError("Input.Recipients", "Не найдено ни одного корректного адреса.");
-        if (recipients.Count > MaxRecipients)
-            ModelState.AddModelError("Input.Recipients", $"За один запуск можно отправить не больше {MaxRecipients} писем.");
-        if (!Settings.IsConfigured)
-            ModelState.AddModelError(string.Empty, "Сначала настройте SMTP для NewsWave.");
-
         if (!ModelState.IsValid)
+        {
+            Run = _runner.Snapshot();
             return Page();
-
-        Guid dispatchId = await _mailQueue.EnqueueAsync(
-            new MailRequest(recipients, Input.Subject.Trim(), Input.Body, Input.IsHtml),
-            cancellationToken);
-
-        TempData["MailSuccess"] =
-            $"Рассылка на {recipients.Count} адресов поставлена в очередь. Код: {dispatchId.ToString()[..8]}.";
+        }
+        await _settingsStore.SaveAsync(Settings, token);
+        TempData["MailSuccess"] = "Настройки сохранены.";
         return RedirectToPage();
     }
 
-    private IReadOnlyList<string> ParseRecipients(string source)
+    public IActionResult OnPostStart()
     {
-        string[] values = (source ?? string.Empty)
-            .Split(new[] { '\r', '\n', ',', ';' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        TempData["MailSuccess"] = _runner.Start() ? "Рассылка запущена." : "Рассылка уже выполняется.";
+        return RedirectToPage();
+    }
 
-        List<string> valid = new();
-        HashSet<string> unique = new(StringComparer.OrdinalIgnoreCase);
+    public IActionResult OnPostStop()
+    {
+        _runner.Stop();
+        TempData["MailSuccess"] = "Остановка запрошена.";
+        return RedirectToPage();
+    }
 
-        foreach (string value in values)
+    public async Task<IActionResult> OnPostSendToMeAsync(CancellationToken token)
+    {
+        try
         {
-            try
-            {
-                MailAddress address = new(value);
-                if (address.Address != value)
-                {
-                    ModelState.AddModelError("Input.Recipients", $"Адрес «{value}» содержит имя. Оставьте только email.");
-                    continue;
-                }
-
-                if (unique.Add(address.Address))
-                    valid.Add(address.Address);
-            }
-            catch (FormatException)
-            {
-                ModelState.AddModelError("Input.Recipients", $"Некорректный адрес: {value}");
-            }
+            await _runner.SendReportAsync(token);
+            TempData["MailSuccess"] = "Отчёт отправлен.";
         }
+        catch (Exception ex) { TempData["MailError"] = ex.Message; }
+        return RedirectToPage();
+    }
 
-        return valid;
+    public async Task<IActionResult> OnPostTestDatabaseAsync(CancellationToken token)
+    {
+        if (!ModelState.IsValid)
+        {
+            Run = _runner.Snapshot();
+            return Page();
+        }
+        try
+        {
+            await _settingsStore.SaveAsync(Settings, token);
+            await _database.TestAsync(token);
+            TempData["MailSuccess"] = "Настройки сохранены. Подключение к BridgeNote установлено.";
+        }
+        catch (Exception ex) { TempData["MailError"] = ex.Message; }
+        return RedirectToPage();
     }
 }

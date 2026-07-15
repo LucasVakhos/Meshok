@@ -588,3 +588,24 @@ main {
 .client-error {
   margin-top: 1rem;
 }
+
+.newsmaker-shell { display: grid; gap: 1.25rem; }
+.newsmaker-tab { min-height: 520px; }
+#mainTabs { margin-bottom: 1rem; }
+.settings-tabs { display: grid; gap: .75rem; margin-bottom: 1rem; }
+.settings-tabs details { border: 1px solid var(--line); border-radius: 14px; background: #f8faf9; }
+.settings-tabs summary { cursor: pointer; padding: 1rem; font-weight: 750; }
+.settings-tabs details[open] summary { border-bottom: 1px solid var(--line); }
+.settings-form-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .9rem 1rem; padding: 1rem; }
+.settings-form-grid label { display: grid; gap: .35rem; color: var(--muted); font-size: .78rem; font-weight: 700; }
+.settings-form-grid input:not([type=checkbox]), .settings-form-grid select {
+  width: 100%; min-height: 38px; padding: .5rem .65rem; border: 1px solid #cfd8d5; border-radius: 8px; background: white; color: var(--ink);
+}
+.settings-form-grid input[type=checkbox] { width: 20px; height: 20px; }
+.settings-tabs details > .btn { margin: 0 1rem 1rem; }
+.report-memo { width: 100%; min-height: 330px; resize: vertical; padding: 1rem; border: 1px solid var(--line); border-radius: 12px; background: #17201f; color: #cde6dc; font: .82rem/1.55 Consolas, monospace; }
+.newsmaker-progress { height: 18px; margin-top: 1rem; overflow: hidden; border-radius: 9px; background: #dfe5e3; }
+.newsmaker-progress > div { height: 100%; border-radius: inherit; background: var(--wave); transition: width .2s; }
+.progress-caption { margin-top: .35rem; color: var(--muted); text-align: right; font-size: .78rem; }
+.newsmaker-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1rem; }
+@media (max-width: 700px) { .settings-form-grid { grid-template-columns: 1fr; } }

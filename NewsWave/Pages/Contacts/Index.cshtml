@@ -2,153 +2,45 @@
 @model NewsWave.Pages.Contacts.IndexModel
 @using System.Text.Json
 @{
-    ViewData["Title"] = "Адресаты";
-    string contactsJson = JsonSerializer.Serialize(Model.Contacts);
-    string nameJson = JsonSerializer.Serialize(Model.Input.Name);
-    string emailJson = JsonSerializer.Serialize(Model.Input.Email);
-    string groupJson = JsonSerializer.Serialize(Model.Input.Group);
+    ViewData["Title"] = "Подписчики";
+    string emails = JsonSerializer.Serialize(Model.Emails.Select(x => new { Email = x }));
 }
-
 <div class="page-heading">
-    <div>
-        <span class="eyebrow">Адресная книга</span>
-        <h1>Адресаты</h1>
-        <p>Храните получателей и собирайте рассылку одним кликом.</p>
-    </div>
-    <a asp-page="/Mail/Index" asp-route-contacts="true" class="hero-action compact-action">
-        Письмо всем активным <span>→</span>
-    </a>
+    <div><span class="eyebrow">BridgeNote · subscribers</span><h1>Подписчики</h1><p>Читается только поле email. Новая запись тоже добавляет только email.</p></div>
+    <span class="status-pill @(Model.DatabaseError is null ? "status-ready" : "status-warning")">@(Model.DatabaseError is null ? "База подключена" : "Нет подключения")</span>
 </div>
-
-@if (TempData["ContactSuccess"] is string success)
-{
-    <div class="alert alert-success">@success</div>
-}
-<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-
+@if (TempData["ContactSuccess"] is string success) { <div class="alert alert-success">@success</div> }
+@if (Model.DatabaseError is not null) { <div class="alert alert-warning">@Model.DatabaseError</div> }
+<div asp-validation-summary="All" class="alert alert-danger"></div>
 <div class="directory-grid">
-    <section class="panel">
-        <div class="panel-title">
-            <div><span class="step-number">01</span><h2>Новый получатель</h2></div>
-        </div>
-        <form method="post" asp-page-handler="Add" id="contactForm">
-            <input asp-for="Input.Name" class="form-control native-editor" />
-            <input asp-for="Input.Email" class="form-control native-editor" />
-            <input asp-for="Input.Group" class="form-control native-editor" />
-            <label class="form-check native-editor"><input asp-for="Input.IsActive" class="form-check-input" /> Участвует в рассылках</label>
-
-            <div class="mb-3">
-                <label class="form-label">Имя</label>
-                <div id="contactName" class="dx-host"></div>
-                <span asp-validation-for="Input.Name" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <div id="contactEmail" class="dx-host"></div>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Группа</label>
-                <div id="contactGroup" class="dx-host"></div>
-            </div>
-            <div class="d-flex align-items-center justify-content-between gap-3">
-                <div id="contactActive" class="dx-host"></div>
-                <button type="submit" class="btn btn-wave native-editor">Добавить</button>
-                <div id="addContactButton" class="dx-host"></div>
-            </div>
-        </form>
-    </section>
-
-    <section class="panel directory-panel">
-        <div class="panel-title">
-            <div><span class="step-number">02</span><h2>Получатели</h2></div>
-            <span class="muted">@Model.Contacts.Count записей</span>
-        </div>
-        <div class="native-grid">
-    <table class="table">
-        <thead><tr><th>Имя</th><th>Email</th><th>Группа</th><th></th></tr></thead>
-        <tbody>
-        @foreach (var contact in Model.Contacts)
-        {
-            <tr>
-                <td>@contact.Name</td><td>@contact.Email</td><td>@contact.Group</td>
-                <td><form method="post" asp-page-handler="Delete"><button class="btn btn-sm btn-outline-danger" name="deleteId" value="@contact.Id">Удалить</button></form></td>
-            </tr>
-        }
-        </tbody>
-    </table>
+<section class="panel">
+    <div class="panel-title"><div><span class="step-number">01</span><h2>Добавить вручную</h2></div></div>
+    <form method="post" asp-page-handler="Add" id="contactForm">
+        <label class="form-label" asp-for="Email">Email</label>
+        <input asp-for="Email" class="form-control native-editor" type="email" />
+        <div id="contactEmail" class="dx-host"></div>
+        <span asp-validation-for="Email" class="text-danger"></span>
+        <button class="btn btn-wave native-editor mt-3">Добавить</button>
+        <div id="addContactButton" class="dx-host mt-3"></div>
+    </form>
+</section>
+<section class="panel directory-panel">
+    <div class="panel-title"><div><span class="step-number">02</span><h2>subscribers</h2></div><span class="muted">@Model.Emails.Count записей</span></div>
+    <div class="native-grid"><table class="table"><thead><tr><th>Email</th></tr></thead><tbody>@foreach(string email in Model.Emails){<tr><td>@email</td></tr>}</tbody></table></div>
+    <div id="contactsGrid" class="dx-host"></div>
+</section>
 </div>
-<div id="contactsGrid" class="dx-host"></div>
-    </section>
-</div>
-
-<form method="post" asp-page-handler="Delete" id="deleteContactForm">
-    <input type="hidden" name="deleteId" id="deleteContactId" />
-</form>
-
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script>
-        window.NewsWave.enhancePage(() => {
-        const contacts = @Html.Raw(contactsJson);
-        const sync = (selector, value) => $(selector).val(value ?? "");
-
-        $("#contactName").dxTextBox({
-            value: @Html.Raw(nameJson),
-            placeholder: "Имя или компания",
-            onValueChanged: e => sync("#Input_Name", e.value)
-        });
-        $("#contactEmail").dxTextBox({
-            value: @Html.Raw(emailJson),
-            mode: "email",
-            placeholder: "mail@example.ru",
-            onValueChanged: e => sync("#Input_Email", e.value)
-        });
-        $("#contactGroup").dxTextBox({
-            value: @Html.Raw(groupJson),
-            placeholder: "Клиенты, партнёры…",
-            onValueChanged: e => sync("#Input_Group", e.value)
-        });
-        $("#contactActive").dxCheckBox({
-            value: @Model.Input.IsActive.ToString().ToLowerInvariant(),
-            text: "Участвует в рассылках",
-            onValueChanged: e => $("#Input_IsActive").prop("checked", e.value)
-        });
-        $("#addContactButton").dxButton({
-            text: "Добавить",
-            icon: "add",
-            type: "default",
-            onClick: () => document.getElementById("contactForm").requestSubmit()
-        });
-
-        $("#contactsGrid").dxDataGrid({
-            dataSource: contacts,
-            keyExpr: "Id",
-            showBorders: false,
-            rowAlternationEnabled: true,
-            noDataText: "Адресная книга пока пуста.",
-            searchPanel: { visible: true, placeholder: "Найти получателя…" },
-            paging: { pageSize: 15 },
-            columns: [
-                { dataField: "Name", caption: "Имя", minWidth: 160 },
-                { dataField: "Email", caption: "Email", minWidth: 210 },
-                { dataField: "Group", caption: "Группа", width: 140 },
-                { dataField: "IsActive", caption: "Активен", dataType: "boolean", width: 90 },
-                {
-                    type: "buttons",
-                    width: 72,
-                    buttons: [{
-                        icon: "trash",
-                        hint: "Удалить",
-                        onClick: e => {
-                            if (!confirm(`Удалить ${e.row.data.Name}?`)) return;
-                            $("#deleteContactId").val(e.row.data.Id);
-                            document.getElementById("deleteContactForm").requestSubmit();
-                        }
-                    }]
-                }
-            ]
-        });
-        });
-    </script>
+<partial name="_ValidationScriptsPartial" />
+<script>
+window.NewsWave.enhancePage(() => {
+    $("#contactEmail").dxTextBox({ value: @Html.Raw(JsonSerializer.Serialize(Model.Email)), mode: "email", onValueChanged: e => $("#Email").val(e.value) });
+    $("#addContactButton").dxButton({ text: "Добавить", icon: "add", type: "default", onClick: () => document.getElementById("contactForm").requestSubmit() });
+    $("#contactsGrid").dxDataGrid({
+        dataSource: @Html.Raw(emails), keyExpr: "Email", showBorders: false, rowAlternationEnabled: true,
+        noDataText: "В subscribers нет email.", searchPanel: { visible: true, placeholder: "Найти email…" },
+        paging: { pageSize: 25 }, columns: [{ dataField: "Email", caption: "Email" }]
+    });
+});
+</script>
 }

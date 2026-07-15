@@ -1,56 +1,51 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using NewsWave.Contacts;
-using NewsWave.Data;
+using MySql.Data.MySqlClient;
+using NewsWave.NewsMaker;
+using System.ComponentModel.DataAnnotations;
 
 namespace NewsWave.Pages.Contacts;
 
 public sealed class IndexModel : PageModel
 {
-    private readonly NewsWaveStore _store;
+    private readonly BridgeNoteRepository _database;
+    public IndexModel(BridgeNoteRepository database) => _database = database;
 
-    public IndexModel(NewsWaveStore store)
-    {
-        _store = store;
-    }
+    [BindProperty, Required(ErrorMessage = "Укажите email."), EmailAddress(ErrorMessage = "Некорректный email.")]
+    public string Email { get; set; } = string.Empty;
+    public IReadOnlyList<string> Emails { get; private set; } = [];
+    public string? DatabaseError { get; private set; }
 
-    [BindProperty]
-    public ContactInput Input { get; set; } = new();
+    public async Task OnGetAsync(CancellationToken token) => await LoadAsync(token);
 
-    public IReadOnlyList<ContactRecord> Contacts => _store.GetContacts();
-
-    public void OnGet()
-    {
-    }
-
-    public async Task<IActionResult> OnPostAddAsync(CancellationToken cancellationToken)
+    public async Task<IActionResult> OnPostAddAsync(CancellationToken token)
     {
         if (!ModelState.IsValid)
+        {
+            await LoadAsync(token);
             return Page();
-
+        }
         try
         {
-            await _store.AddContactAsync(
-                Input.Name,
-                Input.Email,
-                Input.Group,
-                Input.IsActive,
-                cancellationToken);
+            await _database.AddEmailAsync(Email, token);
+            TempData["ContactSuccess"] = "Email добавлен в subscribers.";
+            return RedirectToPage();
         }
-        catch (InvalidOperationException ex)
+        catch (MySqlException ex) when (ex.Number == 1062)
         {
-            ModelState.AddModelError("Input.Email", ex.Message);
-            return Page();
+            ModelState.AddModelError(nameof(Email), "Такой email уже есть в subscribers.");
         }
-
-        TempData["ContactSuccess"] = "Получатель добавлен в адресную книгу.";
-        return RedirectToPage();
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+        }
+        await LoadAsync(token);
+        return Page();
     }
 
-    public async Task<IActionResult> OnPostDeleteAsync(Guid deleteId, CancellationToken cancellationToken)
+    private async Task LoadAsync(CancellationToken token)
     {
-        await _store.DeleteContactAsync(deleteId, cancellationToken);
-        TempData["ContactSuccess"] = "Получатель удалён.";
-        return RedirectToPage();
+        try { Emails = await _database.GetEmailsAsync(token); }
+        catch (Exception ex) { DatabaseError = ex.Message; }
     }
 }
