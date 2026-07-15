@@ -35,6 +35,7 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
     private readonly NewsMakerSettingsStore _settings;
     private readonly ILogger<NewsMakerRunService> _logger;
     private CancellationTokenSource? _runCancellation;
+    private bool _stopRequested;
     private NewsMakerRunStatus _status = NewsMakerRunStatus.Idle;
     private string _message = "Готов к работе";
     private int _current;
@@ -63,6 +64,7 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
         {
             if (_status is NewsMakerRunStatus.Preparing or NewsMakerRunStatus.Sending)
                 return false;
+            _stopRequested = false;
             _status = NewsMakerRunStatus.Preparing;
             _message = "Запуск рассылки...";
             _current = 0;
@@ -79,7 +81,13 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
 
     public void Stop()
     {
-        _runCancellation?.Cancel();
+        CancellationTokenSource? cancellation;
+        lock (_sync)
+        {
+            _stopRequested = true;
+            cancellation = _runCancellation;
+        }
+        cancellation?.Cancel();
         AddReport("Работа остановлена...");
     }
 
@@ -156,7 +164,18 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
     private async Task RunSafeAsync(CancellationToken stoppingToken)
     {
         using CancellationTokenSource linked = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
-        _runCancellation = linked;
+        lock (_sync)
+        {
+            if (_stopRequested)
+            {
+                _status = NewsMakerRunStatus.Stopped;
+                _message = "Работа остановлена...";
+                _completed = DateTimeOffset.Now;
+                return;
+            }
+            _runCancellation = linked;
+        }
+
         try
         {
             await RunAsync(linked.Token);
@@ -167,13 +186,24 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
         }
         catch (Exception ex)
         {
+            bool stopRequested;
+            lock (_sync) stopRequested = _stopRequested;
+            if (stopRequested)
+            {
+                SetStatus(NewsMakerRunStatus.Stopped, "Работа остановлена...");
+                return;
+            }
             _logger.LogError(ex, "Ошибка конвейера NewsMaker.");
             AddReport(ex.Message);
             SetStatus(NewsMakerRunStatus.Failed, "Работа остановлена из-за ошибки.");
         }
         finally
         {
-            _runCancellation = null;
+            lock (_sync)
+            {
+                if (ReferenceEquals(_runCancellation, linked))
+                    _runCancellation = null;
+            }
         }
     }
 
