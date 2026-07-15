@@ -1,4 +1,4 @@
-namespace LB.Libs
+﻿namespace LB.Libs
 {
     public class GHException : Exception
     {
@@ -7,13 +7,14 @@ namespace LB.Libs
         {
         }
 
-        public GHException(string message, Exception innerException)
-              : base(message, innerException)
+    public GHException(string message, Exception innerException)
+          : base(message, innerException)
         {
         }
 
-        public GHException()
+    public GHException()
         {
         }
     }
 }
+

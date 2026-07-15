@@ -1,4 +1,4 @@
-namespace LB.Libs
+﻿namespace LB.Libs
 {
     public enum Category { Connection, Security, User, DateInterval }
 
@@ -6,7 +6,7 @@ namespace LB.Libs
     {
         public Category Category { get; set; }
 
-        public override string Group
+    public override string Group
         {
             get
             {
@@ -32,3 +32,4 @@ namespace LB.Libs
         }
     }
 }
+

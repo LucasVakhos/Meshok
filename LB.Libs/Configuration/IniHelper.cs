@@ -64,12 +64,13 @@ public static class IniHelper
         {
             T configuration = (T)(Activator.CreateInstance(typeof(T))
                 ?? throw new InvalidOperationException($"Не удалось создать конфигурацию {typeof(T).FullName}."));
-
             T selected;
             lock (Sync)
             {
                 if (Configurations.TryGetValue(name, out CfgCore? existing))
+                {
                     selected = (T)existing;
+                }
                 else
                 {
                     Configurations.Add(name, configuration);

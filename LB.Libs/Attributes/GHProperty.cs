@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 namespace LB.Libs
 {
     [AttributeUsage(AttributeTargets.Property)]
@@ -9,3 +9,4 @@ namespace LB.Libs
         }
     }
 }
+

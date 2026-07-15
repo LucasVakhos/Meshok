@@ -1,4 +1,4 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 using System.Reflection;
 namespace LB.Libs
@@ -6,11 +6,11 @@ namespace LB.Libs
     public struct Field
     {
         public const string ctrlPrefix = "edit";
-        public const string layouPrefix = "lc";
-        public const string groupSuffix = "Group";
-        public static Field[] GetFields<TEntity, TAttribute>(string[] except = null, bool withKey = false)
-                where TEntity : AbstractEntity
-                where TAttribute : UpdatablePropertyAttribute
+    public const string layouPrefix = "lc";
+    public const string groupSuffix = "Group";
+    public static Field[] GetFields<TEntity, TAttribute>(string[] except = null, bool withKey = false)
+            where TEntity : AbstractEntity
+            where TAttribute : UpdatablePropertyAttribute
         {
             List<Field> fields = new List<Field>();
             foreach (PropertyInfo info in typeof(TEntity).GetProperties().Where(x =>
@@ -30,8 +30,8 @@ namespace LB.Libs
             return fields.ToArray();
         }
 
-        public static Field[] GetFields<TAttribute>(AbstractEntity entity, string[] except = null, bool withKey = false)
-                where TAttribute : UpdatablePropertyAttribute
+    public static Field[] GetFields<TAttribute>(AbstractEntity entity, string[] except = null, bool withKey = false)
+            where TAttribute : UpdatablePropertyAttribute
         {
             List<Field> fields = new List<Field>();
             foreach (PropertyInfo info in entity.GetType().GetProperties().Where(x =>
@@ -51,24 +51,24 @@ namespace LB.Libs
             return fields.ToArray();
         }
 
-        public readonly bool Key;
-        public readonly string Name;
-        public readonly string Caption;
-        public readonly string ToolTip;
-        public readonly object Value;
-        public readonly Type FieldType;
-        public readonly string DisplayFormat;
-        public readonly string Format;
-        public readonly int Order;
-        public readonly EditorType EditorType;
-        public readonly string Group;
-        public readonly string SubGroup;
-        public readonly object Default;
-        public readonly bool ReadOnly;
-        public readonly bool Required;
-        public readonly CharacterCasing CharacterCasing;
-        public readonly int MaxLength;
-        public bool? AsBoolean
+    public readonly bool Key;
+    public readonly string Name;
+    public readonly string Caption;
+    public readonly string ToolTip;
+    public readonly object Value;
+    public readonly Type FieldType;
+    public readonly string DisplayFormat;
+    public readonly string Format;
+    public readonly int Order;
+    public readonly EditorType EditorType;
+    public readonly string Group;
+    public readonly string SubGroup;
+    public readonly object Default;
+    public readonly bool ReadOnly;
+    public readonly bool Required;
+    public readonly CharacterCasing CharacterCasing;
+    public readonly int MaxLength;
+    public bool? AsBoolean
         {
             get
             {
@@ -79,7 +79,7 @@ namespace LB.Libs
             }
         }
 
-        public int? AsInteger
+    public int? AsInteger
         {
             get
             {
@@ -90,7 +90,7 @@ namespace LB.Libs
             }
         }
 
-        public double? AsDouble
+    public double? AsDouble
         {
             get
             {
@@ -101,7 +101,7 @@ namespace LB.Libs
             }
         }
 
-        public DateTime? AsDateTime
+    public DateTime? AsDateTime
         {
             get
             {
@@ -112,7 +112,7 @@ namespace LB.Libs
             }
         }
 
-        public string AsString
+    public string AsString
         {
             get
             {
@@ -123,21 +123,21 @@ namespace LB.Libs
             }
         }
 
-        public string ControlName => ctrlPrefix + Name;
-        public string LayoutName => layouPrefix + Name;
-        public string GroupName => Group + groupSuffix;
-        public string SubGroupName => SubGroup + groupSuffix;
-        public string CaptionText => Caption + ":";
-        public AbstractEntity Entity { get; }
+    public string ControlName => ctrlPrefix + Name;
+    public string LayoutName => layouPrefix + Name;
+    public string GroupName => Group + groupSuffix;
+    public string SubGroupName => SubGroup + groupSuffix;
+    public string CaptionText => Caption + ":";
+    public AbstractEntity Entity { get; }
 
-        public Field(string name, string caption, object value) : this()
+    public Field(string name, string caption, object value) : this()
         {
             Name = name;
             Caption = caption;
             Value = value;
         }
 
-        public Field(PropertyInfo propInfo, AbstractEntity entity = null) : this()
+    public Field(PropertyInfo propInfo, AbstractEntity entity = null) : this()
         {
             Entity = entity;
             UpdatablePropertyAttribute attr = propInfo.GetCustomAttribute<UpdatablePropertyAttribute>();
@@ -183,7 +183,7 @@ namespace LB.Libs
                 Value = null;
         }
         BaseControl control;
-        public BaseControl CreateControl()
+    public BaseControl CreateControl()
         {
             switch (EditorType)
             {
@@ -275,7 +275,7 @@ namespace LB.Libs
             return control;
         }
 
-        private KeyValuePair<object, string>[] GetEnum(Type fieldType)
+    private KeyValuePair<object, string>[] GetEnum(Type fieldType)
         {
             Dictionary<object, string> keys = new Dictionary<object, string>();
             try
@@ -292,3 +292,4 @@ namespace LB.Libs
         }
     }
 }
+

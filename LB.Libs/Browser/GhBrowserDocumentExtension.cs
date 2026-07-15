@@ -84,19 +84,19 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<string?>(json, JsonOptions);
         }
 
-        public static async Task<string?> GetUrlAsync(this GhBrowser browser)
+    public static async Task<string?> GetUrlAsync(this GhBrowser browser)
         {
             var json = await browser.ExecuteScriptAsync("location.href");
             return JsonSerializer.Deserialize<string?>(json, JsonOptions);
         }
 
-        public static async Task<string?> GetBodyHtmlAsync(this GhBrowser browser)
+    public static async Task<string?> GetBodyHtmlAsync(this GhBrowser browser)
         {
             var json = await browser.ExecuteScriptAsync("document.body ? document.body.innerHTML : null");
             return JsonSerializer.Deserialize<string?>(json, JsonOptions);
         }
 
-        public static async Task<string?> GetDocumentHtmlAsync(this GhBrowser browser)
+    public static async Task<string?> GetDocumentHtmlAsync(this GhBrowser browser)
         {
             var json = await browser.ExecuteScriptAsync("document.documentElement ? document.documentElement.outerHTML : null");
             return JsonSerializer.Deserialize<string?>(json, JsonOptions);
@@ -115,7 +115,7 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<List<string>>(json, JsonOptions) ?? new();
         }
 
-        public static async Task<bool> ExistsAsync(this GhBrowser browser, string selector)
+    public static async Task<bool> ExistsAsync(this GhBrowser browser, string selector)
         {
             var safeSelector = JsonSerializer.Serialize(selector);
             var script = $$"""
@@ -125,17 +125,17 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<bool>(json, JsonOptions);
         }
 
-        public static async Task<GhElementInfo?> QuerySelectorAsync(
-                this GhBrowser browser,
-                string selector)
+    public static async Task<GhElementInfo?> QuerySelectorAsync(
+            this GhBrowser browser,
+            string selector)
         {
             var result = await browser.QuerySelectorAllAsync(selector);
             return result.FirstOrDefault();
         }
 
-        public static async Task<List<GhElementInfo>> QuerySelectorAllAsync(
-                this GhBrowser browser,
-                string selector)
+    public static async Task<List<GhElementInfo>> QuerySelectorAllAsync(
+            this GhBrowser browser,
+            string selector)
         {
             var safeSelector = JsonSerializer.Serialize(selector);
             var script = $$"""
@@ -158,9 +158,9 @@ namespace LB.Libs
             var json = await browser.ExecuteScriptAsync(script);
             return JsonSerializer.Deserialize<List<GhElementInfo>>(json, JsonOptions) ?? new();
         }
-        public static Task<List<GhElementInfo>> GetElementsByTagAsync(
-                this GhBrowser browser,
-                string tagName)
+    public static Task<List<GhElementInfo>> GetElementsByTagAsync(
+            this GhBrowser browser,
+            string tagName)
         {
             return browser.QuerySelectorAllAsync(tagName);
         }
@@ -182,9 +182,9 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<string?>(json, JsonOptions);
         }
 
-        public static async Task<string?> GetElementHtmlAsync(
-                this GhBrowser browser,
-                string selector)
+    public static async Task<string?> GetElementHtmlAsync(
+            this GhBrowser browser,
+            string selector)
         {
             var safeSelector = JsonSerializer.Serialize(selector);
             var script = $$"""
@@ -197,9 +197,9 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<string?>(json, JsonOptions);
         }
 
-        public static async Task<string?> GetElementOuterHtmlAsync(
-                this GhBrowser browser,
-                string selector)
+    public static async Task<string?> GetElementOuterHtmlAsync(
+            this GhBrowser browser,
+            string selector)
         {
             var safeSelector = JsonSerializer.Serialize(selector);
             var script = $$"""
@@ -212,9 +212,9 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<string?>(json, JsonOptions);
         }
 
-        public static async Task<string?> GetElementValueAsync(
-                this GhBrowser browser,
-                string selector)
+    public static async Task<string?> GetElementValueAsync(
+            this GhBrowser browser,
+            string selector)
         {
             var safeSelector = JsonSerializer.Serialize(selector);
             var script = $$"""
@@ -227,9 +227,9 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<string?>(json, JsonOptions);
         }
 
-        public static async Task<bool?> GetElementCheckedAsync(
-                this GhBrowser browser,
-                string selector)
+    public static async Task<bool?> GetElementCheckedAsync(
+            this GhBrowser browser,
+            string selector)
         {
             var safeSelector = JsonSerializer.Serialize(selector);
             var script = $$"""
@@ -242,10 +242,10 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<bool?>(json, JsonOptions);
         }
 
-        public static async Task<string?> GetElementAttributeAsync(
-                this GhBrowser browser,
-                string selector,
-                string attribute)
+    public static async Task<string?> GetElementAttributeAsync(
+            this GhBrowser browser,
+            string selector,
+            string attribute)
         {
             var safeSelector = JsonSerializer.Serialize(selector);
             var safeAttribute = JsonSerializer.Serialize(attribute);
@@ -280,10 +280,10 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<bool>(json, JsonOptions);
         }
 
-        public static async Task<bool> SetElementHtmlAsync(
-                this GhBrowser browser,
-                string selector,
-                string html)
+    public static async Task<bool> SetElementHtmlAsync(
+            this GhBrowser browser,
+            string selector,
+            string html)
         {
             var safeSelector = JsonSerializer.Serialize(selector);
             var safeHtml = JsonSerializer.Serialize(html);
@@ -299,10 +299,10 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<bool>(json, JsonOptions);
         }
 
-        public static async Task<bool> SetElementValueAsync(
-                this GhBrowser browser,
-                string selector,
-                string value)
+    public static async Task<bool> SetElementValueAsync(
+            this GhBrowser browser,
+            string selector,
+            string value)
         {
             var safeSelector = JsonSerializer.Serialize(selector);
             var safeValue = JsonSerializer.Serialize(value);
@@ -321,10 +321,10 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<bool>(json, JsonOptions);
         }
 
-        public static async Task<bool> SetElementCheckedAsync(
-                this GhBrowser browser,
-                string selector,
-                bool value)
+    public static async Task<bool> SetElementCheckedAsync(
+            this GhBrowser browser,
+            string selector,
+            bool value)
         {
             var safeSelector = JsonSerializer.Serialize(selector);
             var safeValue = value ? "true" : "false";
@@ -343,11 +343,11 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<bool>(json, JsonOptions);
         }
 
-        public static async Task<bool> SetElementAttributeAsync(
-                this GhBrowser browser,
-                string selector,
-                string attribute,
-                string value)
+    public static async Task<bool> SetElementAttributeAsync(
+            this GhBrowser browser,
+            string selector,
+            string attribute,
+            string value)
         {
             var safeSelector = JsonSerializer.Serialize(selector);
             var safeAttribute = JsonSerializer.Serialize(attribute);
@@ -364,10 +364,10 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<bool>(json, JsonOptions);
         }
 
-        public static async Task<bool> RemoveElementAttributeAsync(
-                this GhBrowser browser,
-                string selector,
-                string attribute)
+    public static async Task<bool> RemoveElementAttributeAsync(
+            this GhBrowser browser,
+            string selector,
+            string attribute)
         {
             var safeSelector = JsonSerializer.Serialize(selector);
             var safeAttribute = JsonSerializer.Serialize(attribute);
@@ -402,9 +402,9 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<bool>(json, JsonOptions);
         }
 
-        public static async Task<bool> FocusElementAsync(
-                this GhBrowser browser,
-                string selector)
+    public static async Task<bool> FocusElementAsync(
+            this GhBrowser browser,
+            string selector)
         {
             var safeSelector = JsonSerializer.Serialize(selector);
             var script = $$"""
@@ -419,9 +419,9 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<bool>(json, JsonOptions);
         }
 
-        public static async Task<bool> SubmitFormAsync(
-                this GhBrowser browser,
-                string selector)
+    public static async Task<bool> SubmitFormAsync(
+            this GhBrowser browser,
+            string selector)
         {
             var safeSelector = JsonSerializer.Serialize(selector);
             var script = $$"""
@@ -442,7 +442,7 @@ namespace LB.Libs
             return JsonSerializer.Deserialize<bool>(json, JsonOptions);
         }
 
-        public static async Task<bool> ExecuteBoolScriptAsync(this GhBrowser browser, string script)
+    public static async Task<bool> ExecuteBoolScriptAsync(this GhBrowser browser, string script)
         {
             var json = await browser.ExecuteScriptAsync(script);
             return JsonSerializer.Deserialize<bool>(json, JsonOptions);
@@ -453,22 +453,23 @@ namespace LB.Libs
     {
         public string? Tag { get; set; }
 
-        public string? Id { get; set; }
+    public string? Id { get; set; }
 
-        public string? Name { get; set; }
+    public string? Name { get; set; }
 
-        public string? Type { get; set; }
+    public string? Type { get; set; }
 
-        public string? ClassName { get; set; }
+    public string? ClassName { get; set; }
 
-        public string? Text { get; set; }
+    public string? Text { get; set; }
 
-        public string? Value { get; set; }
+    public string? Value { get; set; }
 
-        public bool? Checked { get; set; }
+    public bool? Checked { get; set; }
 
-        public string? Html { get; set; }
+    public string? Html { get; set; }
 
-        public Dictionary<string, string>? Attributes { get; set; }
+    public Dictionary<string, string>? Attributes { get; set; }
     }
 }
+

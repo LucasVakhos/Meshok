@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 namespace LB.Libs
 {
     public class NotImplemented : NotImplementedException
@@ -6,3 +6,4 @@ namespace LB.Libs
         public NotImplemented(string methodName, object obj) : base($"Перезапишите метод {methodName}() У {obj.GetType().Name}!!!") { }
     }
 }
+

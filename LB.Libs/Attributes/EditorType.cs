@@ -1,4 +1,4 @@
-namespace LB.Libs
+﻿namespace LB.Libs
 {
     public enum EditorType
     {
@@ -10,3 +10,4 @@ namespace LB.Libs
         PathSeacher
     }
 }
+

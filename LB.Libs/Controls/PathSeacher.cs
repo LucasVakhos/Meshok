@@ -1,4 +1,4 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 using DevExpress.XtraSplashScreen;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ namespace LB.Libs
     public class PathSeacher : ComboBoxEdit, ISupportInitialize
     {
         private IContainer components = null;
-        public override ISite Site
+    public override ISite Site
         {
             get
             {
@@ -29,8 +29,8 @@ namespace LB.Libs
             }
         }
 
-        private OpenFileDialog openFileDialog;
-        private ContainerControl _owner;
+    private OpenFileDialog openFileDialog;
+    private ContainerControl _owner;
         [GHProperty, DefaultValue(null)]
         public ContainerControl Owner
         {
@@ -48,7 +48,7 @@ namespace LB.Libs
             }
         }
 
-        private CheckEdit _remoteControl;
+    private CheckEdit _remoteControl;
         [GHProperty, DefaultValue(null)]
         public CheckEdit RemoteControl
         {
@@ -65,7 +65,7 @@ namespace LB.Libs
             }
         }
 
-        private TextEdit _serverControl;
+    private TextEdit _serverControl;
         [GHProperty, DefaultValue(null)]
         public TextEdit ServerControl
         {
@@ -82,14 +82,14 @@ namespace LB.Libs
         //[Localizable(true)]
         //public ComboBoxItemCollection Pathes { get => Properties.Items; set => Properties.Items.Assign(value); }
 
-        public PathSeacher()
+    public PathSeacher()
         {
             InitializeComponent();
         }
-        public void BeginInit()
+    public void BeginInit()
         {
         }
-        public void EndInit()
+    public void EndInit()
         {
             if (IsDesignMode)
                 return;
@@ -102,12 +102,12 @@ namespace LB.Libs
             RemoteControl_CheckedChanged(this, EventArgs.Empty);
             BindingContextChanged += PathSeacher_BindingContextChanged;
         }
-        private void PathSeacher_BindingContextChanged(object sender, EventArgs e)
+    private void PathSeacher_BindingContextChanged(object sender, EventArgs e)
         {
             BindingContextChanged -= PathSeacher_BindingContextChanged;
             BindingManager.CurrentItemChanged += BindingManager_CurrentItemChanged;
         }
-        private void BindingManager_CurrentItemChanged(object sender, EventArgs e)
+    private void BindingManager_CurrentItemChanged(object sender, EventArgs e)
         {
             var obj = BindingManager.Current.GetType().GetProperty("Pathes");
             if (obj.GetValue(BindingManager.Current) is List<string> pathes)
@@ -129,7 +129,7 @@ namespace LB.Libs
                 }
             }
         }
-        private void RemoteControl_CheckedChanged(object sender, EventArgs e)
+    private void RemoteControl_CheckedChanged(object sender, EventArgs e)
         {
             if (RemoteControl == null)
                 return;
@@ -146,7 +146,7 @@ namespace LB.Libs
             }
             Invalidate();
         }
-        private void CheckServer(bool remote)
+    private void CheckServer(bool remote)
         {
             //ReadOnly = !remote;
             Properties.Buttons[1].Enabled = !remote;
@@ -159,7 +159,7 @@ namespace LB.Libs
                 ServerControl.Invalidate();
             }
         }
-        private void FdbPath_ButtonClick(object sender, ButtonPressedEventArgs e)
+    private void FdbPath_ButtonClick(object sender, ButtonPressedEventArgs e)
         {
             if (e.Button.Kind == ButtonPredefines.DropDown)
             {
@@ -195,7 +195,7 @@ namespace LB.Libs
                 //throw;
             }
         }
-        protected override void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
             {
@@ -203,7 +203,7 @@ namespace LB.Libs
             }
             base.Dispose(disposing);
         }
-        private void InitializeComponent()
+    private void InitializeComponent()
         {
             this.components = new Container();
             this.openFileDialog = new OpenFileDialog();
@@ -212,14 +212,14 @@ namespace LB.Libs
             ((ISupportInitialize)(this.Properties)).BeginInit();
             this.SuspendLayout();
             this.Properties.Name = "Properties";
-            //
+            // 
             // openFileDialog
-            //
+            // 
             this.openFileDialog.DefaultExt = "FDB";
             this.openFileDialog.Filter = "Файл базы данных (*.FDB)|*.FDB|Файл базы данных (*.GDB)|*.GDB";
-            //
+            // 
             // FDBPathSeacher
-            //
+            // 
             this.Size = new System.Drawing.Size(387, 20);
             this.TabIndex = 7;
             this.ButtonClick += new ButtonPressedEventHandler(this.FdbPath_ButtonClick);

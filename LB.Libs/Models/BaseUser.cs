@@ -27,7 +27,7 @@ namespace LB.Libs
             }
         }
 
-        private string _password = null;
+    private string _password = null;
         [UpdatableProperty(Caption = "Активен", ToolTip = "Активен", Group = "Данные пользователя")]
         public virtual bool Active { get; set; }
     }
