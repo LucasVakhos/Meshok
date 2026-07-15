@@ -12,8 +12,7 @@ public sealed class NewsMakerSettings
     public string ExportPath { get; set; } = "App_Data/exports";
 }
 public sealed class ProgramSettings
-{    public bool RunCollapced { get; set; }
-    [Range(0, 7)] public int RunDay { get; set; } = 7;
+{    [Range(0, 7)] public int RunDay { get; set; } = 7;
     public TimeSpan RunTime { get; set; } = TimeSpan.FromHours(18);
 }
 public sealed class BridgeNoteSettings
