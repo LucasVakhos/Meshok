@@ -10,9 +10,9 @@ namespace GH.Components;
 /// </summary>
 public static class SecretProvider
 {
-    private const string SecretTypeName = "GH.Components.Secret";
+    private static readonly string[] SecretTypeNames = { "LB.Libs.Secret", "GH.Components.Secret" };
     private static readonly Lazy<Type?> SecretType = new(() =>
-        typeof(SecretProvider).Assembly.GetType(SecretTypeName, false));
+        SecretTypeNames.Select(name => typeof(SecretProvider).Assembly.GetType(name, false)).FirstOrDefault(type => type != null));
 
     public static string EncryptionPass => GetString(nameof(EncryptionPass));
 
