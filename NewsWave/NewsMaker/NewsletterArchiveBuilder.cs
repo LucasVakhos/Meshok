@@ -35,6 +35,11 @@ public sealed class NewsletterArchiveBuilder
         Directory.CreateDirectory(directory);
         string baseName = $"news{date:d}".Replace('.', '_');
         string excelPath = Path.Combine(directory, baseName + ".xls");
+        foreach (string oldFile in Directory.GetFiles(directory, "*.xls"))
+        {
+            if (!Path.GetFullPath(oldFile).Equals(Path.GetFullPath(excelPath), StringComparison.OrdinalIgnoreCase))
+                File.Delete(oldFile);
+        }
         WriteExcel(table, excelPath);
 
         string zipName = baseName + ".zip";

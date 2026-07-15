@@ -101,10 +101,11 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        TimeSpan automaticCheckDelay = TimeSpan.FromSeconds(5);
         while (!stoppingToken.IsCancellationRequested)
         {
             Task<bool> read = _requests.Reader.ReadAsync(stoppingToken).AsTask();
-            Task delay = Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+            Task delay = Task.Delay(automaticCheckDelay, stoppingToken);
             Task completed = await Task.WhenAny(read, delay);
             if (completed == read)
             {
@@ -114,6 +115,7 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
             else
             {
                 TryAutoStart();
+                automaticCheckDelay = TimeSpan.FromMinutes(5);
             }
         }
     }
