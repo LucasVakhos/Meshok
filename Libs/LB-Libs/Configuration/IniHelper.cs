@@ -10,6 +10,11 @@ public static class IniHelper
     private static readonly Dictionary<string, CfgCore> Configurations =
         new(StringComparer.Ordinal);
 
+    public static CfgApp CfgAppForm()
+    {
+        return CoreCfg<CfgApp>();
+    }
+
     public static T CoreCfg<T>() where T : CfgCore
     {
         return GetOrCreate<T>();
@@ -49,13 +54,18 @@ public static class IniHelper
         lock (Sync)
         {
             if (Configurations.TryGetValue(name, out CfgCore? existing))
+            {
+                existing.EnsureLoaded();
                 return (T)existing;
+            }
         }
 
         try
         {
-            return (T)(Activator.CreateInstance(typeof(T))
+            T configuration = (T)(Activator.CreateInstance(typeof(T))
                 ?? throw new InvalidOperationException($"Не удалось создать конфигурацию {typeof(T).FullName}."));
+            configuration.EnsureLoaded();
+            return configuration;
         }
         catch (Exception ex)
         {

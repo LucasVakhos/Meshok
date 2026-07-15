@@ -17,26 +17,21 @@ public class CfgCore : AbstractEntity
 
     [ThreadStatic]
     private static bool _loading;
+    private bool _loaded;
 
     internal string ConfigPath => IniFile.DefaultFilePath;
 
     public CfgCore()
     {
-        if (IniHelper.TryGet(GetName(), out CfgCore? existing))
-        {
-            Assigne(existing);
-            return;
-        }
-
-        IniHelper.AddInstance(this);
-        Load();
+        if (!IniHelper.TryGet(GetName(), out _))
+            IniHelper.AddInstance(this);
     }
 
     public virtual string GetName() => GetType().Name;
 
     public void Load()
     {
-        if (_loading)
+        if (_loaded || _loading)
             return;
 
         _loading = true;
@@ -66,8 +61,11 @@ public class CfgCore : AbstractEntity
         finally
         {
             _loading = false;
+            _loaded = true;
         }
     }
+
+    internal void EnsureLoaded() => Load();
 
     protected virtual void LoadDefauls()
     {
