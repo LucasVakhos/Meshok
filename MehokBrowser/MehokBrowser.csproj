@@ -15,6 +15,10 @@
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
   <ItemGroup>
+    <!-- Prevent stale, untracked FluentNHibernate sources from reappearing in
+         SDK-style builds after git pull. -->
+    <Compile Remove="NHibernate\**\*.cs" />
+    <EmbeddedResource Remove="NHibernate\**\*.resx" />
     <Compile Remove="NewsMaker\**\*.cs" />
     <Compile Remove="Frames\SettingFrames\Main\**\*.cs" />
     <EmbeddedResource Remove="Frames\SettingFrames\Main\**\*.resx" />

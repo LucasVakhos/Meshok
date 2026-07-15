@@ -14,6 +14,10 @@
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
   <ItemGroup>
+    <!-- Old local checkouts can still contain deleted NHibernate sources. SDK
+         globs must never compile them back into the .NET 8 project. -->
+    <Compile Remove="NHibernate\**\*.cs" />
+    <EmbeddedResource Remove="NHibernate\**\*.resx" />
     <Compile Remove="Extensions\ComponentExtension.cs" />
     <Compile Remove="Extensions\StringExtensions.cs" />
     <Compile Remove="DataSource\FieldIntListEditor.cs" />

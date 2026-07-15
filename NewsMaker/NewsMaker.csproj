@@ -18,6 +18,8 @@
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="NHibernate\**\*.cs" />
+    <EmbeddedResource Remove="NHibernate\**\*.resx" />
     <Compile Remove="Default.cs" />
     <Compile Remove="Common\ISendpulse.cs" />
     <Compile Remove="Common\Sendpulse.cs" />
