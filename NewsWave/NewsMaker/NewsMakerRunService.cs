@@ -101,15 +101,16 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         TimeSpan automaticCheckDelay = TimeSpan.FromSeconds(5);
+        Task<bool> read = _requests.Reader.ReadAsync(stoppingToken).AsTask();
         while (!stoppingToken.IsCancellationRequested)
         {
-            Task<bool> read = _requests.Reader.ReadAsync(stoppingToken).AsTask();
             Task delay = Task.Delay(automaticCheckDelay, stoppingToken);
             Task completed = await Task.WhenAny(read, delay);
             if (completed == read)
             {
                 await read;
                 await RunSafeAsync(stoppingToken);
+                read = _requests.Reader.ReadAsync(stoppingToken).AsTask();
             }
             else
             {
