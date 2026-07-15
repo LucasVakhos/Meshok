@@ -42,7 +42,6 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
     private DateTimeOffset? _started;
     private DateTimeOffset? _completed;
     private readonly List<string> _report = [];
-    private DateOnly? _lastAutoStart;
 
     public NewsMakerRunService(
         BridgeNoteRepository database,
@@ -114,25 +113,43 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
             }
             else
             {
-                TryAutoStart();
+                await TryAutoStartAsync(stoppingToken);
                 automaticCheckDelay = TimeSpan.FromMinutes(5);
             }
         }
     }
 
-    private void TryAutoStart()
+    private async Task TryAutoStartAsync(CancellationToken token)
     {
-        NewsMakerSettings settings = _settings.Current;
-        DateTime now = DateTime.Now;
-        if (!settings.Program.Autorun || settings.Program.RunDay == 7)
-            return;
-        if ((int)now.DayOfWeek != settings.Program.RunDay || now.TimeOfDay < settings.Program.RunTime)
-            return;
-        DateOnly today = DateOnly.FromDateTime(now);
-        if (_lastAutoStart == today)
-            return;
-        if (Start())
-            _lastAutoStart = today;
+        try
+        {
+            if (await _database.BufferCountAsync(token) > 0)
+            {
+                Start();
+                return;
+            }
+
+            SendInterval interval = await _database.ReadIntervalAsync(token);
+            if (interval.Begin < interval.End)
+            {
+                Start();
+                return;
+            }
+
+            NewsMakerSettings settings = _settings.Current;
+            DateTime now = DateTime.Now;
+            if (settings.Program.RunDay == 7 ||
+                DateTime.Today == interval.End.Date ||
+                (int)DateTime.Today.DayOfWeek != settings.Program.RunDay ||
+                now.TimeOfDay < settings.Program.RunTime)
+                return;
+
+            Start();
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _logger.LogDebug(ex, "Автоматическая проверка NewsMaker пропущена.");
+        }
     }
 
     private async Task RunSafeAsync(CancellationToken stoppingToken)
@@ -166,8 +183,7 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
         AddReport("Подключение к базе данных установлено.");
 
         SendInterval interval = await _database.ReadIntervalAsync(token);
-        int existing = await _database.BufferCountAsync(token);
-        if (existing == 0 && interval.Begin == interval.End)
+        if (interval.Begin == interval.End)
         {
             interval = interval with { End = DateTime.Today };
             await _database.WriteIntervalAsync(interval, token);
