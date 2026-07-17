@@ -10,6 +10,7 @@
     <span class="status-pill @(Model.DatabaseError is null ? "status-ready" : "status-warning")">@(Model.DatabaseError is null ? "База подключена" : "Нет подключения")</span>
 </div>
 @if (TempData["ContactSuccess"] is string success) { <div class="alert alert-success">@success</div> }
+@if (TempData["ContactError"] is string error) { <div class="alert alert-danger">@error</div> }
 @if (Model.DatabaseError is not null) { <div class="alert alert-warning">@Model.DatabaseError</div> }
 <div asp-validation-summary="All" class="alert alert-danger"></div>
 <div class="directory-grid">
@@ -23,13 +24,41 @@
         <button class="btn btn-wave native-editor mt-3">Добавить</button>
         <div id="addContactButton" class="dx-host mt-3"></div>
     </form>
+    <hr class="my-4" />
+    <div class="panel-title mb-2"><div><span class="step-number">Импорт</span><h2>CSV или TXT</h2></div></div>
+    <form method="post" asp-page-handler="Import" enctype="multipart/form-data">
+        <input asp-for="ImportFile" class="form-control" type="file" accept=".csv,.txt,text/csv,text/plain" />
+        <p class="form-hint">До 2 МБ. Email можно разделять запятой, точкой с запятой или переносом строки.</p>
+        <button class="btn btn-outline-secondary" type="submit">Импортировать</button>
+    </form>
 </section>
 <section class="panel directory-panel">
     <div class="panel-title"><div><span class="step-number">02</span><h2>subscribers</h2></div><span class="muted">@Model.Emails.Count записей</span></div>
-    <div class="native-grid"><table class="table"><thead><tr><th>Email</th></tr></thead><tbody>@foreach(string email in Model.Emails){<tr><td>@email</td></tr>}</tbody></table></div>
+    <div class="native-grid">
+        <table class="table">
+            <thead><tr><th>Email</th><th></th></tr></thead>
+            <tbody>
+            @foreach (string email in Model.Emails)
+            {
+                <tr>
+                    <td>@email</td>
+                    <td class="text-end">
+                        <form method="post" asp-page-handler="Delete">
+                            <button class="btn btn-sm btn-outline-danger" name="deleteEmail" value="@email">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
     <div id="contactsGrid" class="dx-host"></div>
 </section>
 </div>
+<form method="post" asp-page-handler="Delete" id="deleteContactForm">
+    <input type="hidden" name="deleteEmail" id="deleteContactEmail" />
+</form>
+
 @section Scripts {
 <partial name="_ValidationScriptsPartial" />
 <script>
@@ -39,7 +68,23 @@ window.NewsWave.enhancePage(() => {
     $("#contactsGrid").dxDataGrid({
         dataSource: @Html.Raw(emails), keyExpr: "Email", showBorders: false, rowAlternationEnabled: true,
         noDataText: "В subscribers нет email.", searchPanel: { visible: true, placeholder: "Найти email…" },
-        paging: { pageSize: 25 }, columns: [{ dataField: "Email", caption: "Email" }]
+        paging: { pageSize: 25 },
+        columns: [
+            { dataField: "Email", caption: "Email" },
+            {
+                type: "buttons",
+                width: 64,
+                buttons: [{
+                    icon: "trash",
+                    hint: "Удалить",
+                    onClick: e => {
+                        if (!confirm(`Удалить ${e.row.data.Email}?`)) return;
+                        $("#deleteContactEmail").val(e.row.data.Email);
+                        document.getElementById("deleteContactForm").requestSubmit();
+                    }
+                }]
+            }
+        ]
     });
 });
 </script>

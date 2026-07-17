@@ -24,6 +24,55 @@
 
 <div id="mainTabs"></div>
 <div class="newsmaker-shell">
+    <section id="campaignTab" class="panel newsmaker-tab campaign-editor">
+        <div class="panel-title">
+            <div><span class="step-number">Письмо</span><h2>Редактор рассылки</h2></div>
+            <a asp-page="/Templates/Index" class="btn btn-sm btn-outline-secondary">Библиотека шаблонов</a>
+        </div>
+        <form method="post" id="campaignForm">
+            <input asp-for="Campaign.TemplateId" type="hidden" />
+            <div class="campaign-layout">
+                <div>
+                    <label class="form-label" for="templatePicker">Шаблон</label>
+                    <select id="templatePicker" class="form-select mb-3" onchange="if(this.value) location.href='/Mail?templateId='+this.value">
+                        <option value="">Текущее письмо</option>
+                        @foreach (var template in Model.Templates)
+                        {
+                            if (Model.Campaign.TemplateId == template.Id)
+                            {
+                                <option value="@template.Id" selected>@template.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@template.Id">@template.Name</option>
+                            }
+                        }
+                    </select>
+
+                    <label asp-for="Campaign.Subject" class="form-label">Тема</label>
+                    <input asp-for="Campaign.Subject" class="form-control mb-1" />
+                    <span asp-validation-for="Campaign.Subject" class="text-danger"></span>
+
+                    <label asp-for="Campaign.Body" class="form-label mt-3">Содержимое</label>
+                    <textarea asp-for="Campaign.Body" class="form-control campaign-body" rows="14"></textarea>
+                    <span asp-validation-for="Campaign.Body" class="text-danger"></span>
+                    <label class="form-check mt-3">
+                        <input asp-for="Campaign.IsHtml" class="form-check-input" />
+                        <span class="form-check-label">HTML-письмо</span>
+                    </label>
+                    <p class="form-hint">Переменные: #hello_name, #unsubscribe_url, #contact_email, #contact_phone</p>
+                    <div class="newsmaker-actions">
+                        <button class="btn btn-wave" asp-page-handler="SaveCampaign">Сохранить письмо</button>
+                        <button class="btn btn-outline-secondary" asp-page-handler="SendTest">Отправить тест</button>
+                    </div>
+                </div>
+                <div>
+                    <div class="preview-heading"><span class="form-label">Предпросмотр</span><small>Получатель: Иван</small></div>
+                    <iframe id="campaignPreview" class="campaign-preview" sandbox="" title="Предпросмотр письма"></iframe>
+                </div>
+            </div>
+        </form>
+    </section>
     <section id="settingsTab" class="panel newsmaker-tab">
         <div class="panel-title"><div><span class="step-number">Установки</span><h2>Настройки</h2></div></div>
         <form method="post" asp-page-handler="Save" id="settingsForm">
@@ -93,7 +142,7 @@
             }
             else
             {
-                <form method="post" asp-page-handler="Start"><button class="btn btn-wave" id="runButton">Начать рассылку</button></form>
+                <form method="post" asp-page-handler="Start"><button class="btn btn-wave" id="runButton" onclick="return confirm('Запустить массовую рассылку всем получателям очереди?')">Начать рассылку</button></form>
             }
             <form method="post" asp-page-handler="SendToMe"><button class="btn btn-outline-secondary" disabled="@Model.Run.Running">Отправить мне</button></form>
         </div>
@@ -104,17 +153,46 @@
 <script>
 window.NewsWave.enhancePage(() => {
     $("#mainTabs").dxTabs({
-        items: [{ text: "Установки", icon: "preferences" }, { text: "Отчёт", icon: "chart" }],
-        selectedIndex: @(Model.Run.Running || Model.Run.Report.Count > 0 ? 1 : 0),
+        items: [{ text: "Письмо", icon: "email" }, { text: "Установки", icon: "preferences" }, { text: "Отчёт", icon: "chart" }],
+        selectedIndex: @(Model.Run.Running || Model.Run.Report.Count > 0 ? 2 : 0),
         onSelectionChanged: e => {
             const index = e.component.option("selectedIndex");
-            $("#settingsTab").toggle(index === 0);
-            $("#reportTab").toggle(index === 1);
+            $("#campaignTab").toggle(index === 0);
+            $("#settingsTab").toggle(index === 1);
+            $("#reportTab").toggle(index === 2);
         }
     });
-    const start = @(Model.Run.Running || Model.Run.Report.Count > 0 ? 1 : 0);
-    $("#settingsTab").toggle(start === 0);
-    $("#reportTab").toggle(start === 1);
+    const start = @(Model.Run.Running || Model.Run.Report.Count > 0 ? 2 : 0);
+    $("#campaignTab").toggle(start === 0);
+    $("#settingsTab").toggle(start === 1);
+    $("#reportTab").toggle(start === 2);
+
+    const preview = document.getElementById("campaignPreview");
+    const subjectInput = document.getElementById("Campaign_Subject");
+    const bodyInput = document.getElementById("Campaign_Body");
+    const htmlInput = document.getElementById("Campaign_IsHtml");
+    const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+    })[char]);
+    const replaceTokens = (value, isHtml) => String(value ?? "")
+        .replaceAll("#hello_name", "Иван")
+        .replaceAll("#unsubscribe_url", isHtml
+            ? `<a href="https://bridgenote.com/unsubscribe/test">этой ссылке</a>`
+            : "https://bridgenote.com/unsubscribe/test")
+        .replaceAll("#contact_email", @Html.Raw(JsonSerializer.Serialize(Model.Settings.Post.BridgeEmail ?? "")))
+        .replaceAll("#contact_phone", @Html.Raw(JsonSerializer.Serialize(Model.Settings.Post.ContactPhone ?? "")));
+    const renderPreview = () => {
+        const isHtml = htmlInput.checked;
+        const subject = replaceTokens(subjectInput.value, false);
+        const rawBody = replaceTokens(bodyInput.value, isHtml);
+        const body = isHtml ? rawBody : escapeHtml(rawBody).replaceAll("\n", "<br>");
+        preview.srcdoc = `<!doctype html><meta charset="utf-8"><style>body{font:15px/1.6 Arial,sans-serif;color:#17202a;padding:24px}h3{margin:0 0 20px;padding-bottom:14px;border-bottom:1px solid #dfe6e8}a{color:#0a7f78}</style><h3>${escapeHtml(subject)}</h3>${body}`;
+    };
+    [subjectInput, bodyInput, htmlInput].forEach(input => {
+        input.addEventListener("input", renderPreview);
+        input.addEventListener("change", renderPreview);
+    });
+    renderPreview();
 
     $("#reportMemoDx").dxTextArea({
         value: @Html.Raw(reportJson),

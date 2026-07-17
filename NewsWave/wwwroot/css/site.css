@@ -628,3 +628,161 @@ main {
   margin-left: .2rem;
   vertical-align: middle;
 }
+.dashboard-heading .status-pill {
+  max-width: 360px;
+  text-align: right;
+}
+
+.dashboard-metrics {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(280px, .75fr);
+  gap: 1.25rem;
+}
+
+.dashboard-primary {
+  min-width: 0;
+}
+
+.dashboard-message {
+  min-height: 2rem;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.dashboard-run-details {
+  margin: 1rem 0 1.25rem;
+}
+
+.dashboard-action {
+  margin-top: 0;
+}
+
+.next-run-value {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 780;
+  letter-spacing: -.06em;
+}
+
+.next-run-time {
+  margin: .1rem 0 1rem;
+  color: var(--wave);
+  font-size: 1rem;
+  font-weight: 750;
+}
+
+.event-list {
+  display: grid;
+  gap: .6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.event-list li {
+  padding: .75rem 1rem;
+  border-left: 3px solid var(--wave);
+  border-radius: 0 10px 10px 0;
+  background: #f3f7f5;
+  color: #43504d;
+  font: .82rem/1.45 Consolas, monospace;
+}
+
+@media (max-width: 900px) {
+  .dashboard-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .dashboard-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-heading .status-pill {
+    max-width: none;
+    text-align: left;
+  }
+}
+.campaign-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, .9fr) minmax(360px, 1.1fr);
+  gap: 1.5rem;
+}
+
+.campaign-body {
+  min-height: 310px;
+  resize: vertical;
+  font: .9rem/1.5 Consolas, monospace;
+}
+
+.preview-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .55rem;
+}
+
+.preview-heading small {
+  color: var(--muted);
+}
+
+.campaign-preview {
+  width: 100%;
+  min-height: 470px;
+  border: 1px solid #ccd7d9;
+  border-radius: 14px;
+  background: white;
+}
+
+@media (max-width: 900px) {
+  .campaign-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .campaign-preview {
+    min-height: 380px;
+  }
+}
+.login-page {
+  display: grid;
+  min-height: 100vh;
+  margin: 0;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.login-card {
+  width: min(100%, 430px);
+  padding: 2rem;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: white;
+  box-shadow: 0 24px 70px rgba(23, 32, 42, .12);
+}
+
+.login-logo {
+  display: block;
+  width: 220px;
+  max-width: 100%;
+  margin-bottom: 2rem;
+}
+
+.login-card h1 {
+  margin: 0 0 .6rem;
+  font-size: 2rem;
+  font-weight: 780;
+  letter-spacing: -.045em;
+}
+
+.login-card p {
+  margin-bottom: 1.5rem;
+  color: var(--muted);
+}

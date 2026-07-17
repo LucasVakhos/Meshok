@@ -32,8 +32,26 @@ public sealed class BridgeNoteRepository
 
     public async Task AddEmailAsync(string email, CancellationToken token)
     {
+        string normalized = email.Trim();
+        if (await EmailExistsAsync(normalized, token))
+            throw new InvalidOperationException("Такой email уже есть в subscribers.");
+
         const string sql = "INSERT INTO subscribers (email) VALUES (@email)";
-        await ExecuteAsync(sql, token, ("@email", email.Trim()));
+        await ExecuteAsync(sql, token, ("@email", normalized));
+    }
+
+    public Task DeleteEmailAsync(string email, CancellationToken token) =>
+        ExecuteAsync("DELETE FROM subscribers WHERE LOWER(TRIM(email)) = LOWER(@email)",
+            token, ("@email", email.Trim()));
+
+    private async Task<bool> EmailExistsAsync(string email, CancellationToken token)
+    {
+        const string sql = "SELECT COUNT(*) FROM subscribers WHERE LOWER(TRIM(email)) = LOWER(@email)";
+        await using MySqlConnection connection = CreateConnection();
+        await connection.OpenAsync(token);
+        await using MySqlCommand command = new(sql, connection);
+        command.Parameters.AddWithValue("@email", email);
+        return Convert.ToInt32(await command.ExecuteScalarAsync(token)) > 0;
     }
 
     public Task<int> CheckNewsAsync(CancellationToken token) => ScalarProcedureAsync("chk_news", token);

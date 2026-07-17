@@ -1,2 +1,99 @@
 @page
 @model IndexModel
+@using NewsWave.NewsMaker
+@{
+    ViewData["Title"] = "Обзор";
+    string runClass = Model.Run.Status switch
+    {
+        NewsMakerRunStatus.Failed => "status-failed",
+        NewsMakerRunStatus.Preparing or NewsMakerRunStatus.Sending => "status-sending",
+        NewsMakerRunStatus.Completed => "status-ready",
+        _ => "status-warning"
+    };
+}
+
+<div class="page-heading dashboard-heading">
+    <div>
+        <span class="eyebrow">Центр управления рассылкой</span>
+        <h1>Обзор</h1>
+        <p>Состояние NewsWave, очередь и ближайший запуск в одном месте.</p>
+    </div>
+    <span class="status-pill @runClass">@Model.Run.Message</span>
+</div>
+
+@if (Model.DatabaseError is not null)
+{
+    <div class="alert alert-warning">
+        <strong>BridgeNote недоступен.</strong> @Model.DatabaseError
+        <a asp-page="/Mail/Index" class="alert-link">Проверить настройки</a>
+    </div>
+}
+
+<section class="metric-grid dashboard-metrics" aria-label="Ключевые показатели">
+    <article class="metric-card">
+        <span>BridgeNote</span>
+        <strong>@(Model.DatabaseAvailable ? "На связи" : Model.DatabaseConfigured ? "Недоступна" : "Не настроена")</strong>
+        <small>@(Model.DatabaseAvailable ? "Подключение успешно" : "Требуется внимание")</small>
+    </article>
+    <article class="metric-card">
+        <span>Подписчики</span>
+        <strong>@Model.SubscriberCount</strong>
+        <small><a asp-page="/Contacts/Index">Открыть адресатов</a></small>
+    </article>
+    <article class="metric-card">
+        <span>Очередь</span>
+        <strong>@Model.QueueCount</strong>
+        <small>@(Model.QueueCount == 0 ? "Писем в очереди нет" : "Ожидают отправки")</small>
+    </article>
+    <article class="metric-card">
+        <span>Шаблоны</span>
+        <strong>@Model.TemplateCount</strong>
+        <small><a asp-page="/Templates/Index">Открыть библиотеку</a></small>
+    </article>
+</section>
+
+<div class="dashboard-grid">
+    <section class="panel dashboard-primary">
+        <div class="panel-title">
+            <div><span class="step-number">Рассылка</span><h2>Текущий запуск</h2></div>
+            <span class="status-pill @runClass">@Model.Run.Status</span>
+        </div>
+        <p class="dashboard-message">@Model.Run.Message</p>
+        @if (Model.Run.Total > 0)
+        {
+            int percent = (int)Math.Round(Model.Run.Current * 100d / Model.Run.Total);
+            <div class="newsmaker-progress"><div style="width:@percent%"></div></div>
+            <div class="progress-caption">@Model.Run.Current / @Model.Run.Total</div>
+        }
+        <dl class="settings-list dashboard-run-details">
+            <div><dt>Начало</dt><dd>@(Model.Run.StartedAt?.ToLocalTime().ToString("dd.MM.yyyy HH:mm") ?? "—")</dd></div>
+            <div><dt>Завершение</dt><dd>@(Model.Run.CompletedAt?.ToLocalTime().ToString("dd.MM.yyyy HH:mm") ?? "—")</dd></div>
+            <div><dt>SMTP</dt><dd>@(Model.SmtpConfigured ? "Настроен" : "Не настроен")</dd></div>
+        </dl>
+        <a asp-page="/Mail/Index" class="hero-action dashboard-action">Перейти к рассылке →</a>
+    </section>
+
+    <aside class="panel">
+        <div class="panel-title"><div><span class="step-number">Расписание</span><h2>Следующий запуск</h2></div></div>
+        <div class="next-run-value">@(Model.NextRun?.ToString("dd.MM.yyyy") ?? "Вручную")</div>
+        <div class="next-run-time">@(Model.NextRun?.ToString("HH:mm") ?? "Автозапуск выключен")</div>
+        <dl class="settings-list dashboard-run-details">
+            <div><dt>Интервал от</dt><dd>@(Model.Interval?.Begin.ToString("dd.MM.yyyy") ?? "—")</dd></div>
+            <div><dt>Интервал до</dt><dd>@(Model.Interval?.End.ToString("dd.MM.yyyy") ?? "—")</dd></div>
+        </dl>
+        <a asp-page="/Mail/Index" asp-fragment="settingsTab" class="btn btn-outline-secondary w-100">Изменить расписание</a>
+    </aside>
+</div>
+
+@if (Model.Run.Report.Count > 0)
+{
+    <section class="panel history-panel">
+        <div class="panel-title"><div><span class="step-number">Последние события</span><h2>Журнал запуска</h2></div></div>
+        <ol class="event-list">
+            @foreach (string item in Model.Run.Report.TakeLast(6).Reverse())
+            {
+                <li>@item</li>
+            }
+        </ol>
+    </section>
+}

@@ -33,6 +33,7 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
     private readonly NewsletterArchiveBuilder _archiveBuilder;
     private readonly NewsletterSmtpSender _sender;
     private readonly NewsMakerSettingsStore _settings;
+    private readonly NewsMakerHistoryStore _history;
     private readonly ILogger<NewsMakerRunService> _logger;
     private CancellationTokenSource? _runCancellation;
     private bool _stopRequested;
@@ -49,13 +50,26 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
         NewsletterArchiveBuilder archiveBuilder,
         NewsletterSmtpSender sender,
         NewsMakerSettingsStore settings,
+        NewsMakerHistoryStore history,
         ILogger<NewsMakerRunService> logger)
     {
         _database = database;
         _archiveBuilder = archiveBuilder;
         _sender = sender;
         _settings = settings;
+        _history = history;
         _logger = logger;
+
+        if (_history.Latest is NewsMakerSnapshot previous)
+        {
+            _status = previous.Status;
+            _message = previous.Message;
+            _current = previous.Current;
+            _total = previous.Total;
+            _started = previous.StartedAt;
+            _completed = previous.CompletedAt;
+            _report.AddRange(previous.Report);
+        }
     }
 
     public bool Start()
@@ -204,6 +218,8 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
                 if (ReferenceEquals(_runCancellation, linked))
                     _runCancellation = null;
             }
+            NewsMakerSnapshot snapshot = Snapshot();
+            await _history.AppendAsync(snapshot, CancellationToken.None);
         }
     }
 
@@ -287,8 +303,10 @@ public sealed class NewsMakerRunService : BackgroundService, INewsMakerRunner
                 sentInWindow = 0;
             }
 
-            (string text, string html) = _archiveBuilder.Personalize(recipient.Name, recipient.UnsubscribeUrl);
-            await _sender.SendNewsletterAsync(recipient, archive, text, html, token);
+            CampaignSettings campaign = _settings.Current.Campaign;
+            (string text, string html) = _archiveBuilder.Personalize(recipient.Name, recipient.UnsubscribeUrl, campaign);
+            string subject = NewsletterArchiveBuilder.PersonalizeSubject(recipient.Name, campaign);
+            await _sender.SendNewsletterAsync(recipient, archive, subject, text, html, token);
             await _database.DeleteBufferItemAsync(recipient.Id, token);
             sentInWindow++;
             SetProgress(NewsMakerRunStatus.Sending, "Рассылка сообщений...", _current + 1, recipients.Count);

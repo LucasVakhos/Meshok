@@ -96,6 +96,43 @@ public sealed class NewsletterArchiveBuilder
                 Replace(html, name, unsubscribeUrl, true));
     }
 
+    public (string Text, string Html) Personalize(
+        string name,
+        string unsubscribeUrl,
+        CampaignSettings? campaign)
+    {
+        if (campaign is null || string.IsNullOrWhiteSpace(campaign.Body))
+            return Personalize(name, unsubscribeUrl);
+
+        string text;
+        string html;
+        if (campaign.IsHtml)
+        {
+            html = campaign.Body;
+            HtmlDocument document = new();
+            document.LoadHtml(html);
+            text = WebUtility.HtmlDecode(document.DocumentNode.InnerText).Trim();
+        }
+        else
+        {
+            text = campaign.Body;
+            html = "<p>" + WebUtility.HtmlEncode(text)
+                .Replace("\r\n", "<br />")
+                .Replace("\n", "<br />") + "</p>";
+        }
+
+        return (Replace(text, name, unsubscribeUrl, false),
+                Replace(html, name, unsubscribeUrl, true));
+    }
+
+    public static string PersonalizeSubject(string name, CampaignSettings? campaign)
+    {
+        string subject = string.IsNullOrWhiteSpace(campaign?.Subject)
+            ? "Обновления на Bridgenote для #hello_name"
+            : campaign.Subject;
+        return subject.Replace("#hello_name", name).Trim();
+    }
+
     private string Replace(string source, string name, string unsubscribeUrl, bool html)
     {
         PostSettings post = _settings.Current.Post;
@@ -219,6 +256,7 @@ public sealed class NewsletterSmtpSender
     public async Task SendNewsletterAsync(
         BridgeRecipient recipient,
         NewsletterArchive archive,
+        string subject,
         string text,
         string html,
         CancellationToken token)
@@ -227,7 +265,7 @@ public sealed class NewsletterSmtpSender
         using MailMessage message = new()
         {
             From = new MailAddress(post.BridgeEmail ?? string.Empty, "Bridgenote.com", Encoding.UTF8),
-            Subject = "Обновления на Bridgenote для " + recipient.Name,
+            Subject = subject,
             SubjectEncoding = Encoding.UTF8,
             BodyEncoding = Encoding.UTF8
         };
@@ -236,6 +274,25 @@ public sealed class NewsletterSmtpSender
         message.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(text, Encoding.UTF8, "text/plain"));
         message.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(html, Encoding.UTF8, "text/html"));
         message.Attachments.Add(new Attachment(new MemoryStream(archive.Bytes, false), archive.FileName, "application/zip"));
+        await SendAsync(message, post, token);
+    }
+
+    public async Task SendTestAsync(string subject, string text, string html, CancellationToken token)
+    {
+        PostSettings post = _settings.Current.Post;
+        if (string.IsNullOrWhiteSpace(post.DeveloperEmail))
+            throw new InvalidOperationException("Не задан адрес для тестовой отправки.");
+
+        using MailMessage message = new()
+        {
+            From = new MailAddress(post.BridgeEmail ?? string.Empty, "Bridgenote.com", Encoding.UTF8),
+            Subject = "[Тест] " + subject,
+            SubjectEncoding = Encoding.UTF8,
+            BodyEncoding = Encoding.UTF8
+        };
+        message.To.Add(post.DeveloperEmail);
+        message.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(text, Encoding.UTF8, "text/plain"));
+        message.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(html, Encoding.UTF8, "text/html"));
         await SendAsync(message, post, token);
     }
 

@@ -1,0 +1,33 @@
+@page
+@model NewsWave.Pages.LoginModel
+@{
+    ViewData["Title"] = "Вход";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Вход — NewsWave</title>
+    <link rel="icon" type="image/svg+xml" href="~/img/newswave-mark.svg" />
+    <link rel="stylesheet" href="~/vendor/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="login-page">
+    <main class="login-card">
+        <img src="~/img/newswave-logo.svg" alt="NewsWave" class="login-logo" />
+        <span class="eyebrow">Защищённый доступ</span>
+        <h1>Вход администратора</h1>
+        <p>Введите пароль управления рассылками.</p>
+        <form method="post">
+            <input asp-for="ReturnUrl" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <label asp-for="Password" class="form-label">Пароль</label>
+            <input asp-for="Password" class="form-control" autofocus autocomplete="current-password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+            <button class="btn btn-wave w-100 mt-3">Войти</button>
+        </form>
+    </main>
+</body>
+</html>
