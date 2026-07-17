@@ -1,0 +1,82 @@
+@page
+@model NewsWave.Pages.History.IndexModel
+@using NewsWave.NewsMaker
+@{
+    ViewData["Title"] = "История";
+    int completed = Model.Runs.Count(x => x.Status == NewsMakerRunStatus.Completed);
+    int failed = Model.Runs.Count(x => x.Status == NewsMakerRunStatus.Failed);
+    int stopped = Model.Runs.Count(x => x.Status == NewsMakerRunStatus.Stopped);
+    int sent = Model.Runs.Sum(x => x.Current);
+}
+
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Архив выполнения</span>
+        <h1>История рассылок</h1>
+        <p>Последние 50 завершённых запусков и их подробные отчёты.</p>
+    </div>
+    <span class="status-pill status-ready">@Model.Runs.Count записей</span>
+</div>
+
+<section class="metric-grid history-metrics" aria-label="Итоги запусков">
+    <article class="metric-card"><span>Завершено</span><strong>@completed</strong><small>Успешные запуски</small></article>
+    <article class="metric-card"><span>Отправлено</span><strong>@sent</strong><small>Писем по журналу</small></article>
+    <article class="metric-card"><span>Ошибки</span><strong>@failed</strong><small>Требуют внимания</small></article>
+    <article class="metric-card"><span>Остановлено</span><strong>@stopped</strong><small>Вручную или отменой</small></article>
+</section>
+
+@if (Model.Runs.Count == 0)
+{
+    <section class="panel empty-history">
+        <span class="step-number">Пока пусто</span>
+        <h2>Завершённых запусков ещё нет</h2>
+        <p>После первой рассылки здесь появятся статус, длительность, прогресс и полный отчёт.</p>
+        <a asp-page="/Mail/Index" class="hero-action">Перейти к рассылке →</a>
+    </section>
+}
+else
+{
+    <section class="history-list" aria-label="Запуски рассылки">
+        @for (int index = 0; index < Model.Runs.Count; index++)
+        {
+            NewsMakerSnapshot run = Model.Runs[index];
+            string statusClass = run.Status switch
+            {
+                NewsMakerRunStatus.Completed => "status-ready",
+                NewsMakerRunStatus.Failed => "status-failed",
+                NewsMakerRunStatus.Stopped => "status-warning",
+                _ => "status-sending"
+            };
+            string statusText = run.Status switch
+            {
+                NewsMakerRunStatus.Completed => "Завершено",
+                NewsMakerRunStatus.Failed => "Ошибка",
+                NewsMakerRunStatus.Stopped => "Остановлено",
+                _ => run.Status.ToString()
+            };
+            TimeSpan? duration = run.StartedAt is null
+                ? null
+                : (run.CompletedAt ?? DateTimeOffset.Now) - run.StartedAt.Value;
+            int percent = run.Total == 0 ? 0 : (int)Math.Round(run.Current * 100d / run.Total);
+
+            <details class="panel history-entry">
+                <summary>
+                    <span class="history-date">
+                        <strong>@(run.StartedAt?.ToLocalTime().ToString("dd.MM.yyyy") ?? "—")</strong>
+                        <small>@(run.StartedAt?.ToLocalTime().ToString("HH:mm") ?? "")</small>
+                    </span>
+                    <span class="history-result">
+                        <strong>@run.Message</strong>
+                        <small>@run.Current / @run.Total писем · @(duration?.ToString(@"hh:mm:ss") ?? "—")</small>
+                    </span>
+                    <span class="status-pill @statusClass">@statusText</span>
+                </summary>
+                @if (run.Total > 0)
+                {
+                    <div class="newsmaker-progress"><div style="width:@percent%"></div></div>
+                }
+                <pre class="history-report">@string.Join(Environment.NewLine, run.Report)</pre>
+            </details>
+        }
+    </section>
+}

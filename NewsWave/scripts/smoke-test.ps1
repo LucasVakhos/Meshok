@@ -33,6 +33,7 @@ try {
         "/Mail" = "campaignPreview"
         "/Contacts" = "Подписчики"
         "/Templates" = "Библиотека писем"
+        "/History" = "История рассылок"
     }
 
     foreach ($route in $checks.Keys) {
