@@ -91,6 +91,34 @@ public sealed class NewsWaveStore
         }
     }
 
+    public async Task UpdateTemplateAsync(
+        Guid id,
+        string name,
+        string subject,
+        string body,
+        bool isHtml,
+        CancellationToken cancellationToken)
+    {
+        await _writeGate.WaitAsync(cancellationToken);
+        try
+        {
+            lock (_sync)
+            {
+                int index = _data.Templates.FindIndex(x => x.Id == id);
+                if (index < 0)
+                    throw new InvalidOperationException("Шаблон не найден.");
+
+                _data.Templates[index] = new MailTemplateRecord(
+                    id, name.Trim(), subject.Trim(), body, isHtml, DateTimeOffset.Now);
+            }
+            await SaveAsync(cancellationToken);
+        }
+        finally
+        {
+            _writeGate.Release();
+        }
+    }
+
     public async Task DeleteTemplateAsync(Guid id, CancellationToken cancellationToken)
     {
         await _writeGate.WaitAsync(cancellationToken);

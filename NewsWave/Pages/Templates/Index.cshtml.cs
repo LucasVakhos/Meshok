@@ -17,25 +17,50 @@ public sealed class IndexModel : PageModel
     [BindProperty]
     public TemplateInput Input { get; set; } = new();
 
+    [BindProperty]
+    public Guid? EditId { get; set; }
+
+    public bool IsEditing => EditId.HasValue;
     public IReadOnlyList<MailTemplateRecord> Templates => _store.GetTemplates();
 
-    public void OnGet()
+    public IActionResult OnGet(Guid? editId)
     {
+        if (editId is not Guid id)
+            return Page();
+
+        MailTemplateRecord? template = _store.FindTemplate(id);
+        if (template is null)
+            return RedirectToPage();
+
+        EditId = template.Id;
+        Input = new TemplateInput
+        {
+            Name = template.Name,
+            Subject = template.Subject,
+            Body = template.Body,
+            IsHtml = template.IsHtml
+        };
+        return Page();
     }
 
-    public async Task<IActionResult> OnPostAddAsync(CancellationToken cancellationToken)
+    public async Task<IActionResult> OnPostSaveAsync(CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
             return Page();
 
-        await _store.AddTemplateAsync(
-            Input.Name,
-            Input.Subject,
-            Input.Body,
-            Input.IsHtml,
-            cancellationToken);
+        if (EditId is Guid id)
+        {
+            await _store.UpdateTemplateAsync(
+                id, Input.Name, Input.Subject, Input.Body, Input.IsHtml, cancellationToken);
+            TempData["TemplateSuccess"] = "Шаблон обновлён.";
+        }
+        else
+        {
+            await _store.AddTemplateAsync(
+                Input.Name, Input.Subject, Input.Body, Input.IsHtml, cancellationToken);
+            TempData["TemplateSuccess"] = "Шаблон сохранён.";
+        }
 
-        TempData["TemplateSuccess"] = "Шаблон сохранён.";
         return RedirectToPage();
     }
 

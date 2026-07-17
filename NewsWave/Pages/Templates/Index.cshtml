@@ -3,6 +3,8 @@
 @using System.Text.Json
 @{
     ViewData["Title"] = "Шаблоны";
+    string editorTitle = Model.IsEditing ? "Редактирование шаблона" : "Новый шаблон";
+    string saveText = Model.IsEditing ? "Сохранить изменения" : "Сохранить";
     string templatesJson = JsonSerializer.Serialize(Model.Templates);
     string nameJson = JsonSerializer.Serialize(Model.Input.Name);
     string subjectJson = JsonSerializer.Serialize(Model.Input.Subject);
@@ -26,9 +28,14 @@
 <div class="directory-grid template-layout">
     <section class="panel">
         <div class="panel-title">
-            <div><span class="step-number">01</span><h2>Новый шаблон</h2></div>
+            <div><span class="step-number">01</span><h2>@editorTitle</h2></div>
+            @if (Model.IsEditing)
+            {
+                <a asp-page="/Templates/Index" class="btn btn-sm btn-outline-secondary">Отмена</a>
+            }
         </div>
-        <form method="post" asp-page-handler="Add" id="templateForm">
+        <form method="post" asp-page-handler="Save" id="templateForm">
+            <input asp-for="EditId" type="hidden" />
             <input asp-for="Input.Name" class="form-control native-editor" />
             <input asp-for="Input.Subject" class="form-control native-editor" />
             <textarea asp-for="Input.Body" class="form-control native-editor" rows="10"></textarea>
@@ -51,7 +58,7 @@
             </div>
             <div class="d-flex align-items-center justify-content-between gap-3">
                 <div id="templateHtml" class="dx-host"></div>
-                <button type="submit" class="btn btn-wave native-editor">Сохранить</button>
+                <button type="submit" class="btn btn-wave native-editor">@saveText</button>
                 <div id="addTemplateButton" class="dx-host"></div>
             </div>
         </form>
@@ -70,7 +77,14 @@
         {
             <tr>
                 <td><a asp-page="/Mail/Index" asp-route-templateId="@template.Id">@template.Name</a></td><td>@template.Subject</td>
-                <td><form method="post" asp-page-handler="Delete"><button class="btn btn-sm btn-outline-danger" name="deleteId" value="@template.Id">Удалить</button></form></td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <a asp-page="/Templates/Index" asp-route-editId="@template.Id" class="btn btn-sm btn-outline-secondary">Изменить</a>
+                        <form method="post" asp-page-handler="Delete">
+                            <button class="btn btn-sm btn-outline-danger" name="deleteId" value="@template.Id">Удалить</button>
+                        </form>
+                    </div>
+                </td>
             </tr>
         }
         </tbody>
@@ -114,7 +128,7 @@
             onValueChanged: e => $("#Input_IsHtml").prop("checked", e.value)
         });
         $("#addTemplateButton").dxButton({
-            text: "Сохранить",
+            text: @Html.Raw(JsonSerializer.Serialize(saveText)),
             icon: "save",
             type: "default",
             onClick: () => document.getElementById("templateForm").requestSubmit()
@@ -134,8 +148,13 @@
                 { dataField: "IsHtml", caption: "HTML", dataType: "boolean", width: 75 },
                 {
                     type: "buttons",
-                    width: 112,
+                    width: 150,
                     buttons: [
+                        {
+                            icon: "edit",
+                            hint: "Изменить",
+                            onClick: e => window.location.href = `/Templates?editId=${e.row.data.Id}`
+                        },
                         {
                             icon: "email",
                             hint: "Создать письмо",
