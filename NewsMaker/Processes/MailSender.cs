@@ -1,5 +1,4 @@
-﻿//#define NOT_SEND
-using GH.AppContext;
+//#define NOT_SEND
 using GH.Configs;
 using NewsMaker.Common;
 using System;

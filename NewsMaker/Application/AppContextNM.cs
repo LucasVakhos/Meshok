@@ -1,4 +1,3 @@
-using GH.AppContext;
 using GH.Configs;
 using System.Windows.Forms;
 namespace NewsMaker

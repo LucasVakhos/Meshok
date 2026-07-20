@@ -1,4 +1,3 @@
-﻿using GH.AppContext;
 using NewsMaker.Common;
 using System;
 using System.Collections.Generic;

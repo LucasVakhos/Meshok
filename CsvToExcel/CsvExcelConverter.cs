@@ -1,4 +1,4 @@
-using DevExpress.Export.Xl;
+﻿using DevExpress.Export.Xl;
 using Microsoft.VisualBasic.FileIO;
 using System.Globalization;
 using System.Text;
@@ -70,7 +70,7 @@ public static class CsvExcelConverter
                 if (fields is null || fields.All(string.IsNullOrEmpty))
                     continue;
 
-                WriteRow(sheet, fields, headers);
+                WriteRow(sheet, fields, headers.Length);
                 rowCount++;
             }
 
