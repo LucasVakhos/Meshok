@@ -97,7 +97,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LB.Libs\LB-Libs.csproj" />
-    <ProjectReference Include="..\IniFile\IniFile.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />

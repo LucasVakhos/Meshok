@@ -49,7 +49,7 @@ namespace GH.Components
                 return;
             string file_name = RunContext.GetConfigsPath(this);
             string key = Path.GetFileNameWithoutExtension(file_name);
-            AppCleaner.IniFile ini = AppCleaner.IniFile.DefaultInstance();
+            LB.Libs.IniFile ini = LB.Libs.IniFile.DefaultInstance();
             string layout = ini.Read("Layouts", key);
             if (string.IsNullOrEmpty(layout) && File.Exists(file_name))
             {
@@ -71,7 +71,7 @@ namespace GH.Components
             string key = Path.GetFileNameWithoutExtension(file_name);
             using MemoryStream stream = new MemoryStream();
             MainView.SaveLayoutToStream(stream);
-            AppCleaner.IniFile ini = AppCleaner.IniFile.DefaultInstance();
+            LB.Libs.IniFile ini = LB.Libs.IniFile.DefaultInstance();
             ini.Write("Layouts", key, Convert.ToBase64String(stream.ToArray()));
             ini.Save();
         }

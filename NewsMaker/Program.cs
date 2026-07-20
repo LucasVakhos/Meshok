@@ -7,7 +7,7 @@ namespace NewsMaker
         private static void Main(string[] args)
         {
             // Первый запуск собирает старые разрозненные INI в один файл рядом с exe.
-            AppCleaner.IniFile.MigrateLegacyFiles();
+            LB.Libs.IniFile.MigrateLegacyFiles();
             AppContextNM.RunInstance();
         }
     }

@@ -1,4 +1,4 @@
-using DevExpress.Utils;
+﻿using DevExpress.Utils;
 using System.ComponentModel;
 using System.Reflection;
 using System.Xml.Linq;
@@ -223,7 +223,7 @@ namespace GH.Components
         {
             string file_name = RunContext.GetConfigsPath(this);
             string key = Path.GetFileNameWithoutExtension(file_name);
-            AppCleaner.IniFile ini = AppCleaner.IniFile.DefaultInstance();
+            LB.Libs.IniFile ini = LB.Libs.IniFile.DefaultInstance();
             string xml = ini.Read("Highlighting", key);
             if (string.IsNullOrEmpty(xml) && File.Exists(file_name))
             {
@@ -292,7 +292,7 @@ namespace GH.Components
                         new XElement("FontStrikeout", item.FontStrikeout));
                 root.Add(element);
             }
-            AppCleaner.IniFile ini = AppCleaner.IniFile.DefaultInstance();
+            LB.Libs.IniFile ini = LB.Libs.IniFile.DefaultInstance();
             ini.Write("Highlighting", Path.GetFileNameWithoutExtension(file_name), doc.ToString(SaveOptions.DisableFormatting));
             ini.Save();
         }

@@ -31,7 +31,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GH.Components\GH.Components.csproj" />
-    <ProjectReference Include="..\IniFile\IniFile.csproj" />
     <ProjectReference Include="..\LB.Libs\LB-Libs.csproj" />
   </ItemGroup>
   <ItemGroup>

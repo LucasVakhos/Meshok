@@ -6,7 +6,7 @@ namespace GH.Components
     public class CfgCore : AbstractEntity
     {
         internal static bool _loading = false;
-    internal string ConfigPath => AppCleaner.IniFile.DefaultFilePath;
+    internal string ConfigPath => LB.Libs.IniFile.DefaultFilePath;
     private string LegacyConfigPath
         {
             get
@@ -42,7 +42,7 @@ namespace GH.Components
                 LoadDefauls();
                 CfgCore cfg = null;
                 Type type = GetType();
-                AppCleaner.IniFile ini = AppCleaner.IniFile.DefaultInstance();
+                LB.Libs.IniFile ini = LB.Libs.IniFile.DefaultInstance();
                 string json = ini.Read(GetName(), "Json");
                 bool migrated = false;
 
@@ -116,7 +116,7 @@ namespace GH.Components
             try
             {
                 string json = JsonConvert.SerializeObject(this, ser);
-                AppCleaner.IniFile ini = AppCleaner.IniFile.DefaultInstance();
+                LB.Libs.IniFile ini = LB.Libs.IniFile.DefaultInstance();
                 ini.Write(GetName(), "Json", json);
                 ini.Save();
             }

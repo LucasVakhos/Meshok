@@ -1,4 +1,4 @@
-using GH.Components;
+﻿using GH.Components;
 using System.Windows.Forms;
 namespace MeshokBrowser
 {
@@ -7,7 +7,7 @@ namespace MeshokBrowser
         protected override void InitializeSomething()
         {
             // Первый запуск собирает старые разрозненные INI в один файл рядом с exe.
-            AppCleaner.IniFile.MigrateLegacyFiles();
+            LB.Libs.IniFile.MigrateLegacyFiles();
             // WebView2 is initialized by GhBrowser when its handle is created.
         }
         public override Form GetMainForm()
