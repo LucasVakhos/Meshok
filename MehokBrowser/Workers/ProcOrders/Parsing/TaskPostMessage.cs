@@ -1,5 +1,6 @@
-//#define NOT_POST_MESSAGE 
-using GH.Components;
+﻿//#define NOT_POST_MESSAGE 
+using GhTextAreaElement = LB.Libs.GhTextAreaElement;
+using GhInputElement = LB.Libs.GhInputElement;
 using MeshokBrowser.Models;
 using System.Linq;
 using System.Windows.Forms;

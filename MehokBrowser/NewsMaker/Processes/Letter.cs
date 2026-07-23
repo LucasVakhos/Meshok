@@ -2,6 +2,7 @@ using GH.Components;
 using NewsMaker.Common;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 namespace NewsMaker
 {
@@ -64,7 +65,8 @@ namespace NewsMaker
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex);
+                     Trace.TraceError(ex.ToString());
+                     Trace.TraceError(ex.ToString());
                 }
             }
         }
@@ -78,7 +80,7 @@ namespace NewsMaker
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex);
+                     Trace.TraceError(ex.ToString());
                 }
             }
         }

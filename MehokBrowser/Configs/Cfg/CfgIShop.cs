@@ -1,13 +1,19 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
+using MehokBrowser.Application;
 using GH.AppContext;
-using GH.Attributes;
+using Category = LB.Libs.Category;
+using CfgCoreConnection = LB.Libs.CfgCoreConnection;
+using DbConnectionProperty = LB.Libs.DbConnectionProperty;
+using EditorType = LB.Libs.EditorType;
+using IniHelper = LB.Libs.IniHelper;
 using GH.Utils;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
-namespace GH.Configs
+namespace MehokBrowser.Configs.Cfg
 {
     public class CfgIShop : CfgCoreConnection
     {
@@ -130,7 +136,7 @@ namespace GH.Configs
             }
             catch (Exception e)
             {
-                Logger.Error(e);
+                Trace.TraceError(e.ToString());
                 return false;
             }
         }

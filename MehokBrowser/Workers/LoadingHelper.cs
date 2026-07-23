@@ -1,5 +1,6 @@
 using GH.AppContext;
 using GH.Components;
+using GhBrowser = LB.Libs.GhBrowser;
 using GH.Configs;
 using System.Collections.Generic;
 using System.IO;

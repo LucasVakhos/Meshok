@@ -1,4 +1,10 @@
-﻿using GH.Components;
+﻿using MehokBrowser.Configs.Cfg;
+using MehokBrowser.Configs.Forms;
+using MehokBrowser.Application;
+using MehokBrowser.UI.Config;
+using CfgApp = LB.Libs.CfgApp;
+using CfgCoreConnection = LB.Libs.CfgCoreConnection;
+using IniHelper = LB.Libs.IniHelper;
 using System.Windows.Forms;
 namespace MeshokBrowser
 {

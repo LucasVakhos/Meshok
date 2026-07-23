@@ -2,16 +2,16 @@
 using System.Windows.Forms;
 using System.Threading;
 using System.Reflection;
+using MehokBrowser.Application;
 using MeshokBrowser.Frames;
 using System.ComponentModel;
-using GH.AppContext;
 using System.Threading.Tasks;
 namespace MeshokBrowser.Workers
 {
     public class ScanSettingFrame : SettingFrame
     {
-        public GH.Components.ActionGh actionApply;
-        public GH.Components.ActionGh actionCancel;
+        public MehokBrowser.Controls.ActionGh actionApply;
+        public MehokBrowser.Controls.ActionGh actionCancel;
         bool EndSignal = false;
         public ScanSettingFrame()
         {
@@ -36,16 +36,16 @@ namespace MeshokBrowser.Workers
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScanSettingFrame));
-            this.actionApply = new GH.Components.ActionGh();
-            this.actionCancel = new GH.Components.ActionGh();
+            this.actionApply = new MehokBrowser.Controls.ActionGh();
+            this.actionCancel = new MehokBrowser.Controls.ActionGh();
             ((System.ComponentModel.ISupportInitialize)(this.actionList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataSource)).BeginInit();
             this.SuspendLayout();
             // 
             // actionList
             // 
-            this.actionList.Actions.Add(this.actionApply);
-            this.actionList.Actions.Add(this.actionCancel);
+            this.actionList.Actions.Add((MehokBrowser.Controls.ActionGh)this.actionApply);
+            this.actionList.Actions.Add((MehokBrowser.Controls.ActionGh)this.actionCancel);
             // 
             // dataSource
             // 
@@ -55,7 +55,7 @@ namespace MeshokBrowser.Workers
             this.dataSource.AllowUdate = false;
             this.dataSource.IsLocalDataSet = true;
             this.dataSource.NeedLoadingAnimate = false;
-            this.dataSource.SupportDataActions = false;
+            // this.dataSource.SupportDataActions = false; // не существует в MehokBrowser.Controls.DataSource
             // 
             // actionApply
             // 

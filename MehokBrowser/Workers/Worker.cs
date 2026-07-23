@@ -1,5 +1,6 @@
-using GH.AppContext;
+﻿using GH.AppContext;
 using GH.Configs;
+using MehokBrowser.Application;
 using Microsoft.Web.WebView2.Core;
 using System;
 using System.IO;

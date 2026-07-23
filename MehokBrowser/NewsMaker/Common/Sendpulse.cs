@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
@@ -41,7 +42,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -55,7 +56,9 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -70,7 +73,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -85,7 +88,9 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -118,7 +123,9 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -150,7 +157,9 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -178,7 +187,9 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -207,7 +218,9 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -235,7 +248,8 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -280,7 +294,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -320,7 +334,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -363,7 +377,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -401,7 +415,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -439,7 +453,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -478,7 +492,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -524,7 +538,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -585,7 +599,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -625,7 +639,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -663,7 +677,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -701,7 +715,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -742,7 +756,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -762,7 +776,7 @@ namespace NewsMaker
                 }
                 catch (IOException ex)
                 {
-                    Logger.Error(ex);
+                    Trace.TraceError(ex.ToString());
                 }
                 return handleResult(result);
             }
@@ -781,7 +795,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -803,7 +817,8 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -825,7 +840,7 @@ namespace NewsMaker
                 }
                 catch (IOException ex)
                 {
-                    Logger.Error(ex);
+                    Trace.TraceError(ex.ToString());
                 }
             }
             return handleResult(result);
@@ -853,7 +868,7 @@ namespace NewsMaker
                 }
                 catch (IOException ex)
                 {
-                    Logger.Error(ex);
+                    Trace.TraceError(ex.ToString());
                 }
                 return handleResult(result);
             }
@@ -903,7 +918,7 @@ namespace NewsMaker
                 }
                 catch (IOException ex)
                 {
-                    Logger.Error(ex);
+                    Trace.TraceError(ex.ToString());
                 }
                 return handleResult(result);
             }
@@ -955,7 +970,8 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1003,7 +1019,8 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1072,7 +1089,8 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1090,7 +1108,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1110,7 +1128,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1141,7 +1159,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1174,7 +1192,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1197,7 +1215,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1219,7 +1237,7 @@ namespace NewsMaker
                 }
                 catch (IOException ex)
                 {
-                    Logger.Error(ex);
+                    Trace.TraceError(ex.ToString());
                 }
                 return handleResult(result);
             }
@@ -1278,7 +1296,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1302,7 +1320,7 @@ namespace NewsMaker
                 }
                 catch (IOException ex)
                 {
-                    Logger.Error(ex);
+                    Trace.TraceError(ex.ToString());
                 }
                 return handleResult(result);
             }
@@ -1328,7 +1346,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1370,7 +1388,8 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1388,7 +1407,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                    Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1411,7 +1430,8 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1431,7 +1451,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                    Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1451,7 +1471,8 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1472,7 +1493,7 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
             return handleResult(result);
         }
@@ -1567,7 +1588,7 @@ namespace NewsMaker
                 }
                 catch (WebException we)
                 {
-                    Logger.Error(we);
+                    Trace.TraceError(we.ToString());
                     var wRespStatusCode = ((HttpWebResponse)we.Response).StatusCode;
                     response.Add("http_code", (int)wRespStatusCode);
                     var WebResponse = ((HttpWebResponse)we.Response).GetResponseStream();
@@ -1578,7 +1599,7 @@ namespace NewsMaker
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
                 foreach (var item in handleError(ex.Message))
                     response.Add(item.Key, item.Value);
             }
@@ -1617,7 +1638,10 @@ namespace NewsMaker
             }
             catch (IOException ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
+                    Trace.TraceError(ex.ToString());
+                Trace.TraceError(ex.ToString());
             }
             if (requestResult == null)
                 return false;

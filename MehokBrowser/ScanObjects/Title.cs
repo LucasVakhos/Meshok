@@ -1,4 +1,5 @@
 using GH.Attributes;
+using UpdatablePropertyAttribute = LB.Libs.UpdatablePropertyAttribute;
 using System.ComponentModel.DataAnnotations;
 namespace MeshokBrowser.Models
 {
@@ -6,44 +7,44 @@ namespace MeshokBrowser.Models
     {
         //"Баркод",
         [Display(Name = "Баркод")]
-        [UpdatableProperty(Caption = "Баркод")]
+        [UpdatablePropertyAttribute(Caption = "Баркод")]
         public string t_bar_code { get; set; }
         //"Артист",
         [Display(Name = "Артист")]
-        [UpdatableProperty(Caption = "Артист")]
+        [UpdatablePropertyAttribute(Caption = "Артист")]
         public string t_artist { get; set; }
         //"Альбом",
         [Display(Name = "Альбом")]
-        [UpdatableProperty(Caption = "Альбом")]
+        [UpdatablePropertyAttribute(Caption = "Альбом")]
         public string t_title { get; set; }
         //"Год издания",
         [Display(Name = "Год издания")]
-        [UpdatableProperty(Caption = "Год издания")]
+        [UpdatablePropertyAttribute(Caption = "Год издания")]
         public string t_year { get; set; }
         //"Лейбл",
         [Display(Name = "Лейбл")]
-        [UpdatableProperty(Caption = "Лейбл")]
+        [UpdatablePropertyAttribute(Caption = "Лейбл")]
         public string l_name { get; set; }
         //"Формат",
         [Display(Name = "Формат")]
-        [UpdatableProperty(Caption = "Формат")]
+        [UpdatablePropertyAttribute(Caption = "Формат")]
         public string m_name { get; set; }
         //"Страна",
         [Display(Name = "Страна")]
-        [UpdatableProperty(Caption = "Страна")]
+        [UpdatablePropertyAttribute(Caption = "Страна")]
         public string ctr_name { get; set; }
         //"Стиль музыки",
         [Display(Name = "Стиль музыки")]
-        [UpdatableProperty(Caption = "Стиль музыки")]
+        [UpdatablePropertyAttribute(Caption = "Стиль музыки")]
         public string st_name { get; set; }
         //"Качество",
         [Display(Name = "Качество")]
-        [UpdatableProperty(Caption = "Качество")]
+        [UpdatablePropertyAttribute(Caption = "Качество")]
         public string ts_quality { get; set; }
         //"Артикул"
         private string _artArticul = "";
         [Display(Name = "Артикул")]
-        [UpdatableProperty(Caption = "Артикул")]
+        [UpdatablePropertyAttribute(Caption = "Артикул")]
         public string artArticul
         {
             get => _artArticul;

@@ -1,5 +1,6 @@
 using MySql.Data.MySqlClient;
 using System;
+using System.Diagnostics;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 namespace GH.Components
@@ -103,7 +104,7 @@ namespace GH.Components
                 }
                 catch (Exception e)
                 {
-                    Logger.Error(e);
+                     Trace.TraceError(e.ToString());
                 }
                 return false;
             }

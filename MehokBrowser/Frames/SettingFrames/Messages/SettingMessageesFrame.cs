@@ -1,8 +1,8 @@
-using System;
+﻿using System;
+using BaseEntity = LB.Libs.BaseEntity;
 using System.Windows.Forms;
 using Common;
-using GH.Components;
-using GH.Helpers;
+using LB.Libs;
 using MeshokBrowser.Frames;
 using MeshokBrowser.Data;
 using MeshokBrowser.Models;

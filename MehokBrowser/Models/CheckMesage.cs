@@ -1,55 +1,56 @@
-using System.ComponentModel.DataAnnotations;
+п»їusing System.ComponentModel.DataAnnotations;
 using Common;
-using GH.Components;
-using GH.Components;
+using Field = LB.Libs.Field;
+using BaseEntity = LB.Libs.BaseEntity;
+using UpdatablePropertyAttribute = LB.Libs.UpdatablePropertyAttribute;
 namespace MeshokBrowser.Models
 {
     public class CheckMesage : BaseEntity
     {
-        [Display(Name = "ID покупателя")]
-        [UpdatableProperty(Caption = "ID покупателя")]
+        [Display(Name = "ID пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "ID пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual int c_id { get; set; }
-        [Display(Name = "Имя покупателя")]
-        [UpdatableProperty(Caption = "Имя покупателя")]
+        [Display(Name = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual string c_name { get; set; }
-        [Display(Name = "e-mail покупателя")]
-        [UpdatableProperty(Caption = "e-mail покупателя")]
+        [Display(Name = "e-mail пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "e-mail пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual string c_email { get; set; }
-        [Display(Name = "ID доставки")]
-        [UpdatableProperty(Caption = "ID доставки")]
+        [Display(Name = "ID пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "ID пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual int md_id { get; set; } = 1;
-        [Display(Name = "Метод доставки")]
-        [UpdatableProperty(Caption = "Метод доставки")]
+        [Display(Name = "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual string md_name { get; set; }
-        [Display(Name = "ID оплаты")]
-        [UpdatableProperty(Caption = "ID оплаты")]
+        [Display(Name = "ID пїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "ID пїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual int mp_id { get; set; } = 1;
-        [Display(Name = "Метод оплаты")]
-        [UpdatableProperty(Caption = "Метод оплаты")]
+        [Display(Name = "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual string mp_name { get; set; }
-        [Display(Name = "ID статуса заказа")]
-        [UpdatableProperty(Caption = "ID статуса заказа")]
+        [Display(Name = "ID пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "ID пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual int cs_id { get; set; } = 0;
-        [Display(Name = "Статус заказа")]
-        [UpdatableProperty(Caption = "Статус заказа")]
+        [Display(Name = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual string cs_name { get; set; }
-        [Display(Name = "Сумма заказа")]
-        [UpdatableProperty(Caption = "Сумма заказа")]
+        [Display(Name = "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual double dp_totalsumm { get; set; } = 0;
-        [Display(Name = "Расшифровка суммы")]
-        [UpdatableProperty(Caption = "Расшифровка суммы")]
+        [Display(Name = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ")]
         public virtual string dp_totalsumm_info { get; set; }
-        [Display(Name = "Заказ упакован")]
-        [UpdatableProperty(Caption = "Заказ упакован")]
+        [Display(Name = "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual bool dp_packed { get; set; } = false;
-        [Display(Name = "Адрес доставки")]
-        [UpdatableProperty(Caption = "Адрес доставки")]
+        [Display(Name = "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual string md_address { get; set; }
-        [Display(Name = "Трекинг № доставки")]
-        [UpdatableProperty(Caption = "Трекинг № доставки")]
+        [Display(Name = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual string md_treck_num { get; set; }
-        [Display(Name = "Url для № доставки")]
-        [UpdatableProperty(Caption = "Url для № доставки")]
+        [Display(Name = "Url пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [UpdatableProperty(Caption = "Url пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual string md_tracking_url { get; set; }
         public virtual int zsc_case { get; set; } = 0;
         private string _mess_text = "";

@@ -1,9 +1,11 @@
-using Common;
-using GH.Components;
+﻿using Common;
+using EnumExtensions = GH.Components.EnumExtensions;
+using MehokBrowser.Configs.Cfg;
 using MeshokBrowser.Data;
 using MeshokBrowser.Helpers;
 using MeshokBrowser.Models;
 using MySql.Data.MySqlClient;
+using System.Diagnostics;
 
 namespace MeshokBrowser
 {
@@ -32,7 +34,7 @@ namespace MeshokBrowser
         private static void AddSiteStatusesToBase()
         {
             var statuses = Enum.GetValues<OrderStatus>()
-                .ToDictionary(item => (int)item, item => GH.Components.EnumExtensions.GetDisplayValue(item));
+                .ToDictionary(item => (int)item, item => EnumExtensions.GetDisplayValue(item));
             DapperLookupRepository.ImportStatuses(_siteNo, statuses);
         }
 
@@ -48,7 +50,7 @@ namespace MeshokBrowser
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
         }
 
@@ -78,7 +80,8 @@ namespace MeshokBrowser
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex);
+                    Trace.TraceError(ex.ToString());
+                     Trace.TraceError(ex.ToString());
                 }
             }
         }
@@ -96,7 +99,7 @@ namespace MeshokBrowser
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex);
+                     Trace.TraceError(ex.ToString());
                 }
             }
         }
@@ -125,7 +128,7 @@ namespace MeshokBrowser
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
                 return false;
             }
         }
@@ -147,7 +150,7 @@ namespace MeshokBrowser
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
             }
         }
 
@@ -159,7 +162,8 @@ namespace MeshokBrowser
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                 Trace.TraceError(ex.ToString());
+                 Trace.TraceError(ex.ToString());
                 return false;
             }
         }

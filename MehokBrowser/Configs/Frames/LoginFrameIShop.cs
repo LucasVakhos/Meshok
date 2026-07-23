@@ -1,15 +1,17 @@
-using GH.Configs;
+﻿using MehokBrowser.UI.Config;
+using MehokBrowser.Configs.Cfg;
 using MeshokBrowser.Data;
 using MeshokBrowser.Models;
 using System.Collections;
+using LB.Libs;
 
-namespace GH.Configs
+namespace MehokBrowser.Configs.Frames
 {
     public class LoginFrameIShop : LoginFrameType<CfgIShop, User>
     {
         public LoginFrameIShop()
         {
-            LoginInputType = GH.Components.LoginInputType.AsSelectFromCombo;
+            LoginInputType = LoginInputType.AsSelectFromCombo;
         }
 
         protected override IList GetAllUsers()

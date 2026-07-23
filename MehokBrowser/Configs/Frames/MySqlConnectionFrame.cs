@@ -1,6 +1,7 @@
-using DevExpress.XtraEditors;
-using GH.Interfaces;
-namespace GH.Configs
+﻿using MehokBrowser.Configs.Cfg;
+using MehokBrowser.UI.Config;
+
+namespace MehokBrowser.Configs.Frames
 {
     public partial class MySqlConnectionFrame : CfgConnectFrameType<CfgBridgeNote>
     {

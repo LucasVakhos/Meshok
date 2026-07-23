@@ -1,4 +1,4 @@
-namespace GH.Configs
+﻿namespace MehokBrowser.Configs.Frames
 {
     partial class CfgFrameBridgeNote
     {

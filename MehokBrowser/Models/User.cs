@@ -1,10 +1,9 @@
-using GH.Components;
-using GH.Components;
+using UpdatableProperty = LB.Libs.UpdatablePropertyAttribute;
 namespace MeshokBrowser.Models
 {
     public class User : BaseUser
     {
-        [UpdatableProperty(Caption = "Логин", ToolTip = "Логин", Group = "Данные пользователя")]
+        [UpdatableProperty(Caption = "пїЅпїЅпїЅпїЅпїЅ", ToolTip = "пїЅпїЅпїЅпїЅпїЅ", Group = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
         public override string Login
         {
             get { return Name; }

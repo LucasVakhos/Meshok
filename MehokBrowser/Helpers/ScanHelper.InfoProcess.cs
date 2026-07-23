@@ -1,10 +1,13 @@
-//#define SKIP_CHANGE_STATUS
+﻿//#define SKIP_CHANGE_STATUS
 //#define SKIP_ADD_TO_BASE
 using Common;
-using GH.Components;
+using GhDomElement = LB.Libs.GhDomElement;
+using GhSelectElement = LB.Libs.GhSelectElement;
+using EnumExtensions = GH.Components.EnumExtensions;
 using MeshokBrowser.Models;
 using MeshokBrowser.Workers;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -68,7 +71,7 @@ namespace MeshokBrowser.Helpers
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex);
+                     Trace.TraceError(ex.ToString());
                     ScanStatus = ScanStatus.Finished;
                     return;
                 }

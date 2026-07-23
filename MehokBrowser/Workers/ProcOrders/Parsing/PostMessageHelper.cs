@@ -1,4 +1,7 @@
-using GH.Components;
+﻿using GhTextAreaElement = LB.Libs.GhTextAreaElement;
+using GhInputElement = LB.Libs.GhInputElement;
+using GhBrowser = LB.Libs.GhBrowser;
+using GhDocument = LB.Libs.GhDocument;
 using MeshokBrowser.Models;
 using System;
 using System.Collections.Generic;

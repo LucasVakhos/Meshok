@@ -1,4 +1,4 @@
-namespace MeshokBrowser.Workers
+﻿namespace MeshokBrowser.Workers
 {
     partial class MessagesSetting
     {
@@ -103,8 +103,8 @@ namespace MeshokBrowser.Workers
             this.dataSource.PageSupport.PageForEdit = this.PageEdit;
             this.dataSource.PageSupport.PageForView = this.PageView;
             this.dataSource.RefreshAfterPost = false;
-            this.dataSource.GetRepository += new GH.Components.GetRepository(this.bindingSource_GetRepository);
-            this.dataSource.GetSqlString += new GH.Components.OnGetSqlString(this.bindingSource_GetSqlString);
+            this.dataSource.GetRepository += new LB.Libs.GetRepository(this.bindingSource_GetRepository);
+            this.dataSource.GetSqlString += new LB.Libs.OnGetSqlString(this.bindingSource_GetSqlString);
             // 
             // pmuMessage
             // 

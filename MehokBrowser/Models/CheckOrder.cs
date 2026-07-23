@@ -1,5 +1,5 @@
-using GH.Components;
 using System;
+using BaseEntity = LB.Libs.BaseEntity;
 namespace MeshokBrowser.Models
 {
     public class CheckOrder : BaseEntity

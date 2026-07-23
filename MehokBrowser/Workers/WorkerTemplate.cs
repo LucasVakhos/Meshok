@@ -1,4 +1,5 @@
-using GH.Utils;
+﻿using GH.Utils;
+using DlgHelper = GH.Components.DlgHelper;
 using System;
 using System.Collections.Generic;
 using System.Linq;

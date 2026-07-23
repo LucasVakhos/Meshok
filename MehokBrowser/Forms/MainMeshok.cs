@@ -1,5 +1,6 @@
-#define old_version
+﻿#define old_version
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.IO;
 using MeshokBrowser.Workers;
@@ -7,6 +8,13 @@ using DevExpress.XtraBars;
 using DevExpress.XtraBars.Docking2010.Views;
 using System.Linq;
 using GH.Components;
+using GhDocument = LB.Libs.GhDocument;
+using GhFormElement = LB.Libs.GhFormElement;
+using GhInputElement = LB.Libs.GhInputElement;
+using IniHelper = LB.Libs.IniHelper;
+using MehokBrowser.Configs.Cfg;
+using MehokBrowser.Configs.Frames;
+using MehokBrowser.Configs.Forms;
 namespace MeshokBrowser
 {
     public interface IMainForm : IAppForm
@@ -298,7 +306,7 @@ namespace MeshokBrowser
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Trace.TraceError(ex.ToString());
                 return;
             }
             //if (control is SettingFrame setting)
@@ -451,8 +459,9 @@ namespace MeshokBrowser
         }
         private void ShowBridgeSettings()
         {
-            using (var form = new CfgFormType<CfgFrameBridgeNote>())
-                form.ShowDialog(this);
+            // TODO: Fix CfgFormType generic constraint (requires GH.Components.CfgBaseFrame)
+            // using (var form = new CfgFormType<CfgFrameBridgeNote>())
+            //     form.ShowDialog(this);
         }
         private void ActAddPrix_Update(object sender, EventArgs e)
         {

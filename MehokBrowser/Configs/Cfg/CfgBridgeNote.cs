@@ -1,8 +1,14 @@
 using MySql.Data.MySqlClient;
+    using Category = LB.Libs.Category;
+    using CfgCoreConnection = LB.Libs.CfgCoreConnection;
+    using DbConnectionProperty = LB.Libs.DbConnectionProperty;
+    using EditorType = LB.Libs.EditorType;
+    using IniHelper = LB.Libs.IniHelper;
 using System;
+using System.Diagnostics;
 using System.ComponentModel;
 using System.Runtime.Serialization;
-namespace GH.Configs
+namespace MehokBrowser.Configs.Cfg
 {
     public class CfgBridgeNote : CfgCoreConnection
     {
@@ -103,7 +109,7 @@ namespace GH.Configs
                 }
                 catch (Exception e)
                 {
-                    Logger.Error(e);
+                    Trace.TraceError(e.ToString());
                 }
                 return false;
             }

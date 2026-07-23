@@ -1,4 +1,4 @@
-namespace MeshokBrowser.Workers
+﻿namespace MeshokBrowser.Workers
 {
     partial class ScanSettingClients
     {
@@ -100,7 +100,7 @@ namespace MeshokBrowser.Workers
             // 
             this.dataSource.DataSource = typeof(MeshokBrowser.Models.Client);
             this.dataSource.Grid = this.clientsGrid;
-            this.dataSource.OnOpen += new GH.Components.OpenHandler(this.dataSource_OnOpen);
+            this.dataSource.OnOpen += new LB.Libs.OpenHandler(this.dataSource_OnOpen);
             this.dataSource.PositionChanged += new System.EventHandler(this.bindingSource_PositionChanged);
             // 
             // layoutControl

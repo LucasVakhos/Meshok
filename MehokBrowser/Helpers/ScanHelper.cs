@@ -1,4 +1,6 @@
 using GH.Components;
+using GhBrowser = LB.Libs.GhBrowser;
+using GhDocument = LB.Libs.GhDocument;
 using MeshokBrowser.Models;
 using MeshokBrowser.Workers;
 using System;

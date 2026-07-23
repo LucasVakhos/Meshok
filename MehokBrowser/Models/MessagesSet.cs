@@ -1,18 +1,18 @@
-using GH.Components;
 using System.ComponentModel.DataAnnotations;
+using BaseEntity = LB.Libs.BaseEntity;
 namespace MeshokBrowser.Models
 {
     public class MessagesSet : BaseEntity
     {
-        [Display(Name = "Статус в базе")]
+        [Display(Name = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ")]
         public virtual int zsc_cs_id { get; set; }
-        [Display(Name = "Статус на мешке")]
+        [Display(Name = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ")]
         public virtual int zsc_zs_id { get; set; }
-        [Display(Name = "Способ доставки")]
+        [Display(Name = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual int? zsc_md_id { get; set; }
-        [Display(Name = "Применять если")]
+        [Display(Name = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ")]
         public virtual int zsc_case { get; set; }
-        [Display(Name = "Текст сообщения")]
+        [Display(Name = "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
         public virtual string zsc_message { get; set; }
     }
 }

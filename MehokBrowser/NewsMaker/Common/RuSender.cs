@@ -2,6 +2,7 @@ using GH.Components;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -313,7 +314,7 @@ namespace NewsMaker.Common
                 catch (WebException we)
                 {
                     HttpStatusCode code = (we.Response as HttpWebResponse).StatusCode;
-                    Logger.Error(we);
+                     Trace.TraceError(we.ToString());
                     //Logger.Error(debug);
                     response.RegError(we);
                     response.Add("DebugInfo", we.ToDebugInfo(request));
@@ -321,7 +322,7 @@ namespace NewsMaker.Common
             }
             catch (Exception ex)
             {                
-                Logger.Error(ex);
+                 Trace.TraceError(ex.ToString());
                 response.RegError(ex);
             }
             return response;

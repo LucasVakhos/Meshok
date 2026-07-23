@@ -2,11 +2,11 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
-using GH.Components;
+using MehokBrowser.Application;
+using MehokBrowser.Frames.Base;
+using MehokBrowser.UI.Interfaces;
+using MehokBrowser.Controls;
 using DevExpress.XtraBars.Ribbon;
-using GH.Controls;
-using GH.AppContext;
-using GH.Interfaces;
 namespace MeshokBrowser.Frames
 {
     public class SettingFrame : SavedFrame, IRibbonControlFrame
@@ -155,8 +155,8 @@ namespace MeshokBrowser.Frames
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataSource = new GH.Components.DataSource(this.components);
-            this.actionList = new GH.Components.ActionList();
+            this.dataSource = new MehokBrowser.Controls.DataSource(this.components);
+            this.actionList = new MehokBrowser.Controls.ActionList();
             ((System.ComponentModel.ISupportInitialize)(this.dataSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.actionList)).BeginInit();
             this.SuspendLayout();
@@ -165,7 +165,7 @@ namespace MeshokBrowser.Frames
             // 
             this.dataSource.ActionList = this.actionList;
             this.dataSource.Owner = this;
-            this.dataSource.State = GH.Components.DataState.Inactive;
+            this.dataSource.State = MehokBrowser.Controls.DataState.Inactive;
             this.dataSource.AfterOpen += new System.EventHandler(this.dataSource_AfterOpen);
             // 
             // actionList

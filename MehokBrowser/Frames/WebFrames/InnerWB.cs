@@ -1,5 +1,7 @@
-using GH.AppContext;
-using GH.Components;
+﻿using GH.AppContext;
+using MehokBrowser.Application;
+using GhBrowser = LB.Libs.GhBrowser;
+using GhDocument = LB.Libs.GhDocument;
 using Microsoft.Web.WebView2.Core;
 using System;
 using System.Collections.Generic;

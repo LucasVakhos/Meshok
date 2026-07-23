@@ -1,0 +1,24 @@
+﻿namespace MehokBrowser.UI.Config
+{
+    public partial class CfgCoreFrame : CfgBaseFrame
+    {
+        public CfgCoreFrame()
+        {
+            InitializeComponent();
+        }
+        private void dataSource_OnPost(object sender, System.EventArgs e)
+        {
+            if (dataSource.Current is LB.Libs.CfgCore cfgCore)
+            {
+                cfgCore.Save();
+            }
+        }
+        private void dataSource_OnCancel(object sender, System.EventArgs e)
+        {
+            if (dataSource.Current is LB.Libs.CfgCore cfgCore)
+            {
+                cfgCore.Load();
+            }
+        }
+    }
+}

@@ -1,5 +1,6 @@
-﻿using FirebirdSql.Data.FirebirdClient;
+using FirebirdSql.Data.FirebirdClient;
 using GH.Components;
+using UpdatableProperty = LB.Libs.UpdatablePropertyAttribute;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.IO;

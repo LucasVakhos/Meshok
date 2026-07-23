@@ -1,5 +1,6 @@
-using Common;
-using GH.Components;
+﻿using Common;
+using GhDomElement = LB.Libs.GhDomElement;
+using GhInputElement = LB.Libs.GhInputElement;
 using MeshokBrowser.Helpers;
 using MeshokBrowser.Workers;
 using System;

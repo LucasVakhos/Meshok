@@ -1,6 +1,9 @@
 using GH.Components;
+using GhBrowser = LB.Libs.GhBrowser;
+using GhDocument = LB.Libs.GhDocument;
 using MeshokBrowser.Workers;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
@@ -90,7 +93,7 @@ namespace MeshokBrowser.Models
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                 Trace.TraceError(ex.ToString());
                 ProcessRunHelper.Executing = false;
                 goto end_lbl;
             }

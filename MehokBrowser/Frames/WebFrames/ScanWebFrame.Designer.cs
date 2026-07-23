@@ -25,7 +25,7 @@
         private void InitializeComponent()
         {
             this.layoutControl = new DevExpress.XtraLayout.LayoutControl();
-            this.webBrowser = new GH.Components.GhBrowser();
+            this.webBrowser = new LB.Libs.GhBrowser();
             this.lgRoot = new DevExpress.XtraLayout.LayoutControlGroup();
             this.lcBrowser = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl)).BeginInit();
@@ -91,6 +91,6 @@
         protected DevExpress.XtraLayout.LayoutControl layoutControl;
         protected DevExpress.XtraLayout.LayoutControlGroup lgRoot;
         protected DevExpress.XtraLayout.LayoutControlItem lcBrowser;
-        public GH.Components.GhBrowser webBrowser;
+        public LB.Libs.GhBrowser webBrowser;
     }
 }

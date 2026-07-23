@@ -1,4 +1,5 @@
 using GH.Components;
+using GhBrowser = LB.Libs.GhBrowser;
 using System.IO.Compression;
 using System.Net;
 using System.Net.Http;

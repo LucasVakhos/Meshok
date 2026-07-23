@@ -1,4 +1,4 @@
-namespace MeshokBrowser.Workers
+﻿namespace MeshokBrowser.Workers
 {
     partial class ScanSettingLostDeals
     {
@@ -38,7 +38,7 @@ namespace MeshokBrowser.Workers
             this.checkNeedAdd = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
             this.rootGroup = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.actionCheckAll = new GH.Components.ActionGh();
+            this.actionCheckAll = new MehokBrowser.Controls.ActionGh();
             ((System.ComponentModel.ISupportInitialize)(this.actionList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl)).BeginInit();
@@ -52,13 +52,13 @@ namespace MeshokBrowser.Workers
             // 
             // actionList
             // 
-            this.actionList.Actions.Add(this.actionCheckAll);
+            this.actionList.Actions.Add((MehokBrowser.Controls.ActionGh)this.actionCheckAll);
             // 
             // dataSource
             // 
             this.dataSource.DataSource = typeof(MeshokBrowser.Models.OrderLine);
             this.dataSource.Grid = this.gridControl;
-            this.dataSource.OnOpen += new GH.Components.OpenHandler(this.dataSource_OnOpen);
+            this.dataSource.OnOpen += new LB.Libs.OpenHandler(this.dataSource_OnOpen);
             // 
             // layoutControl
             // 
@@ -258,6 +258,6 @@ namespace MeshokBrowser.Workers
         private DevExpress.XtraGrid.Columns.GridColumn colCurrStatus;
         private DevExpress.XtraGrid.Columns.GridColumn colNeedAdd;
         private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit checkNeedAdd;
-        private GH.Components.ActionGh actionCheckAll;
+        private MehokBrowser.Controls.ActionGh actionCheckAll;
     }
 }

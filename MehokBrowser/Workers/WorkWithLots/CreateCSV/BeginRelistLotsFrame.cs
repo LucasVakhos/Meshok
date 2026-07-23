@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using GH.Configs;
 using GH.Utils;
+using MehokBrowser.Configs.Cfg;
 using MeshokBrowser.Helpers;
 using MySql.Data.MySqlClient;
 namespace MeshokBrowser.Workers
@@ -88,7 +90,7 @@ namespace MeshokBrowser.Workers
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex);
+                     Trace.TraceError(ex.ToString());
                 }
                 sqlConnection.Close();
             }

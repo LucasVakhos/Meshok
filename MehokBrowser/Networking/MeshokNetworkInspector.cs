@@ -1,4 +1,5 @@
 using GH.Components;
+using GhBrowser = LB.Libs.GhBrowser;
 using Microsoft.Web.WebView2.Core;
 
 namespace MeshokBrowser.Networking;

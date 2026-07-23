@@ -1,5 +1,6 @@
-﻿using Common;
-using GH.Components;
+using Common;
+using GhDomElement = LB.Libs.GhDomElement;
+using GhFormElement = LB.Libs.GhFormElement;
 namespace MeshokBrowser.Helpers
 {
     public class ScanParams

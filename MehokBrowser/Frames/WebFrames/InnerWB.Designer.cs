@@ -1,4 +1,4 @@
-namespace MeshokBrowser
+﻿namespace MeshokBrowser
 {
     partial class InnerWB
     {
@@ -30,7 +30,7 @@ namespace MeshokBrowser
             DevExpress.XtraLayout.RowDefinition rowDefinition1 = new DevExpress.XtraLayout.RowDefinition();
             DevExpress.XtraLayout.RowDefinition rowDefinition2 = new DevExpress.XtraLayout.RowDefinition();
             this.layoutControl = new DevExpress.XtraLayout.LayoutControl();
-            this.wbMain = new GH.Components.GhBrowser();
+            this.wbMain = new LB.Libs.GhBrowser();
             this.textBox1 = new DevExpress.XtraEditors.TextEdit();
             this.btnBack = new DevExpress.XtraEditors.SimpleButton();
             this.btnRefresh = new DevExpress.XtraEditors.SimpleButton();
@@ -216,7 +216,7 @@ namespace MeshokBrowser
         internal DevExpress.XtraLayout.LayoutControl layoutControl;
         private DevExpress.XtraEditors.SimpleButton btnRefresh;
         private DevExpress.XtraLayout.LayoutControlItem lcRefresh;
-        private GH.Components.GhBrowser wbMain;
+        private LB.Libs.GhBrowser wbMain;
         private DevExpress.XtraLayout.LayoutControlItem lcBrowser;
     }
 }
