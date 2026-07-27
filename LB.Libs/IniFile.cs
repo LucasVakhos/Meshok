@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
@@ -16,11 +16,7 @@ public sealed class SavedAttribute : Attribute
 /// </summary>
 public sealed class IniFile
 {
-    private const string MigrationSection = "IniMigration";
-    private const string MigrationVersionKey = "Version";
-    private const string CurrentMigrationVersion = "1";
     private static readonly Lazy<IniFile> Default = new(() => new IniFile(DefaultFilePath));
-    private static readonly object MigrationSync = new();
     private readonly object _sync = new();
     private readonly string _filePath;
     private readonly Dictionary<string, Dictionary<string, string>> _sections =
@@ -57,7 +53,7 @@ public sealed class IniFile
     /// </summary>
     public static void MigrateLegacyFiles()
     {
-        lock (MigrationSync)
+        lock (Default.Value._sync)
         {
             string targetPath = DefaultFilePath;
             string? legacyTargetJson = null;
@@ -74,11 +70,9 @@ public sealed class IniFile
             }
 
             IniFile target = DefaultInstance();
-            if (target.Read(MigrationSection, MigrationVersionKey) == CurrentMigrationVersion)
-                return;
 
             if (!string.IsNullOrEmpty(legacyTargetJson))
-                target.WriteIfMissing("CfgApp", "Json", legacyTargetJson);
+                WriteJsonFields(target, "CfgApp", legacyTargetJson);
 
             foreach (string sourcePath in EnumerateLegacyIniFiles(System.AppContext.BaseDirectory)
                          .OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
@@ -95,7 +89,7 @@ public sealed class IniFile
                     if (text.StartsWith('{'))
                     {
                         string section = Path.GetFileNameWithoutExtension(sourcePath);
-                        target.WriteIfMissing(section, "Json", text);
+                        WriteJsonFields(target, section, text);
                     }
                     else
                     {
@@ -107,17 +101,40 @@ public sealed class IniFile
                 }
                 catch (IOException)
                 {
-                    // Один занятый старый файл не должен блокировать запуск.
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    // Недоступные каталоги пропускаются без потери остальных данных.
                 }
             }
 
-            target.Write(MigrationSection, MigrationVersionKey, CurrentMigrationVersion);
-            target.Write(MigrationSection, "CompletedUtc", DateTime.UtcNow.ToString("O", CultureInfo.InvariantCulture));
             target.Save();
+        }
+    }
+
+    private static void WriteJsonFields(IniFile target, string section, string json)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(json);
+            foreach (var prop in doc.RootElement.EnumerateObject())
+            {
+                string value = prop.Value.ValueKind switch
+                {
+                    JsonValueKind.String => prop.Value.GetString() ?? string.Empty,
+                    JsonValueKind.True => "true",
+                    JsonValueKind.False => "false",
+                    JsonValueKind.Null => string.Empty,
+                    JsonValueKind.Number => prop.Value.GetRawText(),
+                    JsonValueKind.Array => "[" + string.Join(",", prop.Value.EnumerateArray().Select(e =>
+                        e.ValueKind == JsonValueKind.String ? e.GetString() ?? string.Empty : e.GetRawText())) + "]",
+                    _ => prop.Value.GetRawText()
+                };
+                target.WriteIfMissing(section, prop.Name, value);
+            }
+        }
+        catch
+        {
+            target.WriteIfMissing(section, "Json", json);
         }
     }
 
@@ -288,7 +305,7 @@ public sealed class IniFile
         .Where(x => x.GetCustomAttribute<SavedAttribute>() is not null)
         .Where(x => IsSupportedIniType(x.PropertyType));
 
-    private static bool IsSupportedIniType(Type type)
+    internal static bool IsSupportedIniType(Type type)
     {
         type = Nullable.GetUnderlyingType(type) ?? type;
         return type == typeof(string) || type == typeof(int) || type == typeof(bool) ||
@@ -296,7 +313,7 @@ public sealed class IniFile
                type == typeof(List<string>) || type.IsEnum;
     }
 
-    private static string ConvertToIniString(object? value) => value switch
+    internal static string ConvertToIniString(object? value) => value switch
     {
         null => string.Empty,
         List<string> list => string.Join("|", NormalizeStringList(list)),
@@ -304,7 +321,7 @@ public sealed class IniFile
         _ => value.ToString() ?? string.Empty
     };
 
-    private static object? ConvertFromString(string text, Type targetType)
+    internal static object? ConvertFromString(string text, Type targetType)
     {
         var nullableType = Nullable.GetUnderlyingType(targetType);
         var realType = nullableType ?? targetType;
