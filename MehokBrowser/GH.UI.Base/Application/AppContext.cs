@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using DlgHelper = GH.Components.DlgHelper;
+using MeshokBrowser;
 namespace MehokBrowser.Application
 {
-    using UserWantExit = LB.Libs.UserWantExit;
     public class AppContext<T> : RunContext where T : RunContext
     {
         internal static Mutex _mutex;
@@ -89,13 +89,24 @@ namespace MehokBrowser.Application
             Instance = this;
             SplashScreenManager.ShowForm(null, GetSplashScreen(), true, true, false, 1000);
             CfgConnection = GetConnectionSetting();
+
+            bool needSettings = false;
             if (CfgConnection != null)
             {
                 if (!CfgConnection.TestConnection())
-                    throw new UserWantExit();
-                if (!LogIn())
-                    throw new UserWantExit();
-                MainForm = GetMainForm();
+                    needSettings = true;
+                else if (!LogIn())
+                    needSettings = true;
+            }
+
+            MainForm = GetMainForm();
+
+            if (needSettings && MainForm is MainMeshok meshok)
+            {
+                meshok.BeginInvoke(new Action(() =>
+                {
+                    meshok.btnProgramSetting.PerformClick();
+                }));
             }
         }
         protected bool LogIn()

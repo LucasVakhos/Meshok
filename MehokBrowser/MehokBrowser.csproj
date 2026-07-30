@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
@@ -37,6 +37,9 @@
     <EmbeddedResource Remove="NewsMaker\**\*.resx" />
     <EmbeddedResource Remove="Workers\ProcOrders\PO.BeginForm.resx" />
     <EmbeddedResource Remove="Frames\SettingFrames\Main\MeshokSetting - Копировать.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Frames\SettingFrames\Main\Config\Cfg.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Win.Design" Version="25.2.7" />
@@ -105,6 +108,10 @@
     <EmbeddedResource Include="Forms\SplashScreen.resx">
     			<DependentUpon>SplashScreen.cs</DependentUpon>
     		</EmbeddedResource>
+    <EmbeddedResource Include="Frames\SettingFrames\Main\Config\ConnectButton.resx" />
+    <EmbeddedResource Include="Frames\SettingFrames\Main\Frames\ConfigBridgeFrame.resx" />
+    <EmbeddedResource Include="Frames\SettingFrames\Main\Frames\ConfigIShopFrame.resx" />
+    <EmbeddedResource Include="Frames\SettingFrames\Main\Frames\ConfigMeshokFrame.resx" />
     <EmbeddedResource Include="Workers\WorkWithLots\CreateCSV\BeginRelistLotsFrame.resx">
     			<DependentUpon>BeginRelistLotsFrame.cs</DependentUpon>
     		</EmbeddedResource>
