@@ -32,61 +32,57 @@
     </ItemGroup>
   </Target>
   <ItemGroup>
-    <Compile Remove="Legacy\Components\bin\**\*.cs" />
-    <Compile Remove="Legacy\Components\obj\**\*.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Legacy\Components\ActionList\Images\Action.bmp" />
-    <EmbeddedResource Include="Legacy\Components\ActionList\Images\ActionList.bmp" />
-    <EmbeddedResource Include="Legacy\Components\Configs\Forms\CfgForm.resx">
+    <EmbeddedResource Include="ActionList\Images\Action.bmp" />
+    <EmbeddedResource Include="ActionList\Images\ActionList.bmp" />
+    <EmbeddedResource Include="Configs\Forms\CfgForm.resx">
       <DependentUpon>CfgForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\Configs\Forms\CfgFormType.resx">
+    <EmbeddedResource Include="Configs\Forms\CfgFormType.resx">
       <DependentUpon>CfgFormType.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\Configs\Frames\CfgBaseFrame.resx">
+    <EmbeddedResource Include="Configs\Frames\CfgBaseFrame.resx">
       <DependentUpon>CfgBaseFrame.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\Configs\Frames\CfgConnectFrame.resx">
+    <EmbeddedResource Include="Configs\Frames\CfgConnectFrame.resx">
       <DependentUpon>CfgConnectFrame.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\Configs\Frames\CfgConnectFrameType.resx">
+    <EmbeddedResource Include="Configs\Frames\CfgConnectFrameType.resx">
       <DependentUpon>CfgConnectFrameType.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\Configs\Frames\CfgCoreFrame.resx">
+    <EmbeddedResource Include="Configs\Frames\CfgCoreFrame.resx">
       <DependentUpon>CfgCoreFrame.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\Configs\Frames\CfgCoreFrameType.resx">
+    <EmbeddedResource Include="Configs\Frames\CfgCoreFrameType.resx">
       <DependentUpon>CfgCoreFrameType.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\Configs\Frames\LoginFrame.resx">
+    <EmbeddedResource Include="Configs\Frames\LoginFrame.resx">
       <DependentUpon>LoginFrame.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\Configs\Frames\LoginFrameType.resx">
+    <EmbeddedResource Include="Configs\Frames\LoginFrameType.resx">
       <DependentUpon>LoginFrameType.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\Configs\Frames\TestFrame.resx">
+    <EmbeddedResource Include="Configs\Frames\TestFrame.resx">
       <DependentUpon>TestFrame.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\Controls\ConnectButton.resx">
+    <EmbeddedResource Include="Controls\ConnectButton.resx">
       <DependentUpon>ConnectButton.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\Grids\GridHighLiteSetting.resx">
+    <EmbeddedResource Include="Grids\GridHighLiteSetting.resx">
       <DependentUpon>GridHighLiteSetting.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\Images\ActionImages.resx">
+    <EmbeddedResource Include="Images\ActionImages.resx">
       <DependentUpon>ActionImages.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\UserForms\AboutBox.resx">
+    <EmbeddedResource Include="UserForms\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\UserForms\SplashScreen.resx">
+    <EmbeddedResource Include="UserForms\SplashScreen.resx">
       <DependentUpon>SplashScreen.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\UserFrames\AbstractFrame.resx">
+    <EmbeddedResource Include="UserFrames\AbstractFrame.resx">
       <DependentUpon>AbstractFrame.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Legacy\Components\ActionList\ActionList.resx">
+    <EmbeddedResource Include="ActionList\ActionList.resx">
       <DependentUpon>ActionList.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
