@@ -1,10 +1,9 @@
-﻿namespace MeshokBrowser.Frames
+﻿namespace MeshokBrowser.Frames;
+
+public partial class TestBibbon : DevExpress.XtraEditors.XtraUserControl
 {
-    public partial class TestBibbon : DevExpress.XtraEditors.XtraUserControl
+    public TestBibbon()
     {
-        public TestBibbon()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

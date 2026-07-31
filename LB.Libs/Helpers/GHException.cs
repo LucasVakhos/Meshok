@@ -1,20 +1,19 @@
-﻿namespace LB.Libs
+﻿namespace LB.Libs;
+
+public class GHException : Exception
 {
-    public class GHException : Exception
+    public GHException(string message)
+      : base(message)
     {
-        public GHException(string message)
-          : base(message)
-        {
-        }
+    }
 
     public GHException(string message, Exception innerException)
           : base(message, innerException)
-        {
-        }
+    {
+    }
 
     public GHException()
-        {
-        }
+    {
     }
 }
 

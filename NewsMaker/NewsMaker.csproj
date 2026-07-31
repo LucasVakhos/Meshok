@@ -30,7 +30,6 @@
     <Compile Remove="Configs\Frames\LoginFrameIShop.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GH.Components\GH.Components.csproj" />
     <ProjectReference Include="..\LB.Libs\LB-Libs.csproj" />
   </ItemGroup>
   <ItemGroup>

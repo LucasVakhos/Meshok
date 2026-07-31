@@ -1,10 +1,9 @@
-namespace MeshokBrowser.Workers
+﻿namespace MeshokBrowser.Workers;
+
+public class WorkerCsvTemplate : Worker
 {
-    public class WorkerCsvTemplate : Worker
+    public WorkerCsvTemplate(IMainForm form) : base(form)
     {
-        public WorkerCsvTemplate(IMainForm form) : base(form)
-        {
-            ProcessName = "WorkerCsvTemplate";
-        }
+        ProcessName = "WorkerCsvTemplate";
     }
 }

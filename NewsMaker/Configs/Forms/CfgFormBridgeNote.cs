@@ -1,6 +1,5 @@
-﻿namespace GH.Configs
+﻿namespace GH.Configs;
+
+public class CfgFormBridgeNote : CfgFormType<CfgFrameBridgeNote>
 {
-    public class CfgFormBridgeNote : CfgFormType<CfgFrameBridgeNote>
-    {
-    }
 }

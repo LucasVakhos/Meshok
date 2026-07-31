@@ -2,25 +2,23 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-namespace NewsMaker
+namespace NewsMaker;
+public struct SendCallBack
 {
-    public struct SendCallBack
-    {
-        public bool HasError { get; }
-        public bool Result { get
-            {
-                return !HasError;
-            }
-        }
-        public ResponseData Content;
-        public int ErrorCode { get; }
-        public string ErrorMess { get; }
-        public SendCallBack(ResponseData content)
+    public bool HasError { get; }
+    public bool Result { get
         {
-            Content = content;
-            HasError = content.Errors != null;
-            ErrorMess = HasError ? Content.GetErrMessages() : "OK";
-            ErrorCode = HasError ? Content.Errors[0].HResult : 0;            
+            return !HasError;
         }
+    }
+    public ResponseData Content;
+    public int ErrorCode { get; }
+    public string ErrorMess { get; }
+    public SendCallBack(ResponseData content)
+    {
+        Content = content;
+        HasError = content.Errors != null;
+        ErrorMess = HasError ? Content.GetErrMessages() : "OK";
+        ErrorCode = HasError ? Content.Errors[0].HResult : 0;
     }
 }

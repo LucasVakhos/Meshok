@@ -3,23 +3,21 @@ using MeshokBrowser.Frames;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-namespace MeshokBrowser
+namespace MeshokBrowser;
+public partial class MeshokSetting : SettingFrame
 {
-    public partial class MeshokSetting : SettingFrame
+    Config cfg = Config.DefaultInstance;
+    public MeshokSetting()
     {
-        Config cfg = Config.DefaultInstance;
-        public MeshokSetting()
-        {
-            InitializeComponent();
-        }
-        private void MeshokAddInfo_EditValueChanged(object sender, EventArgs e)
-        {
-            labelInfo.Text = $"Доп. информация ({MeshokAddInfo.Text.Length} из 200 знаков)";
-        }
-        private void dataSource_OnOpen(out System.Collections.IList list)
-        {
-            list = new List<Meshok>();
-            list.Add(Config.DefaultInstance.Meshok);
-        }
+        InitializeComponent();
+    }
+    private void MeshokAddInfo_EditValueChanged(object sender, EventArgs e)
+    {
+        labelInfo.Text = $"Доп. информация ({MeshokAddInfo.Text.Length} из 200 знаков)";
+    }
+    private void dataSource_OnOpen(out System.Collections.IList list)
+    {
+        list = new List<Meshok>();
+        list.Add(Config.DefaultInstance.Meshok);
     }
 }

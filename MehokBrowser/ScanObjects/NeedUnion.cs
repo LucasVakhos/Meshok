@@ -1,7 +1,6 @@
-namespace MeshokBrowser.Models
+﻿namespace MeshokBrowser.Models;
+
+public class NeedUnion : BaseScanEntity
 {
-    public class NeedUnion : BaseScanEntity
-    {
-        public Order Packet;
-    }
+    public Order Packet;
 }

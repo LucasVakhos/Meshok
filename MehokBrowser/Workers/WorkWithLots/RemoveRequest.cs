@@ -1,10 +1,9 @@
-namespace MeshokBrowser.Workers
+﻿namespace MeshokBrowser.Workers;
+
+public class RemoveRequest : Worker
 {
-    public class RemoveRequest : Worker
+    public RemoveRequest(IMainForm form) : base(form)
     {
-        public RemoveRequest(IMainForm form) : base(form)
-        {
-            ProcessName = "RemoveRequest";
-        }
+        ProcessName = "RemoveRequest";
     }
 }

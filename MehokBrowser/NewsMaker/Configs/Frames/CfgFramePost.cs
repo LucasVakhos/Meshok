@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -8,14 +8,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
-using GH.Components;
-namespace NewsMaker
+using LB.Libs;
+namespace NewsMaker;
+public partial class CfgFramePost : CfgCoreFrameType<CfgPost>
 {
-    public partial class CfgFramePost : CfgCoreFrameType<CfgPost>
+    public CfgFramePost()
     {
-        public CfgFramePost()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

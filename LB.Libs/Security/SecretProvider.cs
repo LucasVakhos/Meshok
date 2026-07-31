@@ -1,4 +1,4 @@
-#nullable enable
+﻿#nullable enable
 using System.Reflection;
 
 namespace LB.Libs;
@@ -10,7 +10,7 @@ namespace LB.Libs;
 /// </summary>
 public static class SecretProvider
 {
-    private static readonly string[] SecretTypeNames = { "LB.Libs.Secret", "GH.Components.Secret" };
+    private static readonly string[] SecretTypeNames = { "LB.Libs.Secret", "LB.Libs.Secret" };
     private static readonly Lazy<Type?> SecretType = new(() =>
         SecretTypeNames.Select(name => typeof(SecretProvider).Assembly.GetType(name, false)).FirstOrDefault(type => type != null));
 

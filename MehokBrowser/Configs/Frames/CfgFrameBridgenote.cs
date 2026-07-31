@@ -1,12 +1,11 @@
-using MehokBrowser.Configs.Cfg;
-using MehokBrowser.UI.Config;
+﻿using MehokBrowser.Configs.Cfg;
+using LB.Libs;
 
-namespace MehokBrowser.Configs.Frames
+namespace MehokBrowser.Configs.Frames;
+
+public partial class CfgFrameBridgeNote : CfgConnectFrameType<CfgBridgeNote>
 {
-    public partial class CfgFrameBridgeNote : CfgConnectFrameType<CfgBridgeNote>
+    public CfgFrameBridgeNote()
     {
-        public CfgFrameBridgeNote()
-        {
-        }
     }
 }

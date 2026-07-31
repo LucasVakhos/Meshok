@@ -9,13 +9,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using GH.Configs;
-namespace NewsMaker
+namespace NewsMaker;
+
+public partial class CfgFrameRuSender : CfgCoreFrameType<CfgRuSender>
 {
-    public partial class CfgFrameRuSender : CfgCoreFrameType<CfgRuSender>
+    public CfgFrameRuSender()
     {
-        public CfgFrameRuSender()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

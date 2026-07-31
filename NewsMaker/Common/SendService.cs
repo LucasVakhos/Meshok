@@ -1,223 +1,222 @@
-using GH.Configs;
+﻿using GH.Configs;
 using System;
 using System.IO;
 using System.Resources;
 using System.Text;
 using System.Windows.Forms;
 using System.IO.Compression;
-namespace NewsMaker.Common
+namespace NewsMaker.Common;
+
+public class SendService
 {
-    public class SendService
+    public static SendService Instance { get; private set; }
+    private static readonly CfgApp cfgApp = IniHelper.CfgAppForm();
+    private static readonly CfgRuSender cfgRuSender = LB.Libs.IniHelper.CoreCfg<CfgRuSender>();
+    private static readonly CfgProgram cfgProgram = LB.Libs.IniHelper.CoreCfg<CfgProgram>();
+    private static readonly CfgPost cfgPost = LB.Libs.IniHelper.CoreCfg<CfgPost>();
+    private int _hasData;
+    private bool _dataLoaded;
+    public int RunDay
     {
-        public static SendService Instance { get; private set; }
-        private static readonly CfgApp cfgApp = IniHelper.CfgAppForm();
-        private static readonly CfgRuSender cfgRuSender = LB.Libs.IniHelper.CoreCfg<CfgRuSender>();
-        private static readonly CfgProgram cfgProgram = LB.Libs.IniHelper.CoreCfg<CfgProgram>();
-        private static readonly CfgPost cfgPost = LB.Libs.IniHelper.CoreCfg<CfgPost>();
-        private int _hasData;
-        private bool _dataLoaded;
-        public int RunDay
+        get => cfgProgram.RunDay;
+        set => cfgProgram.RunDay = value;
+    }
+    public TimeSpan RunTime
+    {
+        get => cfgProgram.RunTime;
+        set => cfgProgram.RunTime = value;
+    }
+    public int SendLimit
+    {
+        get => cfgRuSender.SendLimit;
+        set => cfgRuSender.SendLimit = value;
+    }
+    public int SendNo
+    {
+        get;
+        private set;
+    }
+    public DateTime UpdIntervalBegin { get; set; } = new DateTime(2018, 12, 20);
+    public DateTime UpdIntervalEnd { get; set; } = new DateTime(2018, 12, 20);
+    internal void IncSendNo()
+    {
+        SendNo++;
+    }
+    public DateTime ExcelCreateDate => UpdIntervalEnd;
+    private DateTime? _stopTimeByLimit = null;
+    public DateTime StopByTimeLimit
+    {
+        get
         {
-            get => cfgProgram.RunDay;
-            set => cfgProgram.RunDay = value;
+            if (_stopTimeByLimit == null)
+                _stopTimeByLimit = DateTime.Now.AddSeconds(1);
+            return (DateTime)_stopTimeByLimit;
         }
-        public TimeSpan RunTime
+        set
         {
-            get => cfgProgram.RunTime;
-            set => cfgProgram.RunTime = value;
+            _stopTimeByLimit = value;
         }
-        public int SendLimit
+    }
+    public bool NeedToSend
+    {
+        get
         {
-            get => cfgRuSender.SendLimit;
-            set => cfgRuSender.SendLimit = value;
-        }
-        public int SendNo
-        {
-            get;
-            private set;
-        }
-        public DateTime UpdIntervalBegin { get; set; } = new DateTime(2018, 12, 20);
-        public DateTime UpdIntervalEnd { get; set; } = new DateTime(2018, 12, 20);
-        internal void IncSendNo()
-        {
-            SendNo++;
-        }
-        public DateTime ExcelCreateDate => UpdIntervalEnd;
-        private DateTime? _stopTimeByLimit = null;
-        public DateTime StopByTimeLimit
-        {
-            get
-            {
-                if (_stopTimeByLimit == null)
-                    _stopTimeByLimit = DateTime.Now.AddSeconds(1);
-                return (DateTime)_stopTimeByLimit;
-            }
-            set
-            {
-                _stopTimeByLimit = value;
-            }
-        }
-        public bool NeedToSend
-        {
-            get
-            {
-                if (_hasData == 0)
-                    _hasData = MySqlHelper.HasData();
-                if (_hasData > 0)
-                    return true;
-                if (UpdIntervalBegin < UpdIntervalEnd)
-                    return true;
-                if (cfgProgram.RunDay == 7
-                    || DateTime.Today == UpdIntervalEnd.Date
-                    || (int)DateTime.Today.DayOfWeek != cfgProgram.RunDay)
-                    return false;
-                if (DateTime.Now.TimeOfDay < cfgProgram.RunTime)
-                    return false;
+            if (_hasData == 0)
+                _hasData = MySqlHelper.HasData();
+            if (_hasData > 0)
                 return true;
-            }
+            if (UpdIntervalBegin < UpdIntervalEnd)
+                return true;
+            if (cfgProgram.RunDay == 7
+                || DateTime.Today == UpdIntervalEnd.Date
+                || (int)DateTime.Today.DayOfWeek != cfgProgram.RunDay)
+                return false;
+            if (DateTime.Now.TimeOfDay < cfgProgram.RunTime)
+                return false;
+            return true;
         }
-        public string CurrentExcelFile => Path.Combine(Path.GetDirectoryName(Application.ExecutablePath),
-            RunContext.AppCfg.ExportPath,
-            string.Format(@"news{0:d}", ExcelCreateDate.Date).Replace('.', '_') + ".xls");
-        public bool UseCollapce
+    }
+    public string CurrentExcelFile => Path.Combine(Path.GetDirectoryName(Application.ExecutablePath),
+        RunContext.AppCfg.ExportPath,
+        string.Format(@"news{0:d}", ExcelCreateDate.Date).Replace('.', '_') + ".xls");
+    public bool UseCollapce
+    {
+        get => cfgProgram.RunCollapced;
+    }
+    public void ResetSendNo()
+    {
+        SendNo = 0;
+        StopByTimeLimit = DateTime.Now.AddSeconds(1);
+    }
+    const bool wait = true;
+    const bool not_wait = false;
+    public bool NeedWait
+    {
+        get
         {
-            get => cfgProgram.RunCollapced;
-        }
-        public void ResetSendNo()
-        {
-            SendNo = 0;
-            StopByTimeLimit = DateTime.Now.AddSeconds(1);
-        }
-        const bool wait = true;
-        const bool not_wait = false;
-        public bool NeedWait
-        {
-            get
+            if (StopByTimeLimit > DateTime.Now)
             {
-                if (StopByTimeLimit > DateTime.Now)
-                {
-                    if (SendNo == SendLimit)
-                        return wait;
-                }
-                else
-                    ResetSendNo();
-                return not_wait;
+                if (SendNo == SendLimit)
+                    return wait;
             }
-        }
-        public SendService(IMainForm mainForm)
-        {
-            Instance = this;
-            ChekcDataLoaded();
-        }
-        public bool ChekcDataLoaded()
-        {
-            if (!_dataLoaded || !AppContextNM.Executing)
-                _dataLoaded = MySqlHelper.ReadSetting(this);
-            return _dataLoaded;
-        }
-        public byte[] Zip(out string zipName)
-        {
-            string excelName = CurrentExcelFile;
-            zipName = Path.ChangeExtension(excelName, ".zip");
-            using (FileStream fs = new FileStream(zipName, FileMode.CreateNew))
-            {
-                using (var archive = new ZipArchive(fs, ZipArchiveMode.Create))
-                {
-                    var entry = archive.CreateEntry(Path.GetFileName(excelName));
-                    using (var input = File.OpenRead(excelName))
-                    using (var output = entry.Open())
-                        input.CopyTo(output);
-                }
-            }
-            byte[] result = File.ReadAllBytes(zipName);
-            File.Delete(zipName);
-            zipName = Path.GetFileName(zipName);
-            return result;
-        }
-        public static string ReadResourceFile(string resourceName)
-        {
-            ResourceManager rm = Properties.Resources.ResourceManager;
-            return rm.GetString(resourceName);
-        }
-        private static string TestLabel(bool html = false)
-        {
-#if TEST_MESSAGE
-            return
-                "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" + (html ? "<br>" : "\r\n") +
-                "~~~ Это тестовое сообщение, созданное для отладки программы рассылки." + (html ? "<br>" : "\r\n") +
-                "~~~ Приносим свои извинения за временное неудобство!" + (html ? "<br>" : "\r\n") +
-                "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
-#else
-            return "";
-#endif
-        }
-        private static string UnsubscribeUrl(string unsubscribe_url, bool html)
-        {
-            if (html)
-                return $"<a href = {unsubscribe_url}>этой ссылке</a>";
             else
-                return $"этой ссылке: {unsubscribe_url}";
+                ResetSendNo();
+            return not_wait;
         }
-        private static string NormalizeText(string text)
+    }
+    public SendService(IMainForm mainForm)
+    {
+        Instance = this;
+        ChekcDataLoaded();
+    }
+    public bool ChekcDataLoaded()
+    {
+        if (!_dataLoaded || !AppContextNM.Executing)
+            _dataLoaded = MySqlHelper.ReadSetting(this);
+        return _dataLoaded;
+    }
+    public byte[] Zip(out string zipName)
+    {
+        string excelName = CurrentExcelFile;
+        zipName = Path.ChangeExtension(excelName, ".zip");
+        using (FileStream fs = new FileStream(zipName, FileMode.CreateNew))
         {
-            StringBuilder builder = new StringBuilder();
-            char[] sp = { '\r', '\n' };
-            string[] strings = text.Split(sp);
-            for (int i = 0; i < strings.Length; i++)
+            using (var archive = new ZipArchive(fs, ZipArchiveMode.Create))
             {
-                string curr_val = strings[i].Trim();
-                if (string.IsNullOrWhiteSpace(curr_val))
-                    continue;
-                builder.AppendLine(curr_val);
+                var entry = archive.CreateEntry(Path.GetFileName(excelName));
+                using (var input = File.OpenRead(excelName))
+                using (var output = entry.Open())
+                    input.CopyTo(output);
             }
-            text = builder.ToString() + "\r\n";
-            return text;
         }
-        private static string PrepareText(string name, string unsubscribe_url, string body, bool html = false)
+        byte[] result = File.ReadAllBytes(zipName);
+        File.Delete(zipName);
+        zipName = Path.GetFileName(zipName);
+        return result;
+    }
+    public static string ReadResourceFile(string resourceName)
+    {
+        ResourceManager rm = Properties.Resources.ResourceManager;
+        return rm.GetString(resourceName);
+    }
+    private static string TestLabel(bool html = false)
+    {
+#if TEST_MESSAGE
+        return
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" + (html ? "<br>" : "\r\n") +
+            "~~~ Это тестовое сообщение, созданное для отладки программы рассылки." + (html ? "<br>" : "\r\n") +
+            "~~~ Приносим свои извинения за временное неудобство!" + (html ? "<br>" : "\r\n") +
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
+#else
+        return "";
+#endif
+    }
+    private static string UnsubscribeUrl(string unsubscribe_url, bool html)
+    {
+        if (html)
+            return $"<a href = {unsubscribe_url}>этой ссылке</a>";
+        else
+            return $"этой ссылке: {unsubscribe_url}";
+    }
+    private static string NormalizeText(string text)
+    {
+        StringBuilder builder = new StringBuilder();
+        char[] sp = { '\r', '\n' };
+        string[] strings = text.Split(sp);
+        for (int i = 0; i < strings.Length; i++)
         {
-            body = body.Replace("#test_label", TestLabel(html));
-            body = body.Replace("#hello_name", name);
-            body = body.Replace("#unsubscribe_url", UnsubscribeUrl(unsubscribe_url, html));
-            body = body.Replace("#contact_email", cfgPost.BridgeEmail ?? string.Empty);
-            body = body.Replace("#contact_phone", cfgPost.ContactPhone ?? string.Empty);
-            return body.Trim();
+            string curr_val = strings[i].Trim();
+            if (string.IsNullOrWhiteSpace(curr_val))
+                continue;
+            builder.AppendLine(curr_val);
         }
-        string bodyText = string.Empty;
-        public string GetBodyText(string name, string unsubscribe_url)
+        text = builder.ToString() + "\r\n";
+        return text;
+    }
+    private static string PrepareText(string name, string unsubscribe_url, string body, bool html = false)
+    {
+        body = body.Replace("#test_label", TestLabel(html));
+        body = body.Replace("#hello_name", name);
+        body = body.Replace("#unsubscribe_url", UnsubscribeUrl(unsubscribe_url, html));
+        body = body.Replace("#contact_email", cfgPost.BridgeEmail ?? string.Empty);
+        body = body.Replace("#contact_phone", cfgPost.ContactPhone ?? string.Empty);
+        return body.Trim();
+    }
+    string bodyText = string.Empty;
+    public string GetBodyText(string name, string unsubscribe_url)
+    {
+        if (bodyText == string.Empty)
         {
-            if (bodyText == string.Empty)
+            HtmlAgilityPack.HtmlDocument html = new HtmlAgilityPack.HtmlDocument();
+            html.LoadHtml(ReadResourceFile("html_code"));
+            foreach (var item in html.DocumentNode.SelectNodes("//p"))
             {
-                HtmlAgilityPack.HtmlDocument html = new HtmlAgilityPack.HtmlDocument();
-                html.LoadHtml(ReadResourceFile("html_code"));
-                foreach (var item in html.DocumentNode.SelectNodes("//p"))
-                {
-                    bodyText += NormalizeText(item.InnerText);
-                }
-                bodyText = bodyText.Trim();
+                bodyText += NormalizeText(item.InnerText);
             }
-            return PrepareText(name, unsubscribe_url, bodyText); ;
+            bodyText = bodyText.Trim();
         }
-        string bodyHtml = string.Empty;
-        public string GetBodyHtml(string name, string unsubscribe_url)
-        {
-            if (bodyHtml == string.Empty)
-                bodyHtml = ReadResourceFile("html_code");
-            return PrepareText(name, unsubscribe_url, bodyHtml, true);
-        }
-        public void ResetStartDate()
-        {
-            UpdIntervalBegin = UpdIntervalEnd;
-            _stopTimeByLimit = null;
-            MySqlHelper.WriteSetting(this);
-        }
-        internal void SetNeedToSend(int needToSend)
-        {
-            _hasData = needToSend;
-        }
-        public void SetUpdIntervalEnd(DateTime now)
-        {
-            UpdIntervalEnd = now.Date;
-            MySqlHelper.WriteSetting(this);
-        }
+        return PrepareText(name, unsubscribe_url, bodyText); ;
+    }
+    string bodyHtml = string.Empty;
+    public string GetBodyHtml(string name, string unsubscribe_url)
+    {
+        if (bodyHtml == string.Empty)
+            bodyHtml = ReadResourceFile("html_code");
+        return PrepareText(name, unsubscribe_url, bodyHtml, true);
+    }
+    public void ResetStartDate()
+    {
+        UpdIntervalBegin = UpdIntervalEnd;
+        _stopTimeByLimit = null;
+        MySqlHelper.WriteSetting(this);
+    }
+    internal void SetNeedToSend(int needToSend)
+    {
+        _hasData = needToSend;
+    }
+    public void SetUpdIntervalEnd(DateTime now)
+    {
+        UpdIntervalEnd = now.Date;
+        MySqlHelper.WriteSetting(this);
     }
 }

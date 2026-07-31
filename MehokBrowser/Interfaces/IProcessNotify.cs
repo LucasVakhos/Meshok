@@ -1,9 +1,8 @@
-﻿namespace MeshokBrowser.Workers
+﻿namespace MeshokBrowser.Workers;
+
+public interface IProcessNotify
 {
-    public interface IProcessNotify
-    {
-        void SetTotalSteps(int value);
-        void IncCurrentStep();
-        void SendMessage(string value);
-    }
+    void SetTotalSteps(int value);
+    void IncCurrentStep();
+    void SendMessage(string value);
 }

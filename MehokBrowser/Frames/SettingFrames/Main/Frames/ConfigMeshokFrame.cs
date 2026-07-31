@@ -1,15 +1,13 @@
 ﻿using System;
-namespace MeshokBrowser
+namespace MeshokBrowser;
+public partial class ConfigMeshokFrame : BaseSetting<ConfigMeshok>
 {
-    public partial class ConfigMeshokFrame : BaseSetting<ConfigMeshok>
+    public ConfigMeshokFrame()
     {
-        public ConfigMeshokFrame()
-        {
-            InitializeComponent();
-        }
-        private void AddInfoTextEdit_EditValueChanged(object sender, EventArgs e)
-        {
-            labelInfo.Text = $"Условия доставки ({AddInfoTextEdit.Text.Length} из 200 знаков)";
-        }
+        InitializeComponent();
+    }
+    private void AddInfoTextEdit_EditValueChanged(object sender, EventArgs e)
+    {
+        labelInfo.Text = $"Условия доставки ({AddInfoTextEdit.Text.Length} из 200 знаков)";
     }
 }

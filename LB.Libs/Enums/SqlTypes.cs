@@ -1,14 +1,13 @@
-﻿namespace LB.Libs
+﻿namespace LB.Libs;
+
+public enum SqlTypes
 {
-    public enum SqlTypes
-    {
-        SelectSql,
-        InsertSql,
-        UpdateSql,
-        SaveOrUpdateSql,
-        CloseDocSql,
-        DeleteSql,
-        RefreshSql,
-        ExecuteSql
-    }
+    SelectSql,
+    InsertSql,
+    UpdateSql,
+    SaveOrUpdateSql,
+    CloseDocSql,
+    DeleteSql,
+    RefreshSql,
+    ExecuteSql
 }

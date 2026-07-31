@@ -1,10 +1,9 @@
 ﻿using DevExpress.XtraBars.Ribbon;
-namespace LB.Libs
+namespace LB.Libs;
+
+public interface IRibbonForm
 {
-    public interface IRibbonForm
-    {
-        RibbonControl Ribbon { get; }
-        RibbonStatusBar StatusBar { get; }
-        RibbonPageGroup FrameGroup { get; }
-    }
+    RibbonControl Ribbon { get; }
+    RibbonStatusBar StatusBar { get; }
+    RibbonPageGroup FrameGroup { get; }
 }

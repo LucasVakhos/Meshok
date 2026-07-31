@@ -1,12 +1,11 @@
 ﻿using MehokBrowser.Configs.Cfg;
-using MehokBrowser.UI.Config;
+using LB.Libs;
 
-namespace MehokBrowser.Configs.Frames
+namespace MehokBrowser.Configs.Frames;
+
+public partial class MySqlConnectionFrame : CfgConnectFrameType<CfgBridgeNote>
 {
-    public partial class MySqlConnectionFrame : CfgConnectFrameType<CfgBridgeNote>
+    public MySqlConnectionFrame()
     {
-        public MySqlConnectionFrame()
-        {
-        }
     }
 }

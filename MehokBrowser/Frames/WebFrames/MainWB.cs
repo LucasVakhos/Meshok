@@ -1,10 +1,9 @@
-﻿namespace MeshokBrowser
+﻿namespace MeshokBrowser;
+
+public partial class MainWB : InnerWB
 {
-    public partial class MainWB : InnerWB
+    public MainWB()
     {
-        public MainWB()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,13 +1,11 @@
-using UpdatableProperty = LB.Libs.UpdatablePropertyAttribute;
-namespace MeshokBrowser.Models
+﻿using UpdatableProperty = LB.Libs.UpdatablePropertyAttribute;
+namespace MeshokBrowser.Models;
+public class User : BaseUser
 {
-    public class User : BaseUser
+    [UpdatableProperty(Caption = "�����", ToolTip = "�����", Group = "������ ������������")]
+    public override string Login
     {
-        [UpdatableProperty(Caption = "�����", ToolTip = "�����", Group = "������ ������������")]
-        public override string Login
-        {
-            get { return Name; }
-            set { Name = value; }
-        }
+        get { return Name; }
+        set { Name = value; }
     }
 }

@@ -10,102 +10,102 @@ using GH.Utils;
 using MehokBrowser.Configs.Cfg;
 using MeshokBrowser.Helpers;
 using MySql.Data.MySqlClient;
-namespace MeshokBrowser.Workers
+namespace MeshokBrowser.Workers;
+
+public partial class BeginRelistLotsForm : BaseFrame
 {
-    public partial class BeginRelistLotsForm : BaseFrame
+    private bool _dialogRes = false;
+    private bool _dialogFinised = false;
+    private bool _exec_finished = false;
+    private int _count = 0;
+    Task exec_thread = null;
+    Task main_thread = null;
+    public bool DialogResult
     {
-        private bool _dialogRes = false;
-        private bool _dialogFinised = false;
-        private bool _exec_finished = false;
-        private int _count = 0;
-        Task exec_thread = null;
-        Task main_thread = null;
-        public bool DialogResult
+        get => _dialogRes;
+        set
         {
-            get => _dialogRes;
-            set {
-                _dialogRes = value;
-                _dialogFinised = true;
-            }
+            _dialogRes = value;
+            _dialogFinised = true;
         }
-        public bool DialogFinised { get => _dialogFinised; }
-        public BeginRelistLotsForm()
+    }
+    public bool DialogFinised { get => _dialogFinised; }
+    public BeginRelistLotsForm()
+    {
+        InitializeComponent();
+        btnOK.Enabled = false;
+        GetCount();
+    }
+    private async void GetCount()
+    {
+        exec_thread = new Task(DoExecute);
+        main_thread = new Task(WaitExeute);
+        List<Task> treads = new List<Task>();
+        exec_thread.Start();
+        treads.Add(exec_thread);
+        await Task.Factory.StartNew(() =>
         {
-            InitializeComponent();
-            btnOK.Enabled = false;
-            GetCount();
+            Task.WaitAll(treads.ToArray());
+        });
+        if (!_exec_finished || _count == 0)
+        {
+            lblInfo.Text = "Нет информации!";
+            return;
         }
-        private async void GetCount()
+        lblInfo.Text = $"Можно выставить или перевыставить\r\n{_count} лотов.";
+        btnOK.Enabled = true;
+    }
+    private void WaitExeute()
+    {
+        while (!_dialogFinised && !_exec_finished)
         {
-            exec_thread = new Task(DoExecute);
-            main_thread = new Task(WaitExeute);
-            List<Task> treads = new List<Task>();
-            exec_thread.Start();
-            treads.Add(exec_thread);
-            await Task.Factory.StartNew(() =>
-            {
-                Task.WaitAll(treads.ToArray());                
-            });
-            if (!_exec_finished || _count == 0)
-            {
-                lblInfo.Text = "Нет информации!";
-                return;
-            }
-            lblInfo.Text = $"Можно выставить или перевыставить\r\n{_count} лотов.";
-            btnOK.Enabled = true;
+            Application.DoEvents();
         }
-        private void WaitExeute()
+    }
+    private void DoExecute()
+    {
+        using (MySqlConnection sqlConnection = CfgBridgeNote.CreateConnection())
         {
-            while (!_dialogFinised && !_exec_finished)
+            try
             {
-                Application.DoEvents();
-            }
-        }
-        private void DoExecute()
-        {
-            using (MySqlConnection sqlConnection = CfgBridgeNote.CreateConnection())
-            {
+                sqlConnection.Open();
+                MySqlTransaction trans = sqlConnection.BeginTransaction();
+                MySqlCommand cmd = new MySqlCommand("meshok_relist", sqlConnection, trans);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 try
                 {
-                    sqlConnection.Open();
-                    MySqlTransaction trans = sqlConnection.BeginTransaction();
-                    MySqlCommand cmd = new MySqlCommand("meshok_relist", sqlConnection, trans);
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    try
+                    object res = cmd.ExecuteScalar();
+                    if (int.TryParse(res.ToString(), out _count))
                     {
-                        object res = cmd.ExecuteScalar();
-                        if (int.TryParse(res.ToString(), out _count))
-                        {
-                            trans.Commit();
-                            _exec_finished = true;
-                        }
-                        else
-                            trans.Rollback();
+                        trans.Commit();
+                        _exec_finished = true;
                     }
-                    catch (Exception)
-                    {
+                    else
                         trans.Rollback();
-                        throw;
-                    }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                     Trace.TraceError(ex.ToString());
+                    trans.Rollback();
+                    throw;
                 }
-                sqlConnection.Close();
             }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.ToString());
+            }
+            sqlConnection.Close();
         }
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            DialogResult = true;
-        }
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = false;
-        }
-        public override void CLose()
-        {
-            DialogResult = false;
-        }
+    }
+    private void btnOK_Click(object sender, EventArgs e)
+    {
+        DialogResult = true;
+    }
+    private void btnCancel_Click(object sender, EventArgs e)
+    {
+        DialogResult = false;
+    }
+    public override void CLose()
+    {
+        DialogResult = false;
     }
 }

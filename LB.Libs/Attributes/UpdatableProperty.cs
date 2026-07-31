@@ -1,8 +1,8 @@
-﻿namespace LB.Libs
+﻿namespace LB.Libs;
+
+public class UpdatablePropertyAttribute : Attribute
 {
-    public class UpdatablePropertyAttribute : Attribute
-    {
-        public bool Key { get; set; } = false;
+    public bool Key { get; set; } = false;
     public virtual string Group { get; set; }
 
     public string SubGroup { get; set; } = null;
@@ -17,6 +17,5 @@
     public bool Required { get; set; } = false;
     public int MaxLength { get; set; } = 0;
     public CharacterCasing CharacterCasing { get; set; }
-    }
 }
 

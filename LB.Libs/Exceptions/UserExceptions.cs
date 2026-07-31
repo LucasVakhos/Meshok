@@ -1,8 +1,7 @@
-﻿namespace LB.Libs
+﻿namespace LB.Libs;
+
+public class UserWantExit : Exception
 {
-    public class UserWantExit : Exception
-    {
-        public UserWantExit() : base("Пользователь отказался от входа в программу") { }
-    }
+    public UserWantExit() : base("Пользователь отказался от входа в программу") { }
 }
 

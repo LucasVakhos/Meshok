@@ -1,16 +1,15 @@
 ﻿using System;
 using DevExpress.XtraEditors;
-namespace MeshokBrowser.Workers
+namespace MeshokBrowser.Workers;
+
+public partial class ScanWebFrame : XtraUserControl
 {
-    public partial class ScanWebFrame : XtraUserControl
+    public ScanWebFrame()
     {
-        public ScanWebFrame()
-        {
-            InitializeComponent();
-        }
-        public void BrowserEnabled(bool enabled )
-        {
-            layoutControl.Enabled = enabled;
-        }
+        InitializeComponent();
+    }
+    public void BrowserEnabled(bool enabled)
+    {
+        layoutControl.Enabled = enabled;
     }
 }

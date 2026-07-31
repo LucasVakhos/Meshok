@@ -1,50 +1,52 @@
-using FirebirdSql.Data.FirebirdClient;
+﻿using FirebirdSql.Data.FirebirdClient;
 using Common;
 using MeshokBrowser.Helpers;
 using System;
 using System.Linq;
-namespace MeshokBrowser.Deals
+namespace MeshokBrowser.Deals;
+
+public class DealMessage : MeshokBrowser.Models.CheckMesage
 {
-    public class DealMessage : MeshokBrowser.Models.CheckMesage
+    public override string ticket
     {
-        public override string ticket
+        get
         {
-            get
-            {
-                int id = mess_text.GetHashCode();
-                string res = $"ticket{id.ToString("X")}";
-                return res;
-            }
+            int id = mess_text.GetHashCode();
+            string res = $"ticket{id.ToString("X")}";
+            return res;
         }
-        private bool _dp_packed;
-        public override bool dp_packed { get => _dp_packed; set => _dp_packed = value; }
-        private double _dp_totalsumm = 0;
-        public override double dp_totalsumm { get => _dp_totalsumm; set => _dp_totalsumm = value; }
-        private string _mess_text = "";
-        public override string mess_text { get => _mess_text.Replace("  ", " "); set => _mess_text = value; }
-        private bool _needMessaging = true;
-        public override bool NeedMessaging {
-            get {
+    }
+    private bool _dp_packed;
+    public override bool dp_packed { get => _dp_packed; set => _dp_packed = value; }
+    private double _dp_totalsumm = 0;
+    public override double dp_totalsumm { get => _dp_totalsumm; set => _dp_totalsumm = value; }
+    private string _mess_text = "";
+    public override string mess_text { get => _mess_text.Replace("  ", " "); set => _mess_text = value; }
+    private bool _needMessaging = true;
+    public override bool NeedMessaging
+    {
+        get
+        {
 #if !test_email_message
-                if (message_case == MessageCase.EmailCheck && !string.IsNullOrEmpty(_orderLine.Client.c_email))
-                    _needMessaging = false;
+            if (message_case == MessageCase.EmailCheck && !string.IsNullOrEmpty(_orderLine.Client.c_email))
+                _needMessaging = false;
 #endif
-                return _needMessaging; }
-            set => _needMessaging = value;
+            return _needMessaging;
         }
-        private OrderLine _orderLine;
-        public DealMessage(OrderLine orderLine, ReadHelperDealMessages recs)
-        {
-            _orderLine = orderLine;
-            zsc_case = (int)recs.zsc_case;
-            id = recs.cod_id;
-            md_id = recs.md_id;
-            mp_id = recs.mp_id;
-            cs_id = recs.cs_id;
-            dp_packed = recs.dp_packed;
-            dp_totalsumm = recs.dp_totalsumm;
-            mess_text = recs.zsc_message;
-            orderLine.Infos.Add(this);
-        }
+        set => _needMessaging = value;
+    }
+    private OrderLine _orderLine;
+    public DealMessage(OrderLine orderLine, ReadHelperDealMessages recs)
+    {
+        _orderLine = orderLine;
+        zsc_case = (int)recs.zsc_case;
+        id = recs.cod_id;
+        md_id = recs.md_id;
+        mp_id = recs.mp_id;
+        cs_id = recs.cs_id;
+        dp_packed = recs.dp_packed;
+        dp_totalsumm = recs.dp_totalsumm;
+        mess_text = recs.zsc_message;
+        orderLine.Infos.Add(this);
     }
 }

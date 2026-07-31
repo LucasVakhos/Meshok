@@ -1,4 +1,4 @@
-using GH.Components;
+﻿using LB.Libs;
 using GhBrowser = LB.Libs.GhBrowser;
 using GhDocument = LB.Libs.GhDocument;
 using MeshokBrowser.Workers;
@@ -7,173 +7,172 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
-namespace MeshokBrowser.Models
+namespace MeshokBrowser.Models;
+
+public class ParsingTask<T> : DisposableTask where T : BaseScanEntity
 {
-    public class ParsingTask<T> : DisposableTask where T : BaseScanEntity
+    private readonly List<T> _saveObj = new List<T>();
+    private readonly List<T> _listObj = new List<T>();
+    protected List<T> SaveTasks { get => _saveObj; }
+    protected List<T> ListTasks { get => _listObj; }
+    private int _parseTrying = 0;
+    private bool _cycleFinished = false;
+    public bool WaitForOperationEnd { get; set; } = false;
+    protected ScanWebFrame ScanFrame
     {
-        private readonly List<T> _saveObj = new List<T>();
-        private readonly List<T> _listObj = new List<T>();
-        protected List<T> SaveTasks { get => _saveObj; }
-        protected List<T> ListTasks { get => _listObj; }
-        private int _parseTrying = 0;
-        private bool _cycleFinished = false;
-        public bool WaitForOperationEnd { get; set; } = false;
-        protected ScanWebFrame ScanFrame
+        get
         {
-            get
+            if (_scanFrame == null)
             {
-                if (_scanFrame == null)
-                {
-                    _scanFrame = new ScanWebFrame();
-                    _scanFrame.webBrowser.DocumentCompleted += wb_DocumentCompleted;
-                }
-                return _scanFrame;
+                _scanFrame = new ScanWebFrame();
+                _scanFrame.webBrowser.DocumentCompleted += wb_DocumentCompleted;
             }
+            return _scanFrame;
         }
-        protected GhBrowser Browser
+    }
+    protected GhBrowser Browser
+    {
+        get
         {
-            get
-            {
-                return ScanFrame.webBrowser;
-            }
+            return ScanFrame.webBrowser;
         }
-        protected T currentObject
+    }
+    protected T currentObject
+    {
+        get
         {
-            get
-            {
-                if (ListTasks.Count == 0)
-                    return null;
-                return ListTasks[0] as T;
-            }
+            if (ListTasks.Count == 0)
+                return null;
+            return ListTasks[0] as T;
         }
-        protected GhDocument doc { get => ScanFrame.webBrowser.Document; }
-        //protected bool RepeatCycle { get; set; }
-        public bool ScanFnished { get; set; }
-        public string Url
+    }
+    protected GhDocument doc { get => ScanFrame.webBrowser.Document; }
+    //protected bool RepeatCycle { get; set; }
+    public bool ScanFnished { get; set; }
+    public string Url
+    {
+        get
         {
-            get
-            {
-                if (currentObject == null)
-                    return "";
-                return GetFullUrl();
-            }
+            if (currentObject == null)
+                return "";
+            return GetFullUrl();
         }
-        protected virtual string GetFullUrl()
+    }
+    protected virtual string GetFullUrl()
+    {
+        return currentObject.FullUrl;
+    }
+    public string CaptionOfTask { get; set; }
+    public override void AddTask(BaseScanEntity scanEntity)
+    {
+        if (!ListTasks.Contains(scanEntity as T))
+            ListTasks.Add(scanEntity as T);
+    }
+    protected virtual void WorkWithDocument() { }
+    protected virtual void wb_DocumentCompleted(object sender, EventArgs e)
+    {
+        if (WaitForOperationEnd)
         {
-            return currentObject.FullUrl;
+            EndParseCurrent();
         }
-        public string CaptionOfTask { get; set; }
-        public override void AddTask(BaseScanEntity scanEntity)
+        else if (Browser.Url?.AbsoluteUri == Url)
+            ParseCurrent();
+    }
+    protected virtual void EndParseCurrent()
+    {
+        WaitForOperationEnd = false;
+    }
+    protected void ParseCurrent()
+    {
+        string url = Url;
+        try
         {
-            if (!ListTasks.Contains(scanEntity as T))
-                ListTasks.Add(scanEntity as T);
-        }
-        protected virtual void WorkWithDocument() { }
-        protected virtual void wb_DocumentCompleted(object sender, EventArgs e)
-        {
-            if (WaitForOperationEnd)
-            {
-                EndParseCurrent();
-            }
-            else if (Browser.Url?.AbsoluteUri == Url)
-                ParseCurrent();
-        }
-        protected virtual void EndParseCurrent()
-        {
-            WaitForOperationEnd = false;
-        }
-        protected void ParseCurrent()
-        {
-            string url = Url;
-            try
-            {
-                if (!TaskFinished)
-                    WorkWithDocument();
-                Thread.Sleep(500);
-            }
-            catch (Exception ex)
-            {
-                 Trace.TraceError(ex.ToString());
-                ProcessRunHelper.Executing = false;
-                goto end_lbl;
-            }
             if (!TaskFinished)
+                WorkWithDocument();
+            Thread.Sleep(500);
+        }
+        catch (Exception ex)
+        {
+            Trace.TraceError(ex.ToString());
+            ProcessRunHelper.Executing = false;
+            goto end_lbl;
+        }
+        if (!TaskFinished)
+        {
+            if (!currentObject.ParsingSaccess)
             {
-                if (!currentObject.ParsingSaccess)
+                if (Url != url)
                 {
-                    if (Url != url)
-                    {
-                        Navigate(Url);
-                        return;
-                    }
-                    if (_parseTrying == 5)
-                    {
-                        ProcessRunHelper.Executing = false;
-                        goto end_lbl;
-                    }
-                    _parseTrying++;
                     Navigate(Url);
                     return;
                 }
-            }
-        end_lbl:
-            _cycleFinished = true;
-        }
-        protected void Navigate(string url)
-        {
-            ScanFrame.webBrowser.Navigate(url);
-            Application.DoEvents();
-        }
-        public override void Execute()
-        {
-            if (!CanExecute())
+                if (_parseTrying == 5)
+                {
+                    ProcessRunHelper.Executing = false;
+                    goto end_lbl;
+                }
+                _parseTrying++;
+                Navigate(Url);
                 return;
-            SaveTasks.AddRange(ListTasks.ToArray());
-            IMainForm mainForm = RunContext.Instance.MainForm as IMainForm;
-            ScanFrame.Text = CaptionOfTask;
-            mainForm.AddPage(ScanFrame, false);
-        begin_lbl:
-            //RepeatCycle = false;
-            _cycleFinished = false;
-            _parseTrying = 0;
-            Navigate(Url);
-            while (ListTasks.Count > 0 && !_cycleFinished && ProcessRunHelper.Executing)
-            {
-                Application.DoEvents();
-                Thread.Sleep(100);
             }
-            if (!ProcessRunHelper.Executing)
-                ListTasks.Clear();
-            else
+        }
+    end_lbl:
+        _cycleFinished = true;
+    }
+    protected void Navigate(string url)
+    {
+        ScanFrame.webBrowser.Navigate(url);
+        Application.DoEvents();
+    }
+    public override void Execute()
+    {
+        if (!CanExecute())
+            return;
+        SaveTasks.AddRange(ListTasks.ToArray());
+        IMainForm mainForm = RunContext.Instance.MainForm as IMainForm;
+        ScanFrame.Text = CaptionOfTask;
+        mainForm.AddPage(ScanFrame, false);
+    begin_lbl:
+        //RepeatCycle = false;
+        _cycleFinished = false;
+        _parseTrying = 0;
+        Navigate(Url);
+        while (ListTasks.Count > 0 && !_cycleFinished && ProcessRunHelper.Executing)
+        {
+            Application.DoEvents();
+            Thread.Sleep(100);
+        }
+        if (!ProcessRunHelper.Executing)
+            ListTasks.Clear();
+        else
             if (_cycleFinished && ListTasks.Count > 0)
                 ListTasks.RemoveAt(0);
-            if (ListTasks.Count > 0)
-                goto begin_lbl;
-            mainForm.RemovePage(ScanFrame);
-        }
-        protected virtual bool CanExecute()
+        if (ListTasks.Count > 0)
+            goto begin_lbl;
+        mainForm.RemovePage(ScanFrame);
+    }
+    protected virtual bool CanExecute()
+    {
+        return true;
+    }
+    protected void DoWaitUserReaction()
+    {
+        WaitForOperationEnd = true;
+        ScanFrame.webBrowser.DomSubmit += WebBrowser_DomSubmit;
+        ScanFrame.BrowserEnabled(true);
+        DoWaitForOperationEnd();
+    }
+    protected void DoWaitForOperationEnd()
+    {
+        while (WaitForOperationEnd)
         {
-            return true;
+            Application.DoEvents();
+            Thread.Sleep(50);
         }
-        protected void DoWaitUserReaction()
-        {
-            WaitForOperationEnd = true;
-            ScanFrame.webBrowser.DomSubmit += WebBrowser_DomSubmit;
-            ScanFrame.BrowserEnabled(true);
-            DoWaitForOperationEnd();
-        }
-        protected void DoWaitForOperationEnd()
-        {
-            while (WaitForOperationEnd)
-            {
-                Application.DoEvents();
-                Thread.Sleep(50);
-            }
-        }
-        private void WebBrowser_DomSubmit(object sender, EventArgs e)
-        {
-            ScanFrame.BrowserEnabled(false);
-            ScanFrame.webBrowser.DomSubmit -= WebBrowser_DomSubmit;
-        }
+    }
+    private void WebBrowser_DomSubmit(object sender, EventArgs e)
+    {
+        ScanFrame.BrowserEnabled(false);
+        ScanFrame.webBrowser.DomSubmit -= WebBrowser_DomSubmit;
     }
 }

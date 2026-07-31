@@ -1,91 +1,90 @@
-using GH.Components;
+﻿using LB.Libs;
 using GH.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-namespace MeshokBrowser.Workers
+namespace MeshokBrowser.Workers;
+
+public class WorkerAddPrix : Worker
 {
-    public class WorkerAddPrix : Worker
+    private enum ProcStep
     {
-        private enum ProcStep
+        Setting,
+        Compare,
+        GoToSetting
+    }
+    private const string meshok_url = "https://meshok.net";
+    private const string loading_start_url = meshok_url + "/profile.php?what=bulk";
+    private const string compare_url = meshok_url + "/profile.php?submit=1&what=bulk";
+    private readonly List<string> files = new List<string>();
+    private ProcStep curSettingStep = ProcStep.Setting;
+    public WorkerAddPrix(IMainForm form) : base(form)
+    {
+        ProcessName = "Загрузка лотов";
+        Begin_url = loading_start_url;
+    }
+    protected override void OnCreate()
+    {
+        files.Clear();
+        files.AddRange(LoadingHelper.GetFileList());
+        TotalSteps = files.Count;
+        if (files.Count == 0)
         {
-            Setting,
-            Compare,
-            GoToSetting
+            WorkDone();
+            DlgHelper.DlgWarning("Нет файлов для заливки!!!");
+            return;
         }
-        private const string meshok_url = "https://meshok.net";
-        private const string loading_start_url = meshok_url + "/profile.php?what=bulk";
-        private const string compare_url = meshok_url + "/profile.php?submit=1&what=bulk";
-        private readonly List<string> files = new List<string>();
-        private ProcStep curSettingStep = ProcStep.Setting;
-        public WorkerAddPrix(IMainForm form) : base(form)
+        ProcScreen.Navigate(Begin_url);
+    }
+    protected override async void OnDocumentCompleted(string url)
+    {
+        if (Begin_url == url)
         {
-            ProcessName = "Загрузка лотов";
-            Begin_url = loading_start_url;
+            await FillPageAndPostAsync();
         }
-        protected override void OnCreate()
+        else if (url == compare_url)
         {
-            files.Clear();
-            files.AddRange(LoadingHelper.GetFileList());
-            TotalSteps = files.Count;
-            if (files.Count == 0)
+            if (curSettingStep == ProcStep.Compare)
             {
-                WorkDone();
-                DlgHelper.DlgWarning("Нет файлов для заливки!!!");
-                return;
+                curSettingStep = ProcStep.GoToSetting;
+                await ProcScreen.webBrowser.SubmitFormAsync("#form2");
             }
+            else if (curSettingStep == ProcStep.GoToSetting)
+            {
+                DoNextStep();
+            }
+        }
+    }
+    private async Task FillPageAndPostAsync()
+    {
+        bool isFillBegin = await LoadingHelper.FillBeginPageAsync(ProcScreen.webBrowser, files[0]);
+        if (!isFillBegin)
+        {
+            if (await ProcScreen.webBrowser.ClickElementAsync("input[name='SLCONSENT']"))
+                return;
+            curSettingStep = ProcStep.Setting;
+            ProcScreen.Navigate(Begin_url);
+            return;
+        }
+        curSettingStep = ProcStep.Compare;
+        if (!await ProcScreen.webBrowser.SubmitFormAsync("#form2"))
+        {
+            curSettingStep = ProcStep.Setting;
             ProcScreen.Navigate(Begin_url);
         }
-        protected override async void OnDocumentCompleted(string url)
-        {
-            if (Begin_url == url)
-            {
-                await FillPageAndPostAsync();
-            }
-            else if (url == compare_url)
-            {
-                if (curSettingStep == ProcStep.Compare)
-                {
-                    curSettingStep = ProcStep.GoToSetting;
-                    await ProcScreen.webBrowser.SubmitFormAsync("#form2");
-                }
-                else if (curSettingStep == ProcStep.GoToSetting)
-                {
-                    DoNextStep();
-                }
-            }
-        }
-        private async Task FillPageAndPostAsync()
-        {
-            bool isFillBegin = await LoadingHelper.FillBeginPageAsync(ProcScreen.webBrowser, files[0]);
-            if (!isFillBegin)
-            {
-                if (await ProcScreen.webBrowser.ClickElementAsync("input[name='SLCONSENT']"))
-                    return;
-                curSettingStep = ProcStep.Setting;
-                ProcScreen.Navigate(Begin_url);
-                return;
-            }
-            curSettingStep = ProcStep.Compare;
-            if (!await ProcScreen.webBrowser.SubmitFormAsync("#form2"))
-            {
-                curSettingStep = ProcStep.Setting;
-                ProcScreen.Navigate(Begin_url);
-            }
-        }
-        private void DoNextStep()
-        {
-            if (files.Count > 0 && File.Exists(files[0]))
-                File.Delete(files[0]);
-            if (files.Count > 0)
-                files.RemoveAt(0);
-            IncCurrentStep();
-            curSettingStep = ProcStep.Setting;
-            if (files.Count > 0)
-                ProcScreen.Navigate(Begin_url);
-            else
-                WorkDone();
-        }
+    }
+    private void DoNextStep()
+    {
+        if (files.Count > 0 && File.Exists(files[0]))
+            File.Delete(files[0]);
+        if (files.Count > 0)
+            files.RemoveAt(0);
+        IncCurrentStep();
+        curSettingStep = ProcStep.Setting;
+        if (files.Count > 0)
+            ProcScreen.Navigate(Begin_url);
+        else
+            WorkDone();
     }
 }

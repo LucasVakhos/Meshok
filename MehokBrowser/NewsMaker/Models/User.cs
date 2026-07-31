@@ -1,7 +1,5 @@
-using GH.Components;
-namespace NewsMaker.Models
+﻿using LB.Libs;
+namespace NewsMaker.Models;
+public class User : BaseUser
 {
-    public class User : BaseUser
-    {
-    }
 }

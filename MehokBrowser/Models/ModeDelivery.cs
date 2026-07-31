@@ -1,7 +1,6 @@
-using BaseEntity = LB.Libs.BaseEntity;
-namespace MeshokBrowser.Models
+﻿using BaseEntity = LB.Libs.BaseEntity;
+namespace MeshokBrowser.Models;
+
+public class ModeDelivery : BaseEntity
 {
-    public class ModeDelivery : BaseEntity
-    {
-    }
 }

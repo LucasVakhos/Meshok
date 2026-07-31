@@ -1,9 +1,8 @@
-using MehokBrowser.UI.Config;
-    using MehokBrowser.Configs.Frames;
+﻿using LB.Libs;
+using MehokBrowser.Configs.Frames;
 
-namespace MehokBrowser.Configs.Forms
+namespace MehokBrowser.Configs.Forms;
+
+public class CfgFormIShop : CfgFormType<CfgFrameIShop>
 {
-    public class CfgFormIShop : CfgFormType<CfgFrameIShop>
-    {        
-    }
 }

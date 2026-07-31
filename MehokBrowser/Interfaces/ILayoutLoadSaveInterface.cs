@@ -1,8 +1,7 @@
-﻿namespace MeshokBrowser
+﻿namespace MeshokBrowser;
+
+public interface ILayoutLoadSaveInterface
 {
-    public interface ILayoutLoadSaveInterface
-    {
-        void LoadControls();
-        void SaveControls();
-    }
+    void LoadControls();
+    void SaveControls();
 }

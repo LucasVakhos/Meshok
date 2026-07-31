@@ -1,10 +1,9 @@
-namespace MeshokBrowser.Workers
+﻿namespace MeshokBrowser.Workers;
+
+public class WorkerRelistLots : Worker
 {
-    public class WorkerRelistLots : Worker
+    public WorkerRelistLots(IMainForm form) : base(form)
     {
-        public WorkerRelistLots(IMainForm form) : base(form)
-        {
-            ProcessName = "WorkerRelistLots";
-        }
+        ProcessName = "WorkerRelistLots";
     }
 }

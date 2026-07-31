@@ -1,8 +1,7 @@
-using GH.Components;
+﻿using LB.Libs;
 using BaseEntity = LB.Libs.BaseEntity;
-namespace MeshokBrowser.Models
+namespace MeshokBrowser.Models;
+
+public class ClientCallBack : BaseEntity
 {
-    public class ClientCallBack : BaseEntity
-    {
-    }
 }

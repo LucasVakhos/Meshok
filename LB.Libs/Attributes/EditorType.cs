@@ -1,13 +1,12 @@
-﻿namespace LB.Libs
+﻿namespace LB.Libs;
+
+public enum EditorType
 {
-    public enum EditorType
-    {
-        Text,
-        Combo,
-        Check,
-        Button,
-        LoginCombo,
-        PathSeacher
-    }
+    Text,
+    Combo,
+    Check,
+    Button,
+    LoginCombo,
+    PathSeacher
 }
 

@@ -1,9 +1,8 @@
-using MehokBrowser.Configs.Cfg;
-using MehokBrowser.UI.Config;
+﻿using MehokBrowser.Configs.Cfg;
+using LB.Libs;
 
-namespace MehokBrowser.Configs.Frames
+namespace MehokBrowser.Configs.Frames;
+
+public partial class CfgFrameCDUchet : CfgConnectFrameType<CfgCDUchet>
 {
-    public partial class CfgFrameCDUchet : CfgConnectFrameType<CfgCDUchet>
-    {
-    }
 }

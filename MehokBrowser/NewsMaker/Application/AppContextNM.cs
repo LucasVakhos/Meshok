@@ -1,38 +1,36 @@
-using GH.Components;
+п»їusing LB.Libs;
 using System.Windows.Forms;
-namespace NewsMaker
+namespace NewsMaker;
+public class AppContextNM : AppContext<AppContextNM>
 {
-    public class AppContextNM : AppContext<AppContextNM>
+    public static bool Executing { get; set; } = false;
+    public static readonly string MyEmail = "zve4202@yandex.ru";
+    protected override void InitializeSomething()
     {
-        public static bool Executing { get; set; } = false;
-        public static readonly string MyEmail = "zve4202@yandex.ru";
-        protected override void InitializeSomething()
-        {
-            //заглушка
-        }
-        public override CfgApp GetCfgApp()
-        {
-            return new CfgApp();
-        }
-        public override Form GetMainForm()
-        {
-            return new NewsMakerForm();
-        }
-        public override Form GetLoginForm()
-        {
-            return null;
-        }
-        public override CfgCoreConnection GetConnectionSetting()
-        {
-            var cfg = IniHelper.Cfg<CfgBridgeNote>();
-            if (cfg == null)
-                cfg = new CfgBridgeNote();
-            return cfg;
-        }
-        public override CfgForm CreateConnectForm()
-        {
-            return null;
-            //return new CfgFormBridgeNote();
-        }
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    }
+    public override CfgApp GetCfgApp()
+    {
+        return new CfgApp();
+    }
+    public override Form GetMainForm()
+    {
+        return new NewsMakerForm();
+    }
+    public override Form GetLoginForm()
+    {
+        return null;
+    }
+    public override CfgCoreConnection GetConnectionSetting()
+    {
+        var cfg = IniHelper.Cfg<CfgBridgeNote>();
+        if (cfg == null)
+            cfg = new CfgBridgeNote();
+        return cfg;
+    }
+    public override CfgForm CreateConnectForm()
+    {
+        return null;
+        //return new CfgFormBridgeNote();
     }
 }

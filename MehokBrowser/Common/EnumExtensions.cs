@@ -2,24 +2,22 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-namespace Common
+namespace Common;
+static class EnumExtensions
 {
-    static class EnumExtensions
+    public static TAttribute GetAttribute<TAttribute>(this Enum enumValue) where TAttribute : Attribute
     {
-        public static TAttribute GetAttribute<TAttribute>(this Enum enumValue) where TAttribute : Attribute
-        {
-            return enumValue.GetType().GetMember(enumValue.ToString()).First().GetCustomAttribute<TAttribute>();
-        }
-        public static string GetDisplayValue(this Enum value)
-        {
-            FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
-            if (fieldInfo == null)
-                return null;
-            return ((DisplayAttribute)fieldInfo.GetCustomAttribute(typeof(DisplayAttribute))).Name;
-        }
-        public static int ToInt(this Enum value)
-        {
-            return (int)(int)Enum.ToObject(value.GetType(), value);
-        }
+        return enumValue.GetType().GetMember(enumValue.ToString()).First().GetCustomAttribute<TAttribute>();
+    }
+    public static string GetDisplayValue(this Enum value)
+    {
+        FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
+        if (fieldInfo == null)
+            return null;
+        return ((DisplayAttribute)fieldInfo.GetCustomAttribute(typeof(DisplayAttribute))).Name;
+    }
+    public static int ToInt(this Enum value)
+    {
+        return (int)(int)Enum.ToObject(value.GetType(), value);
     }
 }

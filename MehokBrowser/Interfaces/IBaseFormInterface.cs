@@ -1,8 +1,7 @@
-﻿namespace MeshokBrowser
+﻿namespace MeshokBrowser;
+
+public interface IBaseFormInterface : ILayoutLoadSaveInterface
 {
-    public interface IBaseFormInterface : ILayoutLoadSaveInterface
-    {
-        void LoadFromIni();
-        void SaveToIni();
-    }
+    void LoadFromIni();
+    void SaveToIni();
 }

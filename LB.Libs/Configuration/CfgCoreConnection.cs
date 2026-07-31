@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace LB.Libs;
@@ -35,7 +35,7 @@ public class CfgCoreConnection : CfgCore
                 bool isConnectionProperty =
                     property.Attributes[typeof(DbConnectionProperty)] is DbConnectionProperty ||
                     property.Attributes.Cast<Attribute>()
-                        .Any(x => x.GetType().FullName == "GH.Components.DbConnectionProperty");
+                        .Any(x => x.GetType().FullName == "LB.Libs.DbConnectionProperty");
                 if (!isConnectionProperty)
                     continue;
                 if (property.Name is nameof(UserLogin) or nameof(UserPassword) or nameof(AutoEntering))
@@ -86,7 +86,7 @@ public class CfgCoreConnection : CfgCore
             }
 
             Attribute? legacy = property.Attributes.Cast<Attribute>()
-                .FirstOrDefault(x => x.GetType().FullName == "GH.Components.DbConnectionProperty");
+                .FirstOrDefault(x => x.GetType().FullName == "LB.Libs.DbConnectionProperty");
             if (legacy is not null)
                 Default(property, legacy.GetType().GetProperty("Default")?.GetValue(legacy));
         }

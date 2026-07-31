@@ -1,4 +1,4 @@
-namespace MeshokBrowser.Models;
+﻿namespace MeshokBrowser.Models;
 
 public class User : LB.Libs.BaseUser
 {

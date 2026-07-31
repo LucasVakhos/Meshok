@@ -1,12 +1,10 @@
 ﻿using System;
-namespace NewsMaker
+namespace NewsMaker;
+internal static class Program
 {
-    internal static class Program
+    [STAThread]
+    private static void Main(string[] args)
     {
-        [STAThread]
-        private static void Main(string[] args)
-        {
-            AppContextNM.RunInstance();
-        }
+        AppContextNM.RunInstance();
     }
 }

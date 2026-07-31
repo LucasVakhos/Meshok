@@ -1,11 +1,10 @@
-using MehokBrowser.UI.Config;
-namespace MeshokBrowser
+﻿using LB.Libs;
+namespace MeshokBrowser;
+
+public partial class CfgFrameMeshok : CfgCoreFrameType<CfgMeshok>
 {
-    public partial class CfgFrameMeshok : CfgCoreFrameType<CfgMeshok>
+    public CfgFrameMeshok()
     {
-        public CfgFrameMeshok()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

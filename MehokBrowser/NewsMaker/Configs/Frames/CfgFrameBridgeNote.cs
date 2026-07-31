@@ -1,11 +1,9 @@
-using DevExpress.XtraEditors;
-using GH.Components;
-namespace GH.Components
+﻿using DevExpress.XtraEditors;
+using LB.Libs;
+namespace LB.Libs;
+public partial class CfgFrameBridgeNote : CfgConnectFrameType<CfgBridgeNote>
 {
-    public partial class CfgFrameBridgeNote : CfgConnectFrameType<CfgBridgeNote>
+    public CfgFrameBridgeNote()
     {
-        public CfgFrameBridgeNote()
-        {
-        }
     }
 }

@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Text.Json;
 
 namespace LB.Libs;
@@ -78,7 +78,7 @@ public class CfgCore : AbstractEntity
             }
 
             Attribute? legacy = property.Attributes.Cast<Attribute>()
-                .FirstOrDefault(x => x.GetType().FullName == "GH.Components.UpdatablePropertyAttribute");
+                .FirstOrDefault(x => x.GetType().FullName == "LB.Libs.UpdatablePropertyAttribute");
             if (legacy is not null)
                 Default(property, legacy.GetType().GetProperty("Default")?.GetValue(legacy));
         }

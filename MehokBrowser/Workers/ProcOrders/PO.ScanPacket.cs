@@ -1,10 +1,9 @@
-namespace MeshokBrowser.Workers
+﻿namespace MeshokBrowser.Workers;
+
+public class POScanPacket : Worker
 {
-    public class POScanPacket : Worker
+    public POScanPacket(IMainForm form) : base(form)
     {
-        public POScanPacket(IMainForm form) : base(form)
-        {
-            ProcessName = "Сканирование пакетов";
-        }
+        ProcessName = "Сканирование пакетов";
     }
 }

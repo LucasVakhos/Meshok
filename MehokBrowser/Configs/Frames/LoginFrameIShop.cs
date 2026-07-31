@@ -1,22 +1,21 @@
-﻿using MehokBrowser.UI.Config;
+﻿using LB.Libs;
 using MehokBrowser.Configs.Cfg;
 using MeshokBrowser.Data;
 using MeshokBrowser.Models;
 using System.Collections;
 using LB.Libs;
 
-namespace MehokBrowser.Configs.Frames
-{
-    public class LoginFrameIShop : LoginFrameType<CfgIShop, User>
-    {
-        public LoginFrameIShop()
-        {
-            LoginInputType = LoginInputType.AsSelectFromCombo;
-        }
+namespace MehokBrowser.Configs.Frames;
 
-        protected override IList GetAllUsers()
-        {
-            return DapperLookupRepository.LoadActiveUsers();
-        }
+public class LoginFrameIShop : LoginFrameType<CfgIShop, User>
+{
+    public LoginFrameIShop()
+    {
+        LoginInputType = LoginInputType.AsSelectFromCombo;
+    }
+
+    protected override IList GetAllUsers()
+    {
+        return DapperLookupRepository.LoadActiveUsers();
     }
 }

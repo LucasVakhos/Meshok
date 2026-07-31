@@ -1,9 +1,8 @@
-using MehokBrowser.Configs.Frames;
-using MehokBrowser.UI.Config;
+﻿using MehokBrowser.Configs.Frames;
+using LB.Libs;
 
-namespace MehokBrowser.Configs.Forms
+namespace MehokBrowser.Configs.Forms;
+
+public class LoginFormIShop : LoginFormType<LoginFrameIShop>
 {
-    public class LoginFormIShop: LoginFormType<LoginFrameIShop>
-    {
-    }
 }

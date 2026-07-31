@@ -1,9 +1,8 @@
-﻿namespace LB.Libs
+﻿namespace LB.Libs;
+
+public enum DisablePagesReason
 {
-    public enum DisablePagesReason
-    {
-        Inserting,
-        ClosingOrOpening,
-        DetailProcessing
-    }
+    Inserting,
+    ClosingOrOpening,
+    DetailProcessing
 }

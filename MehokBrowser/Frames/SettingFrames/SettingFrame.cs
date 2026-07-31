@@ -2,186 +2,182 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
-using MehokBrowser.Application;
-using MehokBrowser.Frames.Base;
-using MehokBrowser.UI.Interfaces;
-using MehokBrowser.Controls;
+using LB.Libs;
 using DevExpress.XtraBars.Ribbon;
-namespace MeshokBrowser.Frames
+namespace MeshokBrowser.Frames;
+
+public class SettingFrame : SavedFrame, IRibbonControlFrame
 {
-    public class SettingFrame : SavedFrame, IRibbonControlFrame
+    private IContainer components = null;
+    public RibbonControl MainRibbonControl
     {
-        private IContainer components = null;
-        public RibbonControl MainRibbonControl
+        get
         {
-            get
+            if (RunContext.Instance.MainForm == null)
+                return null;
+            return RunContext.Instance.MainForm.Controls.OfType<Control>().FirstOrDefault(x => x is RibbonControl) as RibbonControl;
+        }
+    }
+    RibbonControl _ribbonControl;
+    public RibbonControl RibbonControl
+    {
+        get => _ribbonControl;
+        set
+        {
+            _ribbonControl = value;
+            if (value != null)
+                Controls.Add(value);
+        }
+    }
+    public RibbonBarManager Manager => _ribbonControl.Manager;
+    RibbonStatusBar _ribbonStatusBar;
+    public RibbonStatusBar RibbonStatusBar
+    {
+        get => _ribbonStatusBar;
+        set
+        {
+            _ribbonStatusBar = value;
+            if (value != null)
             {
-                if (RunContext.Instance.MainForm == null)
-                    return null;
-                return RunContext.Instance.MainForm.Controls.OfType<Control>().FirstOrDefault(x => x is RibbonControl) as RibbonControl;
+                value.Ribbon = _ribbonControl;
+                Controls.Add(value);
             }
         }
-        RibbonControl _ribbonControl;
-        public RibbonControl RibbonControl
+    }
+    private RibbonPage _editPage;
+    public RibbonPage EditPage
+    {
+        get => _editPage;
+        set
         {
-            get => _ribbonControl;
-            set
+            _editPage = value;
+            if (value != null)
             {
-                _ribbonControl = value;
-                if (value != null)
-                    Controls.Add(value);
+                _ribbonControl.Pages.Add(value);
+                value.MergeOrder = 0;
+                value.Name = "editPage";
+                value.Text = Text.ToUpper();
             }
         }
-        public RibbonBarManager Manager => _ribbonControl.Manager;
-        RibbonStatusBar _ribbonStatusBar;
-        public RibbonStatusBar RibbonStatusBar
+    }
+    public bool DlgResult;
+    public ActionList actionList;
+    public DataSource dataSource;
+    public SettingFrame()
+    {
+        InitializeComponent();
+    }
+    protected override void OnEnter(EventArgs e)
+    {
+        ShowRibbon();
+        base.OnEnter(e);
+    }
+    protected override void OnLeave(EventArgs e)
+    {
+        base.OnLeave(e);
+        HideRibbon();
+    }
+    protected override void OnParentChanged(EventArgs e)
+    {
+        if (!IsDesignMode)
         {
-            get => _ribbonStatusBar;
-            set
+            if (Parent != null)
             {
-                _ribbonStatusBar = value;
-                if (value != null)
+                if (RunContext.AppRunning)
                 {
-                    value.Ribbon = _ribbonControl;
-                    Controls.Add(value);
+                    LoadControls();
+                    ShowRibbon();
+                    OpenData();
+                }
+                else
+                {
+                    HideRibbon();
+                    SaveControls();
                 }
             }
         }
-        private RibbonPage _editPage;
-        public RibbonPage EditPage
+        base.OnParentChanged(e);
+    }
+    public virtual void ShowRibbon()
+    {
+        if (MainRibbonControl == null)
+            return;
+        if (RibbonControl != null)
         {
-            get => _editPage;
-            set
+            MainRibbonControl.MergeRibbon(RibbonControl);
+            if (RibbonStatusBar != null)
+                MainRibbonControl.StatusBar.MergeStatusBar(RibbonStatusBar);
+            MainRibbonControl.SelectedPage = RibbonControl.Pages[0];
+            RibbonPage page = MainRibbonControl.Pages.GetPageByName("rpSettigs");
+            if (page != null)
             {
-                _editPage = value;
-                if (value != null)
-                {
-                    _ribbonControl.Pages.Add(value);
-                    value.MergeOrder = 0;
-                    value.Name = "editPage";
-                    value.Text = Text.ToUpper();
-                }
+                MainRibbonControl.MergedPages.Remove(page);
+                //MainRibbonControl.MergedPages.Insert(MainRibbonControl.MergedPages.Count, page);
             }
         }
-        public bool DlgResult;
-        public ActionList actionList;
-        public DataSource dataSource;
-        public SettingFrame()
+    }
+    public virtual void HideRibbon()
+    {
+        if (MainRibbonControl == null)
+            return;
+        if (RibbonControl != null)
         {
-            InitializeComponent();
-        }
-        protected override void OnEnter(EventArgs e)
-        {
-            ShowRibbon();
-            base.OnEnter(e);
-        }
-        protected override void OnLeave(EventArgs e)
-        {
-            base.OnLeave(e);
-            HideRibbon();
-        }
-        protected override void OnParentChanged(EventArgs e)
-        {
-            if (!IsDesignMode)
+            if (MainRibbonControl.MergedRibbon == RibbonControl)
             {
-                if (Parent != null)
-                {
-                    if (RunContext.AppRunning)
-                    {
-                        LoadControls();
-                        ShowRibbon();
-                        OpenData();
-                    }
-                    else
-                    {
-                        HideRibbon();
-                        SaveControls();
-                    }
-                }
-            }
-            base.OnParentChanged(e);
-        }
-        public virtual void ShowRibbon()
-        {
-            if (MainRibbonControl == null)
-                return;
-            if (RibbonControl != null)
-            {
-                MainRibbonControl.MergeRibbon(RibbonControl);
-                if (RibbonStatusBar != null)
-                    MainRibbonControl.StatusBar.MergeStatusBar(RibbonStatusBar);
-                MainRibbonControl.SelectedPage = RibbonControl.Pages[0];
-                RibbonPage page = MainRibbonControl.Pages.GetPageByName("rpSettigs");
+                RibbonPage page = MainRibbonControl.MergedPages.GetPageByName("rpSettigs");
                 if (page != null)
-                {
-                    MainRibbonControl.MergedPages.Remove(page);
-                    //MainRibbonControl.MergedPages.Insert(MainRibbonControl.MergedPages.Count, page);
-                }
+                    MainRibbonControl.Pages.Add(page);
+                MainRibbonControl.UnMergeRibbon();
+                MainRibbonControl.StatusBar.UnMergeStatusBar();
             }
         }
-        public virtual void HideRibbon()
+    }
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
         {
-            if (MainRibbonControl == null)
-                return;
-            if (RibbonControl != null)
+            HideRibbon();
+            SaveControls();
+            if (components != null)
             {
-                if (MainRibbonControl.MergedRibbon == RibbonControl)
-                {
-                    RibbonPage page = MainRibbonControl.MergedPages.GetPageByName("rpSettigs");
-                    if (page != null)
-                        MainRibbonControl.Pages.Add(page);
-                    MainRibbonControl.UnMergeRibbon();
-                    MainRibbonControl.StatusBar.UnMergeStatusBar();
-                }
+                components.Dispose();
             }
         }
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                HideRibbon();
-                SaveControls();
-                if (components != null)
-                {
-                    components.Dispose();
-                }
-            }
-            base.Dispose(disposing);
-        }
-        private void dataSource_AfterOpen(object sender, EventArgs e)
-        {
-            //lblInfo.Caption = $"Записей: {dataSource.Count}";
-        }
-        private void InitializeComponent()
-        {
-            this.components = new System.ComponentModel.Container();
-            this.dataSource = new MehokBrowser.Controls.DataSource(this.components);
-            this.actionList = new MehokBrowser.Controls.ActionList();
-            ((System.ComponentModel.ISupportInitialize)(this.dataSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.actionList)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // dataSource
-            // 
-            this.dataSource.ActionList = this.actionList;
-            this.dataSource.Owner = this;
-            this.dataSource.State = MehokBrowser.Controls.DataState.Inactive;
-            this.dataSource.AfterOpen += new System.EventHandler(this.dataSource_AfterOpen);
-            // 
-            // actionList
-            // 
-            this.actionList.Owner = this;
-            // 
-            // SettingFrame
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
-            this.Name = "SettingFrame";
-            this.Size = new System.Drawing.Size(800, 600);
-            ((System.ComponentModel.ISupportInitialize)(this.dataSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.actionList)).EndInit();
-            this.ResumeLayout(false);
-        }
+        base.Dispose(disposing);
+    }
+    private void dataSource_AfterOpen(object sender, EventArgs e)
+    {
+        //lblInfo.Caption = $"Записей: {dataSource.Count}";
+    }
+    private void InitializeComponent()
+    {
+        this.components = new System.ComponentModel.Container();
+        this.dataSource = new LB.Libs.DataSource(this.components);
+        this.actionList = new LB.Libs.ActionList();
+        ((System.ComponentModel.ISupportInitialize)(this.dataSource)).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)(this.actionList)).BeginInit();
+        this.SuspendLayout();
+        //
+        // dataSource
+        //
+        this.dataSource.ActionList = this.actionList;
+        this.dataSource.Owner = this;
+        this.dataSource.State = LB.Libs.DataState.Inactive;
+        this.dataSource.AfterOpen += new System.EventHandler(this.dataSource_AfterOpen);
+        //
+        // actionList
+        //
+        this.actionList.Owner = this;
+        //
+        // SettingFrame
+        //
+        this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+        this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
+        this.Name = "SettingFrame";
+        this.Size = new System.Drawing.Size(800, 600);
+        ((System.ComponentModel.ISupportInitialize)(this.dataSource)).EndInit();
+        ((System.ComponentModel.ISupportInitialize)(this.actionList)).EndInit();
+        this.ResumeLayout(false);
     }
 }

@@ -9,13 +9,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using GH.Configs;
-namespace NewsMaker
+namespace NewsMaker;
+
+public partial class CfgFramePost : CfgCoreFrameType<CfgPost>
 {
-    public partial class CfgFramePost : CfgCoreFrameType<CfgPost>
+    public CfgFramePost()
     {
-        public CfgFramePost()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

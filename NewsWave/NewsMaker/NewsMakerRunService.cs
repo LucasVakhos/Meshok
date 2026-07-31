@@ -1,4 +1,4 @@
-using System.Data;
+﻿using System.Data;
 using System.Threading.Channels;
 
 namespace NewsWave.NewsMaker;

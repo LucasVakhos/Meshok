@@ -1,15 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace Common
+namespace Common;
+
+public enum MessageCase
 {
-    public enum MessageCase
-    {
-        [Display(Name = "В любом случае")]
-        AnyCase,
-        [Display(Name = "Посылка упакована")]
-        DocClosed,
-        [Display(Name = "Нужен запрос Email")]
-        EmailCheck,
-        [Display(Name = "Нужно разделить лот")]
-        NeedSplit,
-    }
+    [Display(Name = "В любом случае")]
+    AnyCase,
+    [Display(Name = "Посылка упакована")]
+    DocClosed,
+    [Display(Name = "Нужен запрос Email")]
+    EmailCheck,
+    [Display(Name = "Нужно разделить лот")]
+    NeedSplit,
 }

@@ -1,10 +1,8 @@
-namespace MeshokBrowser.Workers
+﻿namespace MeshokBrowser.Workers;
+public class WorkerScanLots : Worker
 {
-    public class WorkerScanLots : Worker
+    public WorkerScanLots(IMainForm form) : base(form)
     {
-        public WorkerScanLots(IMainForm form) : base(form)
-        {
-            ProcessName = "WorkerScanLots";
-        }
+        ProcessName = "WorkerScanLots";
     }
 }

@@ -1,26 +1,24 @@
 ﻿using System;
 using System.Data;
-namespace NewsMaker
+namespace NewsMaker;
+public delegate void Stepping();
+public delegate void Mailing(Letter letter);
+public class Prepare<T> : ResultList<T>
 {
-    public delegate void Stepping();
-    public delegate void Mailing(Letter letter);
-    public class Prepare<T> : ResultList<T>
+    public Prepare(string message, bool regIt = true) : base(message, regIt)
     {
-        public Prepare(string message, bool regIt = true) : base(message, regIt)
-        {
-            Table = new DataTable("DataTable");
-            FillTable();
-        }
-        internal DataTable Table { get; set; }
-        public virtual int DataCount => Table.Rows.Count;
-        protected virtual void FillTable()
-        {
-            throw new Exception($"Перезапишите FillTable у {GetType()}");
-        }
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) Table.Dispose();
-            base.Dispose(disposing);
-        }
+        Table = new DataTable("DataTable");
+        FillTable();
+    }
+    internal DataTable Table { get; set; }
+    public virtual int DataCount => Table.Rows.Count;
+    protected virtual void FillTable()
+    {
+        throw new Exception($"Перезапишите FillTable у {GetType()}");
+    }
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing) Table.Dispose();
+        base.Dispose(disposing);
     }
 }

@@ -1,4 +1,4 @@
-using DevExpress.Export.Xl;
+﻿using DevExpress.Export.Xl;
 using HtmlAgilityPack;
 using System.Data;
 using System.Globalization;
@@ -242,7 +242,8 @@ public sealed class NewsletterArchiveBuilder
         sheet.SplitPosition = new XlCellPosition(0, 1);
     }
 
-    private static string ReadTemplate()    {
+    private static string ReadTemplate()
+    {
         ResourceManager resources = new("NewsWave.NewsMakerResources", typeof(NewsletterArchiveBuilder).Assembly);
         return resources.GetString("html_code") ?? throw new InvalidOperationException("В ресурсах NewsMaker не найден html_code.");
     }

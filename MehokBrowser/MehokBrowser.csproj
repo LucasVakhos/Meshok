@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
@@ -82,95 +83,94 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Configs\Forms\CfgFormIShop.resx">
-    			<DependentUpon>CfgFormIShop.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>CfgFormIShop.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Configs\Frames\CfgFrameBridgeNote.resx">
-    			<DependentUpon>CfgFrameBridgenote.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>CfgFrameBridgenote.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Configs\Frames\CfgFrameCDUchet.resx">
-    			<DependentUpon>CfgFrameCDUchet.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>CfgFrameCDUchet.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Configs\Frames\CfgFrameIShop.resx">
-    			<DependentUpon>CfgFrameIShop.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>CfgFrameIShop.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Configs\Frames\CfgFrameMeshok.resx">
-    			<DependentUpon>CfgFrameMeshok.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>CfgFrameMeshok.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Configs\Frames\LoginFrameIShop.resx">
-    			<DependentUpon>LoginFrameIShop.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>LoginFrameIShop.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Configs\Frames\MySqlConnectionFrame.resx">
-    			<DependentUpon>MySqlConnectionFrame.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>MySqlConnectionFrame.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutBox.resx">
-    			<DependentUpon>AboutBox.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SplashScreen.resx">
-    			<DependentUpon>SplashScreen.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frames\SettingFrames\Main\Config\ConnectButton.resx" />
     <EmbeddedResource Include="Frames\SettingFrames\Main\Frames\ConfigBridgeFrame.resx" />
     <EmbeddedResource Include="Frames\SettingFrames\Main\Frames\ConfigIShopFrame.resx" />
     <EmbeddedResource Include="Frames\SettingFrames\Main\Frames\ConfigMeshokFrame.resx" />
     <EmbeddedResource Include="Workers\WorkWithLots\CreateCSV\BeginRelistLotsFrame.resx">
-    			<DependentUpon>BeginRelistLotsFrame.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>BeginRelistLotsFrame.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frames\SettingFrames\Main\MainConfigFrame.resx">
-    			<DependentUpon>MainConfigFrame.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>MainConfigFrame.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frames\WebFrames\MainWB.resx">
-    			<DependentUpon>MainWB.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>MainWB.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frames\WebFrames\ProcessorWB.resx">
-    			<DependentUpon>ProcessorWB.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>ProcessorWB.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frames\ScanSettingFrames\BeginFrame.resx">
-    			<DependentUpon>BeginFrame.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>BeginFrame.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frames\ScanSettingFrames\ScanSettingLostDeals.resx">
-    			<DependentUpon>ScanSettingLostDeals.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>ScanSettingLostDeals.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frames\ScanSettingFrames\ScanSettingFrame.resx">
-    			<DependentUpon>ScanSettingFrame.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>ScanSettingFrame.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frames\SettingFrames\SettingFrame.resx">
-    			<DependentUpon>SettingFrame.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>SettingFrame.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frames\TestBibbon.resx">
-    			<DependentUpon>TestBibbon.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>TestBibbon.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainMeshok.resx">
-    			<DependentUpon>MainMeshok.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>MainMeshok.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frames\ScanSettingFrames\ScanSettingClients.resx">
-    			<DependentUpon>ScanSettingClients.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>ScanSettingClients.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frames\SettingFrames\Messages\SettingMessageesFrame.resx">
-    			<DependentUpon>SettingMessageesFrame.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>SettingMessageesFrame.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frames\WebFrames\ScanWebFrame.resx">
-    			<DependentUpon>ScanWebFrame.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>ScanWebFrame.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frames\WebFrames\InnerWB.resx">
-    			<DependentUpon>InnerWB.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>InnerWB.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-    			<Generator>ResXFileCodeGenerator</Generator>
-    			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    			<SubType>Designer</SubType>
-    		</EmbeddedResource>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\BaseForm.resx">
-    			<DependentUpon>BaseForm.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>BaseForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frames\BaseFrame.resx">
-    			<DependentUpon>BaseFrame.cs</DependentUpon>
-    		</EmbeddedResource>
+      <DependentUpon>BaseFrame.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="icons8_MaxCDN.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GH.Components\GH.Components.csproj" />
     <ProjectReference Include="..\LB.Libs\LB-Libs.csproj" />
   </ItemGroup>
 </Project>

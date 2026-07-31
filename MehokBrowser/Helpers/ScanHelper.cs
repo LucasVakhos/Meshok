@@ -1,53 +1,52 @@
-using GH.Components;
+﻿using LB.Libs;
 using GhBrowser = LB.Libs.GhBrowser;
 using GhDocument = LB.Libs.GhDocument;
 using MeshokBrowser.Models;
 using MeshokBrowser.Workers;
 using System;
 using System.Collections.Generic;
-namespace MeshokBrowser.Helpers
+namespace MeshokBrowser.Helpers;
+
+public partial class ScanHelper : ScanSetting, IDisposable
 {
-    public partial class ScanHelper : ScanSetting, IDisposable
+    GhBrowser webBrowser => ProcessRunHelper.ProcScreen.webBrowser;
+    GhDocument webDocument => webBrowser.Document;
+    IProcessNotify _processor = null;
+    public string ShowOnPageValue { get => ShowOnPage.ToString(); }
+    public string[] Splits { get; internal set; }
+    public ScanHelper(IProcessNotify processor)
     {
-        GhBrowser webBrowser => ProcessRunHelper.ProcScreen.webBrowser;
-        GhDocument webDocument => webBrowser.Document;
-        IProcessNotify _processor = null;
-        public string ShowOnPageValue { get => ShowOnPage.ToString(); }
-        public string[] Splits { get; internal set; }
-        public ScanHelper(IProcessNotify processor)
+        _processor = processor;
+        RestoreSetting();
+    }
+    void Wait(List<DisposableTask> waits)
+    {
+        if (waits.Count == 0)
+            return;
+        _processor.SetTotalSteps(waits.Count);
+        foreach (var item in waits)
         {
-            _processor = processor;
-            RestoreSetting();
+            item.Execute();
+            if (_processor != null)
+                _processor.IncCurrentStep();
+            item.Dispose();
         }
-        void Wait(List<DisposableTask> waits)
+        waits.Clear();
+    }
+    private void SetTaskToOrderLienes(List<DisposableTask> result)
+    {
+        foreach (var task in result)
         {
-            if (waits.Count == 0)
-                return;
-            _processor.SetTotalSteps(waits.Count);
-            foreach (var item in waits)
+            _processor.SetTotalSteps(AllPackets.OrderLines.Count);
+            foreach (OrderLine orderLine in AllPackets.OrderLines)
             {
-                item.Execute();
-                if (_processor != null)
-                    _processor.IncCurrentStep();
-                item.Dispose();
-            }
-            waits.Clear();
-        }
-        private void SetTaskToOrderLienes(List<DisposableTask> result)
-        {
-            foreach (var task in result)
-            {
-                _processor.SetTotalSteps(AllPackets.OrderLines.Count);
-                foreach (OrderLine orderLine in AllPackets.OrderLines)
-                {
-                    orderLine.AddTaskByStatus(ScanStatus, task);
-                    _processor.IncCurrentStep();
-                }
+                orderLine.AddTaskByStatus(ScanStatus, task);
+                _processor.IncCurrentStep();
             }
         }
-        public void Dispose()
-        {
-            _processor = null;
-        }
+    }
+    public void Dispose()
+    {
+        _processor = null;
     }
 }

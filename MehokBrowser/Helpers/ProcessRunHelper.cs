@@ -1,21 +1,20 @@
-﻿namespace MeshokBrowser.Workers
+﻿namespace MeshokBrowser.Workers;
+
+public static class ProcessRunHelper
 {
-    public static class ProcessRunHelper
+    private static bool _executing;
+    private static ProcessorWB _procScreen = null;
+    private static IMainForm _mainForm = null;
+    private static bool _enableBaseDocumrntComplete = true;
+    public static bool Executing
     {
-        private static bool _executing;
-        private static ProcessorWB _procScreen = null;
-        private static IMainForm _mainForm = null;
-        private static bool _enableBaseDocumrntComplete = true;
-        public static bool Executing
+        get => _executing;
+        set
         {
-            get => _executing;
-            set
-            {
-                _executing = value;
-            }
+            _executing = value;
         }
-        public static bool EnableBaseDocumrntComplete { get => _enableBaseDocumrntComplete; set => _enableBaseDocumrntComplete = value; }
-        public static ProcessorWB ProcScreen { get => _procScreen; set => _procScreen = value; }
-        public static IMainForm MainForm { get => _mainForm; set => _mainForm = value; }
     }
+    public static bool EnableBaseDocumrntComplete { get => _enableBaseDocumrntComplete; set => _enableBaseDocumrntComplete = value; }
+    public static ProcessorWB ProcScreen { get => _procScreen; set => _procScreen = value; }
+    public static IMainForm MainForm { get => _mainForm; set => _mainForm = value; }
 }

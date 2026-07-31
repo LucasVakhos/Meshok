@@ -1,16 +1,15 @@
 ﻿using System;
-namespace MeshokBrowser
+namespace MeshokBrowser;
+
+static class Program
 {
-    static class Program
+    /// <summary>
+    /// Главная точка входа для приложения.
+    /// </summary>
+    [STAThread]
+    static void Main()
     {
-        /// <summary>
-        /// Главная точка входа для приложения.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            //DevExpress.ExpressApp.FrameworkSettings.DefaultSettingsCompatibilityMode =        DevExpress.ExpressApp.FrameworkSettingsCompatibilityMode.v20_1;
-            AppContextMB.RunInstance();
-        }
+        //DevExpress.ExpressApp.FrameworkSettings.DefaultSettingsCompatibilityMode =        DevExpress.ExpressApp.FrameworkSettingsCompatibilityMode.v20_1;
+        AppContextMB.RunInstance();
     }
 }

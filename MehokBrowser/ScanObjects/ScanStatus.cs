@@ -1,12 +1,11 @@
-namespace MeshokBrowser.Models
+﻿namespace MeshokBrowser.Models;
+
+public enum ScanStatus
 {
-    public enum ScanStatus
-    {
-        None,
-        ScanLostDeals,
-        ScanNew,
-        ScanNotNew,
-        ScanNewMess,
-        Finished
-    }
+    None,
+    ScanLostDeals,
+    ScanNew,
+    ScanNotNew,
+    ScanNewMess,
+    Finished
 }

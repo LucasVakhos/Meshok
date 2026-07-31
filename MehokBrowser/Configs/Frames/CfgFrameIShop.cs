@@ -1,13 +1,12 @@
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
 using FirebirdSql.Data.FirebirdClient;
 using GH.Interfaces;
 using System.Linq;
 using MehokBrowser.Configs.Cfg;
-using MehokBrowser.UI.Config;
+using LB.Libs;
 
-namespace MehokBrowser.Configs.Frames
+namespace MehokBrowser.Configs.Frames;
+
+public partial class CfgFrameIShop : CfgConnectFrameType<CfgIShop>
 {
-    public partial class CfgFrameIShop : CfgConnectFrameType<CfgIShop>
-    {
-    }
 }

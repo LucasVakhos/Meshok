@@ -1,4 +1,4 @@
-using DevExpress.LookAndFeel;
+﻿using DevExpress.LookAndFeel;
 using DevExpress.XtraNavBar;
 using System.Runtime.Serialization;
 

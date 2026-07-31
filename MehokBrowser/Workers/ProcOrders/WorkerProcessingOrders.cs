@@ -1,10 +1,9 @@
-namespace MeshokBrowser.Workers
+﻿namespace MeshokBrowser.Workers;
+
+public class WorkerProcessingOrders : Worker
 {
-    public class WorkerProcessingOrders : Worker
+    public WorkerProcessingOrders(IMainForm form) : base(form)
     {
-        public WorkerProcessingOrders(IMainForm form) : base(form)
-        {
-            ProcessName = "Обработка заказов";
-        }
+        ProcessName = "Обработка заказов";
     }
 }

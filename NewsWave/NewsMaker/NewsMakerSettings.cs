@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.DataProtection;
+﻿using Microsoft.AspNetCore.DataProtection;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
@@ -21,7 +21,8 @@ public sealed class CampaignSettings
     public bool IsHtml { get; set; } = true;
 }
 public sealed class ProgramSettings
-{    [Range(0, 7)] public int RunDay { get; set; } = 7;
+{
+    [Range(0, 7)] public int RunDay { get; set; } = 7;
     public TimeSpan RunTime { get; set; } = TimeSpan.FromHours(18);
 }
 public sealed class BridgeNoteSettings

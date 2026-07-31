@@ -1,6 +1,4 @@
-namespace GH.Components
+﻿namespace LB.Libs;
+public class CfgFormBridgeNote : CfgFormType<CfgFrameBridgeNote>
 {
-    public class CfgFormBridgeNote : CfgFormType<CfgFrameBridgeNote>
-    {
-    }
 }

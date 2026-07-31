@@ -1,150 +1,148 @@
-using FirebirdSql.Data.FirebirdClient;
-using GH.Components;
+﻿using FirebirdSql.Data.FirebirdClient;
+using LB.Libs;
 using UpdatableProperty = LB.Libs.UpdatablePropertyAttribute;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-namespace MeshokBrowser
+namespace MeshokBrowser;
+public class SettingIShop : PrivateSetting
 {
-    public class SettingIShop : PrivateSetting
+    private bool _isComplete = false;
+    [UpdatableProperty]
+    public virtual string DataSource { get; set; } = LB.Libs.SecretProvider.LegacyIShopDataSource;
+    [UpdatableProperty]
+    public virtual bool BaseRemote { get; set; } = false;
+    [UpdatableProperty]
+    public virtual int BaseDialect { get; set; } = 3;
+    [UpdatableProperty]
+    public virtual int BasePort { get; set; } = 3050;
+    [UpdatableProperty]
+    public virtual string BaseCharset { get; set; } = "WIN1251";
+    [UpdatableProperty]
+    public virtual string BaseLogin { get; set; } = LB.Libs.SecretProvider.LegacyIShopLogin;
+    [UpdatableProperty]
+    public virtual string BasePassword { get; set; } = LB.Libs.SecretProvider.LegacyIShopPassword;
+    [UpdatableProperty]
+    public virtual string Database { get; set; }
+    [UpdatableProperty]
+    public override string User { get; set; }
+    [UpdatableProperty]
+    public override string PassWrd { get; set; }
+    public virtual bool UserWantRememberMe { get; set; }
+    public bool IsComplete
     {
-        private bool _isComplete = false;
-        [UpdatableProperty]
-        public virtual string DataSource { get; set; } = LB.Libs.SecretProvider.LegacyIShopDataSource;
-        [UpdatableProperty]
-        public virtual bool BaseRemote { get; set; } = false;
-        [UpdatableProperty]
-        public virtual int BaseDialect { get; set; } = 3;
-        [UpdatableProperty]
-        public virtual int BasePort { get; set; } = 3050;
-        [UpdatableProperty]
-        public virtual string BaseCharset { get; set; } = "WIN1251";
-        [UpdatableProperty]
-        public virtual string BaseLogin { get; set; } = LB.Libs.SecretProvider.LegacyIShopLogin;
-        [UpdatableProperty]
-        public virtual string BasePassword { get; set; } = LB.Libs.SecretProvider.LegacyIShopPassword;
-        [UpdatableProperty]
-        public virtual string Database { get; set; }
-        [UpdatableProperty]
-        public override string User { get; set; }
-        [UpdatableProperty]
-        public override string PassWrd { get; set; }
-        public virtual bool UserWantRememberMe { get; set; }
-        public bool IsComplete
+        get
         {
-            get
+            if (!_isComplete)
             {
-                if (!_isComplete)
+                foreach (PropertyInfo item in GetType().GetProperties())
                 {
-                    foreach (PropertyInfo item in GetType().GetProperties())
+                    if (item.GetValue(this) == null)
+                        break;
+                    if (item.Name == "User")
                     {
-                        if (item.GetValue(this) == null)
-                            break;
-                        if (item.Name == "User")
-                        {
-                            _isComplete = true;
-                            break;
-                        }
+                        _isComplete = true;
+                        break;
                     }
                 }
-                return _isComplete;
             }
-            set
-            {
-                _isComplete = value;
-            }
+            return _isComplete;
+        }
+        set
+        {
+            _isComplete = value;
         }
     }
-    public class ConfigIShop : PrivateConfig<SettingIShop>, IConnectSetting
+}
+public class ConfigIShop : PrivateConfig<SettingIShop>, IConnectSetting
+{
+    [Display(Name = "Server", Description = "Серевер или имя компьютера")]
+    public virtual string DataSource { get; set; } = LB.Libs.SecretProvider.LegacyIShopDataSource;
+    [Display(Name = "Remote", Description = "База на другом компьютере")]
+    public virtual bool BaseRemote { get; set; } = false;
+    [Display(Name = "Dialect", Description = "Dialect Базы данных")]
+    public virtual int BaseDialect { get; set; } = 3;
+    [Display(Name = "Port", Description = "Port Базы данных")]
+    public virtual int BasePort { get; set; } = 3050;
+    [Display(Name = "Charset", Description = "Charset Базы данных")]
+    public virtual string BaseCharset { get; set; } = "WIN1251";
+    [Display(Name = "Login", Description = "Login  для подключения к Базе данных")]
+    public virtual string BaseLogin { get; set; } = LB.Libs.SecretProvider.LegacyIShopLogin;
+    [Display(Name = "Password", Description = "Password для подключения к Базе данных")]
+    public virtual string BasePassword { get; set; } = LB.Libs.SecretProvider.LegacyIShopPassword;
+    private string _base = LB.Libs.SecretProvider.LegacyIShopDatabase;
+    [Display(Name = "База данных", Description = "Локальный путь к базе данных включая название файла")]
+    public virtual string Database { get => _base; set => _base = value; }
+    [Display(Name = "Remember Me", Description = "Входить без подтверждения авторизации")]
+    public virtual bool UserWantRememberMe { get; set; }
+    public bool IsComplete
     {
-        [Display(Name = "Server", Description = "Серевер или имя компьютера")]
-        public virtual string DataSource { get; set; } = LB.Libs.SecretProvider.LegacyIShopDataSource;
-        [Display(Name = "Remote", Description = "База на другом компьютере")]
-        public virtual bool BaseRemote { get; set; } = false;
-        [Display(Name = "Dialect", Description = "Dialect Базы данных")]
-        public virtual int BaseDialect { get; set; } = 3;
-        [Display(Name = "Port", Description = "Port Базы данных")]
-        public virtual int BasePort { get; set; } = 3050;
-        [Display(Name = "Charset", Description = "Charset Базы данных")]
-        public virtual string BaseCharset { get; set; } = "WIN1251";
-        [Display(Name = "Login", Description = "Login  для подключения к Базе данных")]
-        public virtual string BaseLogin { get; set; } = LB.Libs.SecretProvider.LegacyIShopLogin;
-        [Display(Name = "Password", Description = "Password для подключения к Базе данных")]
-        public virtual string BasePassword { get; set; } = LB.Libs.SecretProvider.LegacyIShopPassword;
-        private string _base = LB.Libs.SecretProvider.LegacyIShopDatabase;
-        [Display(Name = "База данных", Description = "Локальный путь к базе данных включая название файла")]
-        public virtual string Database { get => _base; set => _base = value; }
-        [Display(Name = "Remember Me", Description = "Входить без подтверждения авторизации")]
-        public virtual bool UserWantRememberMe { get; set; }
-        public bool IsComplete
+        get
         {
-            get
-            {
-                return Setting.IsComplete;
-            }
-            set
-            {
-                Setting.IsComplete = value;
-            }
+            return Setting.IsComplete;
         }
-        //bool IConnectSetting.IsComplete { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public SettingIShop Setting => ini.Setting as SettingIShop;
-        public bool Refresh()
+        set
         {
-            throw new System.NotImplementedException();
+            Setting.IsComplete = value;
         }
-        //public override void LoadFromIni()
-        //{
-        //    if (Setting != null)
-        //    {
-        //        DataSource = Setting.DataSource;
-        //        BaseDialect = Setting.BaseDialect;
-        //        BasePort = Setting.BasePort;
-        //        BaseCharset = Setting.BaseCharset;
-        //        BaseRemote = Setting.BaseRemote;
-        //        Database = Setting.Database;
-        //        BaseLogin = Setting.BaseLogin;
-        //        BasePassword = Setting.BasePassword;
-        //        User = Setting.User;
-        //        PassWrd = Setting.PassWrd;
-        //        UserWantRememberMe = Setting.UserWantRememberMe;
-        //    }
-        //}
-        public override void SaveToIni()
-        {
-            if (Setting != null)
-            {
-                Setting.DataSource = DataSource;
-                Setting.BaseDialect = BaseDialect;
-                Setting.BasePort = BasePort;
-                Setting.BaseCharset = BaseCharset;
-                Setting.BaseRemote = BaseRemote;
-                Setting.Database = Database;
-                Setting.BaseLogin = BaseLogin;
-                Setting.BasePassword = BasePassword;
-                Setting.User = User;
-                Setting.PassWrd = PassWrd;
-                Setting.UserWantRememberMe = UserWantRememberMe;
-                ini.Save();
-            }
-        }
-        //TODO public override bool TestConnection()
-        //{
-        //    using (FbConnection connection = new FbConnection(Connections<ConfigIShop>.CreateConnectionString()))
-        //    {
-        //        try
-        //        {
-        //            connection.Open();
-        //            return connection.State == System.Data.ConnectionState.Open;
-        //        }
-        //        catch (System.Exception ex)
-        //        {
-        //            Logger.Error(ex);
-        //            return false;
-        //        }
-        //    }
-        //}
     }
+    //bool IConnectSetting.IsComplete { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+    public SettingIShop Setting => ini.Setting as SettingIShop;
+    public bool Refresh()
+    {
+        throw new System.NotImplementedException();
+    }
+    //public override void LoadFromIni()
+    //{
+    //    if (Setting != null)
+    //    {
+    //        DataSource = Setting.DataSource;
+    //        BaseDialect = Setting.BaseDialect;
+    //        BasePort = Setting.BasePort;
+    //        BaseCharset = Setting.BaseCharset;
+    //        BaseRemote = Setting.BaseRemote;
+    //        Database = Setting.Database;
+    //        BaseLogin = Setting.BaseLogin;
+    //        BasePassword = Setting.BasePassword;
+    //        User = Setting.User;
+    //        PassWrd = Setting.PassWrd;
+    //        UserWantRememberMe = Setting.UserWantRememberMe;
+    //    }
+    //}
+    public override void SaveToIni()
+    {
+        if (Setting != null)
+        {
+            Setting.DataSource = DataSource;
+            Setting.BaseDialect = BaseDialect;
+            Setting.BasePort = BasePort;
+            Setting.BaseCharset = BaseCharset;
+            Setting.BaseRemote = BaseRemote;
+            Setting.Database = Database;
+            Setting.BaseLogin = BaseLogin;
+            Setting.BasePassword = BasePassword;
+            Setting.User = User;
+            Setting.PassWrd = PassWrd;
+            Setting.UserWantRememberMe = UserWantRememberMe;
+            ini.Save();
+        }
+    }
+    //TODO public override bool TestConnection()
+    //{
+    //    using (FbConnection connection = new FbConnection(Connections<ConfigIShop>.CreateConnectionString()))
+    //    {
+    //        try
+    //        {
+    //            connection.Open();
+    //            return connection.State == System.Data.ConnectionState.Open;
+    //        }
+    //        catch (System.Exception ex)
+    //        {
+    //            Logger.Error(ex);
+    //            return false;
+    //        }
+    //    }
+    //}
 }

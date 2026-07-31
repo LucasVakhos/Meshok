@@ -1,4 +1,4 @@
-﻿//#define NOT_POST_MESSAGE 
+﻿//#define NOT_POST_MESSAGE
 using GhTextAreaElement = LB.Libs.GhTextAreaElement;
 using GhInputElement = LB.Libs.GhInputElement;
 using MeshokBrowser.Models;
@@ -6,66 +6,65 @@ using System.Linq;
 using System.Windows.Forms;
 using Common;
 using System.Threading;
-namespace MeshokBrowser.Workers
+namespace MeshokBrowser.Workers;
+
+public class TaskPostMessage : ParsingTask<OrderLine>
 {
-    public class TaskPostMessage : ParsingTask<OrderLine>
+    public TaskPostMessage()
     {
-        public TaskPostMessage()
+        CaptionOfTask = "Рассылка сообщений";
+    }
+    protected override bool CanExecute()
+    {
+        return ListTasks.Any(x => x.HasMessages);
+    }
+    protected override void WorkWithDocument()
+    {
+        currentObject.ParsingSaccess = true;
+        GhTextAreaElement memo = doc.GetElementsByTagName("textarea").Where(x => x.Id == "MESS").FirstOrDefault() as GhTextAreaElement;
+        if (memo == null)
+            return;
+        string bodiText = doc.Body.TextContent;
+        foreach (CheckMesage item in currentObject.Infos.Where(x => x.NeedMessaging).ToArray())
         {
-            CaptionOfTask = "Рассылка сообщений";
+            if (item.ticket == "" || bodiText.Contains(item.ticket))
+                item.NeedMessaging = false;
         }
-        protected override bool CanExecute()
+        if (!currentObject.HasMessages)
+            return;
+        currentObject.ParsingSaccess = false;
+        CheckMesage mesage = currentObject.Infos.Where(x => x.NeedMessaging).FirstOrDefault();
+        //foreach (CheckMesage item in currentObject.Infos.Where(x => x.NeedMessaging).ToArray())
+        //{
+        memo.Focus();
+        string mess = mesage.ticket + "\r\n" + mesage.mess_text;
+        memo.Value = mess;
+        memo.Focus();
+        Application.DoEvents();
+        GhInputElement btn = doc.GetElementsByTagName("input").Where(x => x.GetAttribute("type") == "submit" &&
+            x.GetAttribute("value") == "Отправить").FirstOrDefault() as GhInputElement;
+        if (btn != null)
         {
-            return ListTasks.Any(x => x.HasMessages);
-        }
-        protected override void WorkWithDocument()
-        {
-            currentObject.ParsingSaccess = true;
-            GhTextAreaElement memo = doc.GetElementsByTagName("textarea").Where(x => x.Id == "MESS").FirstOrDefault() as GhTextAreaElement;
-            if (memo == null)
-                return;
-            string bodiText = doc.Body.TextContent;
-            foreach (CheckMesage item in currentObject.Infos.Where(x => x.NeedMessaging).ToArray())
-            {
-                if (item.ticket == "" || bodiText.Contains(item.ticket))
-                    item.NeedMessaging = false;
-            }
-            if (!currentObject.HasMessages)
-                return;
-            currentObject.ParsingSaccess = false;
-            CheckMesage mesage = currentObject.Infos.Where(x => x.NeedMessaging).FirstOrDefault();
-            //foreach (CheckMesage item in currentObject.Infos.Where(x => x.NeedMessaging).ToArray())
-            //{
-            memo.Focus();
-            string mess = mesage.ticket + "\r\n" + mesage.mess_text;
-            memo.Value = mess;
-            memo.Focus();
+            btn.Focus();
             Application.DoEvents();
-            GhInputElement btn = doc.GetElementsByTagName("input").Where(x => x.GetAttribute("type") == "submit" &&
-                x.GetAttribute("value") == "Отправить").FirstOrDefault() as GhInputElement;
-            if (btn != null)
-            {
-                btn.Focus();
-                Application.DoEvents();
-            }
-#if !NOT_POST_MESSAGE
-            if (currentObject.Check.dp_status == 6 && currentObject.Check.dp_packed)
-            {
-                DoWaitUserReaction();
-            }
-            else
-            {
-                WaitForOperationEnd = true;
-                if (btn != null)
-                    btn.Click();
-                else
-                    memo.Form.Submit();
-                DoWaitForOperationEnd();
-                Thread.Sleep(1000);
-            }
-#endif
-            mesage.NeedMessaging = false;
-            currentObject.ParsingSaccess = !currentObject.HasMessages;
         }
+#if !NOT_POST_MESSAGE
+        if (currentObject.Check.dp_status == 6 && currentObject.Check.dp_packed)
+        {
+            DoWaitUserReaction();
+        }
+        else
+        {
+            WaitForOperationEnd = true;
+            if (btn != null)
+                btn.Click();
+            else
+                memo.Form.Submit();
+            DoWaitForOperationEnd();
+            Thread.Sleep(1000);
+        }
+#endif
+        mesage.NeedMessaging = false;
+        currentObject.ParsingSaccess = !currentObject.HasMessages;
     }
 }
