@@ -376,3 +376,6 @@ _VS.Helper.ZipManifest.txt
 _zip/
 NewsWave/wwwroot/vendor/
 NewsWave/App_Data/
+
+# Nested local repository copy
+/Meshok/
