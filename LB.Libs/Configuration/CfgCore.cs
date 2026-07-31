@@ -60,6 +60,7 @@ public class CfgCore : AbstractEntity
             }
 
             bool loadedAny = false;
+            bool migrateSecrets = false;
             foreach (System.Reflection.PropertyInfo property in GetIniProperties())
             {
                 if (!ini.TryRead(section, property.Name, out string text))
@@ -67,7 +68,14 @@ public class CfgCore : AbstractEntity
 
                 try
                 {
-                    property.SetValue(this, IniFile.ConvertFromString(text, property.PropertyType));
+                    object? value = IniFile.ConvertFromString(text, property.PropertyType);
+                    if (IsSecret(property) && value is string secret)
+                    {
+                        migrateSecrets |= !string.IsNullOrEmpty(secret) && !SecretProtector.IsProtected(secret);
+                        value = SecretProtector.Unprotect(secret);
+                    }
+
+                    property.SetValue(this, value);
                     loadedAny = true;
                 }
                 catch (Exception ex)
@@ -76,7 +84,7 @@ public class CfgCore : AbstractEntity
                 }
             }
 
-            if (!loadedAny)
+            if (!loadedAny || migrateSecrets)
                 Save(true);
         }
         finally
@@ -133,7 +141,12 @@ public class CfgCore : AbstractEntity
             IniFile ini = IniFile.DefaultInstance();
             string section = GetName();
             foreach (System.Reflection.PropertyInfo property in GetIniProperties())
-                ini.Write(section, property.Name, property.GetValue(this));
+            {
+                object? value = property.GetValue(this);
+                if (IsSecret(property) && value is string secret)
+                    value = SecretProtector.Protect(secret);
+                ini.Write(section, property.Name, value);
+            }
 
             ini.Remove(section, "Json");
             ini.Save();
@@ -151,4 +164,8 @@ public class CfgCore : AbstractEntity
         .Where(property => property.GetCustomAttributes(
             typeof(System.Runtime.Serialization.DataMemberAttribute), true).Length > 0)
         .Where(property => IniFile.IsSupportedIniType(property.PropertyType));
+
+    private static bool IsSecret(System.Reflection.PropertyInfo property) =>
+        property.PropertyType == typeof(string) &&
+        property.Name.Contains("Password", StringComparison.OrdinalIgnoreCase);
 }
