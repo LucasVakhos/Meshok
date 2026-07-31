@@ -216,8 +216,7 @@ public sealed class IniFile
 
         foreach (var property in GetSavedProperties(obj.GetType()))
         {
-            var text = Read(section, property.Name);
-            if (string.IsNullOrEmpty(text))
+            if (!TryRead(section, property.Name, out string text))
                 continue;
 
             try

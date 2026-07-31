@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LB-Libs", "LB.Libs\LB-Libs.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsWave", "NewsWave\NewsWave.csproj", "{BB2CBA13-0B65-41BA-AEFB-CB0AB02FB5F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LB.Libs.Tests", "LB.Libs.Tests\LB.Libs.Tests.csproj", "{B81C1EB0-5699-4586-954B-61EA45E55824}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LB.Libs", "LB.Libs", "{8B02AB41-CE70-ACF9-BA9D-4049D5BE6210}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +77,18 @@ Global
 		{BB2CBA13-0B65-41BA-AEFB-CB0AB02FB5F1}.Release|x64.Build.0 = Release|Any CPU
 		{BB2CBA13-0B65-41BA-AEFB-CB0AB02FB5F1}.Release|x86.ActiveCfg = Release|Any CPU
 		{BB2CBA13-0B65-41BA-AEFB-CB0AB02FB5F1}.Release|x86.Build.0 = Release|Any CPU
+		{B81C1EB0-5699-4586-954B-61EA45E55824}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B81C1EB0-5699-4586-954B-61EA45E55824}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B81C1EB0-5699-4586-954B-61EA45E55824}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B81C1EB0-5699-4586-954B-61EA45E55824}.Debug|x64.Build.0 = Debug|Any CPU
+		{B81C1EB0-5699-4586-954B-61EA45E55824}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B81C1EB0-5699-4586-954B-61EA45E55824}.Debug|x86.Build.0 = Debug|Any CPU
+		{B81C1EB0-5699-4586-954B-61EA45E55824}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B81C1EB0-5699-4586-954B-61EA45E55824}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B81C1EB0-5699-4586-954B-61EA45E55824}.Release|x64.ActiveCfg = Release|Any CPU
+		{B81C1EB0-5699-4586-954B-61EA45E55824}.Release|x64.Build.0 = Release|Any CPU
+		{B81C1EB0-5699-4586-954B-61EA45E55824}.Release|x86.ActiveCfg = Release|Any CPU
+		{B81C1EB0-5699-4586-954B-61EA45E55824}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
