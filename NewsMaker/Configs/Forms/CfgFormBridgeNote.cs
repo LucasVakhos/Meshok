@@ -1,4 +1,4 @@
-﻿namespace GH.Configs;
+﻿namespace NewsMaker.Configs;
 
 public class CfgFormBridgeNote : CfgFormType<CfgFrameBridgeNote>
 {

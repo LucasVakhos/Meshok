@@ -1,6 +1,6 @@
-﻿using GH.Configs;
+﻿using NewsMaker.Configs;
 using MySql.Data.MySqlClient;
-using GH.Helpers;
+using LB.Libs;
 using System;
 using Microsoft.Win32;
 using System.Windows.Forms;

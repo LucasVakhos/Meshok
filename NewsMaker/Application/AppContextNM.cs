@@ -1,4 +1,4 @@
-﻿using GH.Configs;
+﻿using NewsMaker.Configs;
 using System.Windows.Forms;
 namespace NewsMaker;
 

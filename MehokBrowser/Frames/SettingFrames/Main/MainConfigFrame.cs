@@ -1,6 +1,5 @@
 ﻿using DevExpress.XtraLayout;
-using GH.Configs;
-using GH.Controls;
+using LB.Libs;
 namespace MeshokBrowser;
 public partial class MainConfigFrame : BaseFrame, IPagesFrame
 {

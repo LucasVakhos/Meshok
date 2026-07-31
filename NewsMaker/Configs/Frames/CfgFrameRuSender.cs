@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
-using GH.Configs;
+using NewsMaker.Configs;
 namespace NewsMaker;
 
 public partial class CfgFrameRuSender : CfgCoreFrameType<CfgRuSender>

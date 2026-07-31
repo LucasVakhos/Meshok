@@ -1,4 +1,4 @@
-﻿using GH.Configs;
+﻿using NewsMaker.Configs;
 using MeshokBrowser.Models;
 using System.Collections;
 using System.Collections.Generic;

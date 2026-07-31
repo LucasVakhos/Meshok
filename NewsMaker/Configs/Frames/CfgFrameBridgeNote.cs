@@ -1,5 +1,5 @@
 ﻿using DevExpress.XtraEditors;
-namespace GH.Configs;
+namespace NewsMaker.Configs;
 
 public partial class CfgFrameBridgeNote : CfgConnectFrameType<CfgBridgeNote>
 {

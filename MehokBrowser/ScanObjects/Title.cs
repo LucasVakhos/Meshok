@@ -1,4 +1,4 @@
-﻿using GH.Attributes;
+﻿using LB.Libs;
 using UpdatablePropertyAttribute = LB.Libs.UpdatablePropertyAttribute;
 using System.ComponentModel.DataAnnotations;
 namespace MeshokBrowser.Models;

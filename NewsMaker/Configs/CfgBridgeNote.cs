@@ -1,8 +1,8 @@
 ﻿using System;
-using GH.Configs;
+using NewsMaker.Configs;
 using MySql.Data.MySqlClient;
 namespace NewsMaker;
-public class CfgBridgeNote : GH.Configs.CfgBridgeNote
+public class CfgBridgeNote : NewsMaker.Configs.CfgBridgeNote
 {
     protected override void CreateSomething()
     {

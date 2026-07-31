@@ -1,4 +1,4 @@
-﻿using GH.Configs;
+﻿using NewsMaker.Configs;
 using System;
 using System.IO;
 using System.Resources;

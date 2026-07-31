@@ -1,9 +1,8 @@
 ﻿using DevExpress.XtraEditors;
 using FirebirdSql.Data.FirebirdClient;
-using GH.Interfaces;
+using LB.Libs;
 using System.Linq;
 using MehokBrowser.Configs.Cfg;
-using LB.Libs;
 
 namespace MehokBrowser.Configs.Frames;
 

@@ -1,4 +1,4 @@
-﻿using GH.Configs;
+﻿using LB.Libs;
 using MeshokBrowser.Models;
 using MeshokBrowser.Workers;
 using System;

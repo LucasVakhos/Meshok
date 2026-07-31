@@ -1,12 +1,10 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
 using LB.Libs;
-using GH.AppContext;
 using Category = LB.Libs.Category;
 using CfgCoreConnection = LB.Libs.CfgCoreConnection;
 using DbConnectionProperty = LB.Libs.DbConnectionProperty;
 using EditorType = LB.Libs.EditorType;
 using IniHelper = LB.Libs.IniHelper;
-using GH.Utils;
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;

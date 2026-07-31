@@ -1,4 +1,4 @@
-﻿using GH.Configs;
+﻿using NewsMaker.Configs;
 using NewsMaker.Common;
 using Newtonsoft.Json;
 using System;

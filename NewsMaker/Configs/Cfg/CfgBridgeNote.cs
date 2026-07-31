@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
-namespace GH.Configs;
+namespace NewsMaker.Configs;
 
 public class CfgBridgeNote : CfgCoreConnection
 {

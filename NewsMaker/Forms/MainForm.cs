@@ -2,7 +2,7 @@
 using DevExpress.XtraLayout;
 using DevExpress.XtraLayout.Utils;
 using LB.Libs;
-using GH.Configs;
+using NewsMaker.Configs;
 using NewsMaker.Common;
 using System;
 using System.Collections.Generic;

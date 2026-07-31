@@ -1,4 +1,4 @@
-﻿using GH.Configs;
+﻿using NewsMaker.Configs;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 namespace NewsMaker;

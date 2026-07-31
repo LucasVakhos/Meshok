@@ -1,5 +1,4 @@
-﻿using GH.AppContext;
-using LB.Libs;
+﻿using LB.Libs;
 using GhBrowser = LB.Libs.GhBrowser;
 using GhDocument = LB.Libs.GhDocument;
 using Microsoft.Web.WebView2.Core;

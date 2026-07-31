@@ -1,4 +1,4 @@
-﻿using GH.Configs;
+﻿using NewsMaker.Configs;
 using MySql.Data.MySqlClient;
 using NewsMaker.Common;
 using System;

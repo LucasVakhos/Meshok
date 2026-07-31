@@ -32,65 +32,10 @@
     </ItemGroup>
   </Target>
   <ItemGroup>
-    <Compile Remove="Legacy\Components\NHibernate\**\*.cs" />
-    <Compile Remove="Legacy\Components\Extensions\ComponentExtension.cs" />
-    <Compile Remove="Legacy\Components\Extensions\StringExtensions.cs" />
-    <Compile Remove="Legacy\Components\DataSource\FieldIntListEditor.cs" />
-    <Compile Remove="Legacy\Components\Controls\ConnectButtonNew.cs" />
-    <Compile Remove="Legacy\Components\Images\EditImages.cs" />
-    <Compile Remove="Legacy\Components\UserForms\ConnectionForm.cs" />
-    <Compile Remove="Legacy\Components\UserFrames\DataFrame.cs" />
-    <Compile Remove="Legacy\Components\UserFrames\DataFrame.Designer.cs" />
-    <Compile Remove="Legacy\Components\UserFrames\DataFrameEditorAttribute.cs" />
-    <Compile Remove="Legacy\Components\UserFrames\DetailsFrame.cs" />
-    <Compile Remove="Legacy\Components\UserFrames\DictionaryFrame.cs" />
-    <Compile Remove="Legacy\Components\UserFrames\DocumentFrame.cs" />
-    <Compile Remove="Legacy\Components\UserFrames\DocumentFrame.Designer.cs" />
-    <Compile Remove="Legacy\Components\UserFrames\InfoFrame.cs" />
-    <Compile Remove="Legacy\Components\UserFrames\InfoFrame.Designer.cs" />
-    <Compile Remove="Legacy\Components\UserFrames\LightDataFrame.cs" />
-    <Compile Remove="Legacy\Components\UserFrames\LightDataFrame.Designer.cs" />
-    <Compile Remove="Legacy\Components\Utils\AppIni.cs" />
-    <Compile Remove="Legacy\Components\Utils\AppIniSection.cs" />
-    <Compile Remove="Legacy\Components\Utils\FinalizeInit.cs" />
-    <Compile Remove="Legacy\Components\Z.FindFolder\**\*.cs" />
     <Compile Remove="Legacy\Components\bin\**\*.cs" />
     <Compile Remove="Legacy\Components\obj\**\*.cs" />
-    <Compile Remove="Legacy\Components\ActionList\ActionTargetDescriptionInfo.cs" />
-    <Compile Remove="Legacy\Components\Attributes\DbConnectionProperty.cs" />
-    <Compile Remove="Legacy\Components\Attributes\EditorType.cs" />
-    <Compile Remove="Legacy\Components\Attributes\GHProperty.cs" />
-    <Compile Remove="Legacy\Components\Attributes\MapAttribute.cs" />
-    <Compile Remove="Legacy\Components\Attributes\UpdatableProperty.cs" />
-    <Compile Remove="Legacy\Components\Browser\**\*.cs" />
-    <Compile Remove="Legacy\Components\Configs\Cfg\CfgApp.cs" />
-    <Compile Remove="Legacy\Components\Configs\Cfg\CfgCore.cs" />
-    <Compile Remove="Legacy\Components\Configs\Cfg\CfgCoreConnection.cs" />
-    <Compile Remove="Legacy\Components\Configs\IniFile\IniFile.cs" />
-    <Compile Remove="Legacy\Components\Configs\IniFile\IniHelper.cs" />
-    <Compile Remove="Legacy\Components\Controls\PathSeacher.cs" />
-    <Compile Remove="Legacy\Components\DataSource\Delegates.cs" />
-    <Compile Remove="Legacy\Components\DataSource\DisablePagesReason.cs" />
-    <Compile Remove="Legacy\Components\DataSource\EditGrants.cs" />
-    <Compile Remove="Legacy\Components\DataSource\EditTypes.cs" />
-    <Compile Remove="Legacy\Components\DataSource\IDataRepository.cs" />
-    <Compile Remove="Legacy\Components\DataSource\SqlTypes.cs" />
-    <Compile Remove="Legacy\Components\Helpers\EnumHelper.cs" />
-    <Compile Remove="Legacy\Components\Helpers\GHException.cs" />
-    <Compile Remove="Legacy\Components\Helpers\ObjectHelper.cs" />
-    <Compile Remove="Legacy\Components\Helpers\SizeHeper.cs" />
-    <Compile Remove="Legacy\Components\Images\EditTypesConst.cs" />
-    <Compile Remove="Legacy\Components\Interfaces\IRibbonForm.cs" />
-    <Compile Remove="Legacy\Components\LayoutControl\ButtonsPanel.cs" />
-    <Compile Remove="Legacy\Components\Models\Entities\AbstractEntity.cs" />
-    <Compile Remove="Legacy\Components\Models\Entities\BaseEntity.cs" />
-    <Compile Remove="Legacy\Components\Models\Entities\BaseUser.cs" />
-    <Compile Remove="Legacy\Components\Models\Entities\Field.cs" />
-    <Compile Remove="Legacy\Components\UserExceptions\NotImplemented.cs" />
-    <Compile Remove="Legacy\Components\UserExceptions\UserExceptions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Remove="Legacy\Components\NHibernate\**\*.resx" />
     <EmbeddedResource Include="Legacy\Components\ActionList\Images\Action.bmp" />
     <EmbeddedResource Include="Legacy\Components\ActionList\Images\ActionList.bmp" />
     <EmbeddedResource Include="Legacy\Components\Configs\Forms\CfgForm.resx">

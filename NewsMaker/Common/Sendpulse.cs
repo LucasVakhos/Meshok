@@ -1,4 +1,4 @@
-﻿using GH.Utils;
+﻿using LB.Libs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -8,7 +8,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
-using static GH.Utils.DlgHelper;
+using static LB.Libs.DlgHelper;
 namespace NewsMaker;
 internal class Sendpulse : ISendpulse
 {
