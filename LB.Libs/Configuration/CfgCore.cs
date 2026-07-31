@@ -4,7 +4,7 @@ using System.Text.Json;
 namespace LB.Libs;
 
 /// <summary>
-/// Base class for JSON-backed application settings stored in the shared INI.
+/// Base class for application settings stored as keys in the shared INI.
 /// </summary>
 public class CfgCore : AbstractEntity
 {
@@ -40,23 +40,44 @@ public class CfgCore : AbstractEntity
             LoadDefauls();
             IniFile.MigrateLegacyFiles();
 
-            string json = IniFile.DefaultInstance().Read(GetName(), "Json");
-            if (string.IsNullOrWhiteSpace(json))
+            IniFile ini = IniFile.DefaultInstance();
+            string section = GetName();
+            string json = ini.Read(section, "Json");
+            if (!string.IsNullOrWhiteSpace(json))
             {
+                try
+                {
+                    if (JsonSerializer.Deserialize(json, GetType(), SerializerOptions) is CfgCore loaded)
+                        Assigne(loaded);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.ToString());
+                }
+
                 Save(true);
                 return;
             }
 
-            try
+            bool loadedAny = false;
+            foreach (System.Reflection.PropertyInfo property in GetIniProperties())
             {
-                if (JsonSerializer.Deserialize(json, GetType(), SerializerOptions) is CfgCore loaded)
-                    Assigne(loaded);
+                if (!ini.TryRead(section, property.Name, out string text))
+                    continue;
+
+                try
+                {
+                    property.SetValue(this, IniFile.ConvertFromString(text, property.PropertyType));
+                    loadedAny = true;
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError($"Cannot load [{section}] {property.Name}: {ex}");
+                }
             }
-            catch (Exception ex)
-            {
-                Trace.TraceError(ex.ToString());
+
+            if (!loadedAny)
                 Save(true);
-            }
         }
         finally
         {
@@ -109,9 +130,12 @@ public class CfgCore : AbstractEntity
 
         try
         {
-            string json = JsonSerializer.Serialize(this, GetType(), SerializerOptions);
             IniFile ini = IniFile.DefaultInstance();
-            ini.Write(GetName(), "Json", json);
+            string section = GetName();
+            foreach (System.Reflection.PropertyInfo property in GetIniProperties())
+                ini.Write(section, property.Name, property.GetValue(this));
+
+            ini.Remove(section, "Json");
             ini.Save();
             EndEdit();
         }
@@ -120,4 +144,11 @@ public class CfgCore : AbstractEntity
             Trace.TraceError(ex.ToString());
         }
     }
+
+    private IEnumerable<System.Reflection.PropertyInfo> GetIniProperties() => GetType()
+        .GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public)
+        .Where(property => property.CanRead && property.CanWrite)
+        .Where(property => property.GetCustomAttributes(
+            typeof(System.Runtime.Serialization.DataMemberAttribute), true).Length > 0)
+        .Where(property => IniFile.IsSupportedIniType(property.PropertyType));
 }

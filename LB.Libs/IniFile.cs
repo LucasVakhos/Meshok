@@ -149,6 +149,22 @@ public sealed class IniFile
         }
     }
 
+    public bool TryRead(string section, string key, out string value)
+    {
+        lock (_sync)
+        {
+            if (_sections.TryGetValue(section, out var values) &&
+                values.TryGetValue(key, out string? storedValue))
+            {
+                value = storedValue;
+                return true;
+            }
+
+            value = string.Empty;
+            return false;
+        }
+    }
+
     public void Write(string section, string key, object? value)
     {
         lock (_sync)
@@ -160,6 +176,15 @@ public sealed class IniFile
             }
 
             values[key] = ConvertToIniString(value);
+        }
+    }
+
+    public void Remove(string section, string key)
+    {
+        lock (_sync)
+        {
+            if (_sections.TryGetValue(section, out var values))
+                values.Remove(key);
         }
     }
 
@@ -310,13 +335,20 @@ public sealed class IniFile
         type = Nullable.GetUnderlyingType(type) ?? type;
         return type == typeof(string) || type == typeof(int) || type == typeof(bool) ||
                type == typeof(long) || type == typeof(double) || type == typeof(decimal) ||
-               type == typeof(List<string>) || type.IsEnum;
+               type == typeof(DateTime) || type == typeof(Size) || type == typeof(Point) ||
+               type == typeof(List<string>) || type == typeof(Dictionary<string, string>) ||
+               type.IsEnum;
     }
 
     internal static string ConvertToIniString(object? value) => value switch
     {
         null => string.Empty,
         List<string> list => string.Join("|", NormalizeStringList(list)),
+        Dictionary<string, string> dictionary => string.Join("|", dictionary.Select(pair =>
+            $"{Uri.EscapeDataString(pair.Key)}={Uri.EscapeDataString(pair.Value)}")),
+        DateTime dateTime => dateTime.ToString("O", CultureInfo.InvariantCulture),
+        Size size => $"{size.Width},{size.Height}",
+        Point point => $"{point.X},{point.Y}",
         IFormattable formattable => formattable.ToString(null, CultureInfo.InvariantCulture),
         _ => value.ToString() ?? string.Empty
     };
@@ -328,6 +360,19 @@ public sealed class IniFile
         if (nullableType != null && string.IsNullOrWhiteSpace(text)) return null;
         if (realType == typeof(string)) return text;
         if (realType == typeof(List<string>)) return ParseStringList(text);
+        if (realType == typeof(Dictionary<string, string>)) return ParseStringDictionary(text);
+        if (realType == typeof(DateTime))
+            return DateTime.Parse(text, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+        if (realType == typeof(Size))
+        {
+            int[] parts = ParseIntegerPair(text);
+            return new Size(parts[0], parts[1]);
+        }
+        if (realType == typeof(Point))
+        {
+            int[] parts = ParseIntegerPair(text);
+            return new Point(parts[0], parts[1]);
+        }
         if (realType.IsEnum)
         {
             if (Enum.TryParse(realType, text, true, out var enumValue)) return enumValue;
@@ -337,6 +382,45 @@ public sealed class IniFile
         }
         if (realType == typeof(bool)) return bool.Parse(text);
         return Convert.ChangeType(text, realType, CultureInfo.InvariantCulture);
+    }
+
+    private static int[] ParseIntegerPair(string text)
+    {
+        string[] parts = text.Split(',', 2, StringSplitOptions.TrimEntries);
+        if (parts.Length != 2)
+            throw new FormatException($"Expected two comma-separated integers, got '{text}'.");
+
+        return
+        [
+            int.Parse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture),
+            int.Parse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture)
+        ];
+    }
+
+    private static Dictionary<string, string> ParseStringDictionary(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return new Dictionary<string, string>();
+
+        if (text.TrimStart().StartsWith('{'))
+        {
+            try
+            {
+                return JsonSerializer.Deserialize<Dictionary<string, string>>(text) ?? new();
+            }
+            catch
+            {
+            }
+        }
+
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (string item in text.Split('|', StringSplitOptions.RemoveEmptyEntries))
+        {
+            string[] pair = item.Split('=', 2);
+            if (pair.Length == 2)
+                result[Uri.UnescapeDataString(pair[0])] = Uri.UnescapeDataString(pair[1]);
+        }
+        return result;
     }
 
     private static List<string> ParseStringList(string text)
