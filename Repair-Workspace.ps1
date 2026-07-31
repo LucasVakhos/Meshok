@@ -89,7 +89,7 @@ Invoke-DotNet -Arguments @('restore', 'Meshok.Sln')
 Invoke-DotNet -Arguments @('build', 'Meshok.Sln')
 
 $legacyBrowserHits = @(
-    Get-ChildItem @('GH.Components', 'MehokBrowser', 'NewsMaker') -Filter '*.cs' -Recurse |
+    Get-ChildItem @('LB.Libs', 'MehokBrowser', 'NewsMaker') -Filter '*.cs' -Recurse |
         Select-String -Pattern 'using Gecko|GeckoWebBrowser|GeckoDocument|GeckoHtmlElement|Xpcom'
 )
 if ($legacyBrowserHits.Count -gt 0) {

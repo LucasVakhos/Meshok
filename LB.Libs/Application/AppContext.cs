@@ -90,13 +90,28 @@ public class AppContext<T> : RunContext where T : RunContext
         CfgConnection = GetConnectionSetting();
         if (CfgConnection != null)
         {
-            if (!CfgConnection.TestConnection())
+            if (!EnsureConnection())
                 throw new UserWantExit();
             if (!LogIn())
                 throw new UserWantExit();
             MainForm = GetMainForm();
         }
     }
+
+    private bool EnsureConnection()
+    {
+        if (CfgConnection.TestConnection())
+            return true;
+
+        SplashScreenManager.CloseForm(false);
+        using CfgForm form = CreateConnectForm();
+        if (form == null || form.ShowDialog() != DialogResult.OK)
+            return false;
+
+        CfgConnection = GetConnectionSetting();
+        return CfgConnection != null && CfgConnection.TestConnection();
+    }
+
     protected bool LogIn()
     {
         using (Form form = GetLoginForm())
