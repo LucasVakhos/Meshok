@@ -46,7 +46,8 @@ public partial class MainMeshok : MainForm, IMainForm
         {
             cfgMeshok = LB.Libs.IniHelper.Cfg<CfgMeshok>();
             сfgIShop = IniHelper.Cfg<CfgIShop>();
-            FbHelper.Init();
+            if (!RunContext.Instance.ConnectionFailed && !FbHelper.Init())
+                RunContext.Instance.ConnectionFailed = true;
             InitMainBrowser();
             InitProcessors();
             tabbedView.DocumentClosing += TabbedView_DocumentClosing;
@@ -85,12 +86,8 @@ public partial class MainMeshok : MainForm, IMainForm
     }
     private bool BeginProcOrders()
     {
-        if (!IniHelper.Cfg<CfgIShop>().TestConnection())
-        {
-            ShowIShopSettings();
-            DlgHelper.DlgWarning("Проверьте подключение к базе!");
+        if (!EnsureIShopConnection())
             return false;
-        }
         if (!Helpers.ScanSetting.Begin(this))
         {
             return false;
@@ -423,19 +420,16 @@ public partial class MainMeshok : MainForm, IMainForm
     {
         if (sender is ActionGh action)
         {
-            action.Enabled = messageSettings == null && _processor == null;
+            action.Enabled = !RunContext.Instance.ConnectionFailed &&
+                messageSettings == null && _processor == null;
         }
     }
     private void ActMessageSetting_Execute(object sender, EventArgs e)
     {
         if (messageSettings == null)
         {
-            if (!сfgIShop.TestConnection())
-            {
-                ShowIShopSettings();
-                DlgHelper.DlgWarning("Проверьте подключение к базе!");
+            if (!EnsureIShopConnection())
                 return;
-            }
             messageSettings = new MessagesSetting();
             messageSettings.Caption = actMessageSetting.Caption;
         }
@@ -456,10 +450,48 @@ public partial class MainMeshok : MainForm, IMainForm
     {
         ShowIShopSettings();
     }
-    private void ShowIShopSettings()
+    private bool EnsureIShopConnection()
     {
-        using (var form = new CfgFormIShop())
-            form.ShowDialog(this);
+        if (!сfgIShop.TestConnection())
+        {
+            RunContext.Instance.ConnectionFailed = true;
+            bool restored = ShowIShopSettings();
+            if (!restored)
+                DlgHelper.DlgWarning("Проверьте подключение к базе!");
+            UpdateDatabaseActions();
+            return restored;
+        }
+
+        return !RunContext.Instance.ConnectionFailed || ActivateDatabase();
+    }
+
+    private bool ShowIShopSettings()
+    {
+        using var form = new CfgFormIShop();
+        if (form.ShowDialog(this) != DialogResult.OK)
+            return false;
+
+        return ActivateDatabase();
+    }
+
+    private bool ActivateDatabase()
+    {
+        RunContext.Instance.ConnectionFailed = false;
+        FbHelper.Reset();
+        if (!FbHelper.Init())
+        {
+            RunContext.Instance.ConnectionFailed = true;
+            DlgHelper.DlgWarning("Подключение установлено, но инициализировать данные сайта не удалось.");
+        }
+
+        UpdateDatabaseActions();
+        return !RunContext.Instance.ConnectionFailed;
+    }
+
+    private void UpdateDatabaseActions()
+    {
+        actProcessOrders.DoUpdate();
+        actMessageSetting.DoUpdate();
     }
     private void ShowBridgeSettings()
     {
@@ -478,7 +510,8 @@ public partial class MainMeshok : MainForm, IMainForm
     {
         if (sender is ActionGh action)
         {
-            bool inProfile = auth_success && mainBrowser.InProfile() && _processor == null;
+            bool inProfile = !RunContext.Instance.ConnectionFailed &&
+                auth_success && mainBrowser.InProfile() && _processor == null;
             action.Enabled = inProfile && mainBrowser.HasQty(deals_token);
         }
     }

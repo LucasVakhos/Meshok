@@ -13,29 +13,44 @@ public static class FbHelper
 {
     private static int _siteNo = -1;
 
-    public static void Init()
+    public static bool Init()
     {
         if (_siteNo > 0)
-            return;
-        SetSiteNo();
-        AddSiteStatusesToBase();
-        GetRelationsStatusesFromBase();
+            return true;
+        if (RunContext.Instance?.ConnectionFailed == true)
+            return false;
+
+        try
+        {
+            int siteNo = DapperLookupRepository.FindSiteId(
+                LB.Libs.IniHelper.Cfg<CfgMeshok>().SiteName)
+                ?? throw new InvalidOperationException("Site is not registered in the database.");
+            if (siteNo <= 0)
+                throw new InvalidOperationException("Site is not registered in the database.");
+
+            AddSiteStatusesToBase(siteNo);
+            GetRelationsStatusesFromBase();
+            _siteNo = siteNo;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _siteNo = -1;
+            Logger.Error(ex);
+            return false;
+        }
     }
 
-    private static void SetSiteNo()
-    {
-        _siteNo = DapperLookupRepository.FindSiteId(LB.Libs.IniHelper.Cfg<CfgMeshok>().SiteName)
-            ?? throw new InvalidOperationException("Site is not registered in the database.");
-    }
+    public static void Reset() => _siteNo = -1;
 
     private static void GetRelationsStatusesFromBase() =>
         StatusRelation.SetStatusRels(DapperLookupRepository.BaseStatusEntities());
 
-    private static void AddSiteStatusesToBase()
+    private static void AddSiteStatusesToBase(int siteNo)
     {
         var statuses = Enum.GetValues<OrderStatus>()
             .ToDictionary(item => (int)item, item => EnumExtensions.GetDisplayValue(item));
-        DapperLookupRepository.ImportStatuses(_siteNo, statuses);
+        DapperLookupRepository.ImportStatuses(siteNo, statuses);
     }
 
     public static void AddOrderLine(OrderLine orderLine)

@@ -77,11 +77,14 @@ public static class DapperLookupRepository
     }
     public static void ImportOrderLine(int siteId, OrderLine line)
     {
+        if (!TryParseDealId(line.deal_id, out long dealId))
+            throw new ArgumentException("Deal ID must be a positive number.", nameof(line));
+
         const string sql = @"select cod_id from z$import_cod(@siteId, @dealId, @co_id, @t_id, @ts_id,
                 @qty, @price, @commition, @price_ru)";
         var parameters = new DynamicParameters(line);
         parameters.Add("siteId", siteId);
-        parameters.Add("dealId", line.deal_id);
+        parameters.Add("dealId", dealId);
         using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
             connection.QueryFirst<int>(sql, parameters);
     }
@@ -94,26 +97,35 @@ public static class DapperLookupRepository
     }
     public static List<CheckMesage> FindMessages(int siteId, string dealId, int messageCase)
     {
+        if (!TryParseDealId(dealId, out long numericDealId))
+            return new List<CheckMesage>();
+
         const string sql = @"select cod_id as id, c_id, c_name, c_email, md_id, md_name, mp_id, mp_name,
                 cs_id, cs_name, dp_totalsumm, dp_totalsumm_info, dp_packed, md_address, md_treck_num,
                 md_tracking_url, zsc_case, zsc_message as mess_text
                 from z$check_message(@siteId, @dealId, @messageCase)";
         using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
-            return connection.Query<CheckMesage>(sql, new { siteId, dealId, messageCase }).ToList();
+            return connection.Query<CheckMesage>(sql, new { siteId, dealId = numericDealId, messageCase }).ToList();
     }
     public static CheckOrder FindOrder(int siteId, string dealId)
     {
+        if (!TryParseDealId(dealId, out long numericDealId))
+            return null;
+
         const string sql = @"select cod_id as id, co_id, co_c_id, co_creation_date, co_md_id, co_mp_id, co_status,
                 dp_id, dp_c_id, dp_md_id, dp_mp_id, dp_totalsumm, dp_status, dp_packed, dp_creation_date
                 from z$check_order(@siteId, @dealId)";
         using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
-            return connection.QueryFirstOrDefault<CheckOrder>(sql, new { siteId, dealId });
+            return connection.QueryFirstOrDefault<CheckOrder>(sql, new { siteId, dealId = numericDealId });
     }
     public static bool HasOrder(int siteId, string dealId)
     {
+        if (!TryParseDealId(dealId, out long numericDealId))
+            return false;
+
         const string sql = "select z$s_id from z$site_id_s(@siteId, @dealId)";
         using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
-            return connection.QueryFirstOrDefault<int?>(sql, new { siteId, dealId }).GetValueOrDefault() > 0;
+            return connection.QueryFirstOrDefault<int?>(sql, new { siteId, dealId = numericDealId }).GetValueOrDefault() > 0;
     }
     public static List<BaseStatus> BaseStatusEntities()
     {
@@ -145,5 +157,8 @@ public static class DapperLookupRepository
         using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
             return connection.Query<LookupRow>(sql).Select(x => new KeyValuePair<int, string>(x.Id, x.Name)).ToArray();
     }
+    private static bool TryParseDealId(string dealId, out long value) =>
+        long.TryParse(dealId, out value) && value > 0;
+
     private sealed class LookupRow { public int Id { get; set; } public string Name { get; set; } }
 }

@@ -16,6 +16,8 @@ public class RunContext : ApplicationContext
     public static readonly string ExePath = Path.GetDirectoryName(ExeFullName);
     public static readonly string ProcessName = Path.GetFileNameWithoutExtension(ExeFullName);
     private static CfgApp _appCfg = null;
+    public bool ConnectionFailed { get; set; }
+
     public static CfgApp AppCfg
     {
         get
