@@ -96,6 +96,56 @@ public sealed class IniFileTests : IDisposable
         Assert.Equal("two", reloaded.Read("Section", "Second"));
     }
 
+    [Fact]
+    public void Save_CreatesBackupOfPreviousValidVersion()
+    {
+        IniFile ini = CreateIni();
+        ini.Write("Section", "Value", "first");
+        ini.Save();
+        ini.Write("Section", "Value", "second");
+
+        ini.Save();
+
+        string backupPath = ini.FilePath + ".bak";
+        Assert.True(File.Exists(backupPath));
+        Assert.Equal("first", new IniFile(backupPath).Read("Section", "Value"));
+        Assert.Equal("second", new IniFile(ini.FilePath).Read("Section", "Value"));
+    }
+
+    [Fact]
+    public void Load_UsesBackupWhenPrimaryFileIsMalformed()
+    {
+        IniFile ini = CreateIni();
+        ini.Write("Section", "Value", "known-good");
+        ini.Save();
+        ini.Write("Section", "Value", "newer");
+        ini.Save();
+        File.WriteAllText(ini.FilePath, "broken line without section or equals");
+
+        var recovered = new IniFile(ini.FilePath);
+
+        Assert.Equal("known-good", recovered.Read("Section", "Value"));
+    }
+
+    [Fact]
+    public void SaveAfterRecovery_DoesNotReplaceGoodBackupWithCorruptPrimary()
+    {
+        IniFile ini = CreateIni();
+        ini.Write("Section", "Value", "known-good");
+        ini.Save();
+        ini.Write("Section", "Value", "newer");
+        ini.Save();
+        File.WriteAllText(ini.FilePath, "corrupt");
+        var recovered = new IniFile(ini.FilePath);
+        recovered.Write("Section", "Value", "recovered-and-updated");
+
+        recovered.Save();
+
+        Assert.Equal("recovered-and-updated", new IniFile(ini.FilePath).Read("Section", "Value"));
+        Assert.Equal("known-good", new IniFile(ini.FilePath + ".bak").Read("Section", "Value"));
+        Assert.False(File.Exists(ini.FilePath + ".tmp"));
+    }
+
     public void Dispose()
     {
         if (Directory.Exists(_directory))

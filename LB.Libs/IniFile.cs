@@ -19,6 +19,7 @@ public sealed class IniFile
     private static readonly Lazy<IniFile> Default = new(() => new IniFile(DefaultFilePath));
     private readonly object _sync = new();
     private readonly string _filePath;
+    private bool _primaryIsValid = true;
     private readonly Dictionary<string, Dictionary<string, string>> _sections =
         new(StringComparer.OrdinalIgnoreCase);
 
@@ -252,7 +253,11 @@ public sealed class IniFile
 
             string tempPath = _filePath + ".tmp";
             File.WriteAllLines(tempPath, lines, new UTF8Encoding(false));
-            File.Move(tempPath, _filePath, true);
+            if (File.Exists(_filePath) && _primaryIsValid)
+                File.Replace(tempPath, _filePath, _filePath + ".bak", true);
+            else
+                File.Move(tempPath, _filePath, true);
+            _primaryIsValid = true;
         }
     }
 
@@ -263,33 +268,71 @@ public sealed class IniFile
             if (!File.Exists(_filePath))
                 return;
 
-            string currentSection = string.Empty;
-            foreach (var rawLine in File.ReadAllLines(_filePath, Encoding.UTF8))
+            if (TryLoadFile(_filePath, out var sections))
             {
-                var line = rawLine.Trim();
+                CopySections(sections);
+                return;
+            }
+
+            _primaryIsValid = false;
+            string backupPath = _filePath + ".bak";
+            if (TryLoadFile(backupPath, out sections))
+                CopySections(sections);
+        }
+    }
+
+    private static bool TryLoadFile(
+        string filePath,
+        out Dictionary<string, Dictionary<string, string>> sections)
+    {
+        sections = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+        if (!File.Exists(filePath))
+            return false;
+
+        try
+        {
+            string currentSection = string.Empty;
+            foreach (string rawLine in File.ReadAllLines(filePath, Encoding.UTF8))
+            {
+                string line = rawLine.Trim();
                 if (string.IsNullOrWhiteSpace(line) || line.StartsWith(';') || line.StartsWith('#'))
                     continue;
 
                 if (line.StartsWith('[') && line.EndsWith(']'))
                 {
                     currentSection = line[1..^1].Trim();
-                    if (!_sections.ContainsKey(currentSection))
-                        _sections[currentSection] = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                    if (string.IsNullOrEmpty(currentSection))
+                        return false;
+                    if (!sections.ContainsKey(currentSection))
+                        sections[currentSection] = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                     continue;
                 }
 
-                var parts = line.Split('=', 2);
-                if (parts.Length != 2 || string.IsNullOrEmpty(currentSection))
-                    continue;
+                string[] parts = line.Split('=', 2);
+                string key = parts[0].Trim();
+                if (parts.Length != 2 || string.IsNullOrEmpty(currentSection) || string.IsNullOrEmpty(key))
+                    return false;
 
-                if (!_sections.TryGetValue(currentSection, out var values))
-                {
-                    values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                    _sections[currentSection] = values;
-                }
-                values[parts[0].Trim()] = Unescape(parts[1]);
+                sections[currentSection][key] = Unescape(parts[1]);
             }
+
+            return true;
         }
+        catch (IOException)
+        {
+            return false;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return false;
+        }
+    }
+
+    private void CopySections(Dictionary<string, Dictionary<string, string>> source)
+    {
+        _sections.Clear();
+        foreach (var section in source)
+            _sections[section.Key] = section.Value;
     }
 
     private static IEnumerable<string> EnumerateLegacyIniFiles(string rootPath)
