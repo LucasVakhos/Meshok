@@ -13,6 +13,7 @@ public class ConnectButton : SimpleButton
     const int _minHeight = 24;
     private bool tested = false;
     private bool testOk = false;
+    public event EventHandler<ConnectionTestedEventArgs>? ConnectionTested;
     private IContainer components;
     private ImageCollection images;
     private LayoutControlItem _lcLabelInfo = null;
@@ -126,11 +127,13 @@ public class ConnectButton : SimpleButton
                     if (testOk)
                     {
                         Label.Text = "Подключение состоялось...";
+                        Label.ToolTip = "Соединение с базой данных установлено";
                         Label.Appearance.Image = images.Images["check_ok"];
                     }
                     else
                     {
-                        Label.Text = "Не удалось подключиться...";
+                        Label.Text = "Не удалось подключиться";
+                        Label.ToolTip = LastError ?? "Проверьте параметры подключения";
                         Label.Appearance.Image = images.Images["check_fault"];
                     }
                 break;
@@ -149,10 +152,23 @@ public class ConnectButton : SimpleButton
             {
                 if (data.Current is LB.Libs.CfgCoreConnection config)
                 {
-                    testOk = config.TestConnection();
+                    string? error = null;
+                    try
+                    {
+                        testOk = config.TestConnection();
+                        error = config.LastConnectionError;
+                    }
+                    catch (Exception ex)
+                    {
+                        testOk = false;
+                        error = ex.Message;
+                        Logger.Error(ex);
+                    }
                     if (config.IsComplete && testOk)
                         config.Save();
                     tested = true;
+                    LastError = error;
+                    ConnectionTested?.Invoke(this, new ConnectionTestedEventArgs(testOk, error));
                 }
             }
             finally
@@ -162,6 +178,8 @@ public class ConnectButton : SimpleButton
             }
         }
     }
+
+    public string? LastError { get; private set; }
     private void FocusIt()
     {
         if (Parent is DataLayoutControl dataLayout && dataLayout.Controls.OfType<BaseEdit>().OrderBy(o => o.TabIndex).FirstOrDefault() is BaseEdit baseEdit)
@@ -219,4 +237,10 @@ public class ConnectButton : SimpleButton
         ((ISupportInitialize)(images)).EndInit();
         ResumeLayout(false);
     }
+}
+
+public sealed class ConnectionTestedEventArgs(bool succeeded, string? error) : EventArgs
+{
+    public bool Succeeded { get; } = succeeded;
+    public string? Error { get; } = error;
 }

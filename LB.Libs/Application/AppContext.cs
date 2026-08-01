@@ -100,8 +100,15 @@ public class AppContext<T> : RunContext where T : RunContext
 
     private bool EnsureConnection()
     {
-        if (CfgConnection.TestConnection())
-            return true;
+        try
+        {
+            if (CfgConnection.TestConnection())
+                return true;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+        }
 
         SplashScreenManager.CloseForm(false);
         using CfgForm form = CreateConnectForm();

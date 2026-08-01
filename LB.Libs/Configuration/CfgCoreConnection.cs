@@ -12,6 +12,9 @@ public class CfgCoreConnection : CfgCore
 {
     private BaseUser? _user;
 
+    [Browsable(false)]
+    public string? LastConnectionError { get; protected set; }
+
     [DataMember]
     [DbConnectionProperty(Category = Category.User, Caption = "Login", ToolTip = "Логин", EditorType = EditorType.Combo)]
     public virtual string UserLogin { get; set; } = string.Empty;

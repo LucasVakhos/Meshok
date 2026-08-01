@@ -26,20 +26,16 @@ public class CfgFormType<T> : CfgForm where T : CfgBaseFrame
                 Suspend(value, lcControl);
                 try
                 {
-                    Task.Factory.StartNew(() =>
-                    {
-                        while (_cfgFrame != null && !Disposing)
-                        {
-                            if (CfgFrame.dataSource.Current is LB.Libs.CfgCoreConnection cfg)
-                                IsConnect = cfg.IsComplete && cfg.TestConnection();
-                            Thread.Sleep(250);
-                        }
-                    });
                     layoutControl.Dock = DockStyle.None;
                     value.layoutControl.Dock = DockStyle.None;
                     value.ClientSize = value.layoutControl.PreferredSize;
                     value.layoutControl.Dock = DockStyle.Fill;
                     layoutControl.Controls.Add(value);
+                    ConnectButton? connectButton = value.layoutControl.Controls
+                        .OfType<ConnectButton>()
+                        .FirstOrDefault();
+                    if (connectButton is not null)
+                        connectButton.ConnectionTested += ConnectButton_ConnectionTested;
                     lcControl.Control = value;
                     lcControl.Text = value.Caption;
                     lcControl.Name = "lc" + typeof(T).Name;
@@ -57,6 +53,12 @@ public class CfgFormType<T> : CfgForm where T : CfgBaseFrame
                 actCancel.Execute += ActCancel_Execute;
             }
         }
+    }
+
+    private void ConnectButton_ConnectionTested(object? sender, ConnectionTestedEventArgs e)
+    {
+        IsConnect = e.Succeeded;
+        actEnter.DoUpdate();
     }
 
     public bool IsConnect

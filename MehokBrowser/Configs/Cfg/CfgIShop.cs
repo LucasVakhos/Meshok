@@ -124,6 +124,7 @@ public class CfgIShop : CfgCoreConnection
     }
     public override bool TestConnection()
     {
+        LastConnectionError = null;
         try
         {
             using (FbConnection conn = new FbConnection(ConnectionString()))
@@ -135,6 +136,9 @@ public class CfgIShop : CfgCoreConnection
         catch (Exception e)
         {
             Trace.TraceError(e.ToString());
+            Logger.Error(e);
+            LastConnectionError =
+                $"Firebird {DataSource}:{Port}, база '{Database}': {e.Message}";
             return false;
         }
     }
