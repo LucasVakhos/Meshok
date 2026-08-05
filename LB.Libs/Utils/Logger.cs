@@ -5,8 +5,15 @@ using log4net.Filter;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using System.Configuration;
+
 namespace LB.Libs;
 
+/// <summary>
+/// Legacy статический логгер на основе log4net.
+/// УСТАРЕЛ: Используйте Microsoft.Extensions.Logging через LoggerAdapter вместо этого класса.
+/// Этот класс сохранён для обратной совместимости с существующим кодом.
+/// </summary>
+[Obsolete("Use Microsoft.Extensions.Logging with LoggerAdapter instead. This class will be removed in a future version.")]
 public static class Logger
 {
     private static readonly bool _isConfigurated = Setup();
@@ -93,6 +100,7 @@ public static class Logger
         roller.ActivateOptions();
         hierarchy.Root.AddAppender(roller);
     }
+    [Obsolete("Use LoggerAdapter.Error instead")]
     public static void Error(object message)
     {
         if (Skip(message))
@@ -103,28 +111,33 @@ public static class Logger
     {
         return message is Exception ex && ex.InnerException is UserWantExit;
     }
+    [Obsolete("Use LoggerAdapter.Error instead")]
     public static void Error(object message, Exception exception)
     {
         if (Skip(message))
             return;
         Log.Error(message, exception);
     }
+    [Obsolete("Use LoggerAdapter.ErrorFormatted instead")]
     public static void ErrorFormatted(string format, params object[] args)
     {
         Log.ErrorFormat(format, args);
     }
+    [Obsolete("Use LoggerAdapter.Fatal instead")]
     public static void Fatal(object message)
     {
         if (Skip(message))
             return;
         Log.Fatal(message);
     }
+    [Obsolete("Use LoggerAdapter.Fatal instead")]
     public static void Fatal(object message, Exception exception)
     {
         if (Skip(message))
             return;
         Log.Fatal(message, exception);
     }
+    [Obsolete("Use LoggerAdapter.FatalFormatted instead")]
     public static void FatalFormatted(string format, params object[] args)
     {
         Log.FatalFormat(format, args);

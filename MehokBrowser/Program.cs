@@ -79,14 +79,14 @@ static class Program
                 logging.ClearProviders();
                 logging.AddConfiguration(context.Configuration.GetSection("Logging"));
 
-                // Добавление log4net через Microsoft.Extensions.Logging
-                logging.AddLog4Net("log4net.config");
+                // Добавление console и debug logging
+                logging.AddConsole();
+                logging.AddDebug();
 
-                // Добавление console logging для development
-                if (context.HostingEnvironment.IsDevelopment())
+                // Для production можно добавить Windows Event Log
+                if (!context.HostingEnvironment.IsDevelopment())
                 {
-                    logging.AddConsole();
-                    logging.AddDebug();
+                    logging.AddEventLog();
                 }
 
                 logging.SetMinimumLevel(LogLevel.Information);
