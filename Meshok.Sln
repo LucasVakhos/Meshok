@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsWave", "NewsWave\NewsWa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LB.Libs.Tests", "LB.Libs.Tests\LB.Libs.Tests.csproj", "{B81C1EB0-5699-4586-954B-61EA45E55824}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LB.Libs", "LB.Libs", "{8B02AB41-CE70-ACF9-BA9D-4049D5BE6210}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MehokBrowser.Tests", "MehokBrowser.Tests\MehokBrowser.Tests.csproj", "{B0A9D9A2-9EF6-46C5-B2A0-BA3262E4DD6F}"
 EndProject
 Global
