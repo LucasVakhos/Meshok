@@ -1,5 +1,6 @@
 ﻿using DevExpress.XtraGrid;
 using DevExpress.XtraLayout;
+using LB.Libs.Utils;
 using System.IO;
 using System.Windows.Forms;
 namespace MeshokBrowser;
@@ -71,7 +72,7 @@ public static class LayoutLoadSaveHelper
 
     private static void RestoreLayout(string legacyPath, Action<Stream> restore)
     {
-        LB.Libs.IniFile ini = LB.Libs.IniFile.DefaultInstance();
+        IniFile ini = IniFile.DefaultInstance();
         string key = Path.GetFileNameWithoutExtension(legacyPath);
         string layout = ini.Read("Layouts", key);
         if (string.IsNullOrEmpty(layout) && File.Exists(legacyPath))
@@ -90,7 +91,7 @@ public static class LayoutLoadSaveHelper
     {
         using MemoryStream stream = new MemoryStream();
         save(stream);
-        LB.Libs.IniFile ini = LB.Libs.IniFile.DefaultInstance();
+        IniFile ini = IniFile.DefaultInstance();
         ini.Write("Layouts", Path.GetFileNameWithoutExtension(legacyPath), Convert.ToBase64String(stream.ToArray()));
         ini.Save();
     }

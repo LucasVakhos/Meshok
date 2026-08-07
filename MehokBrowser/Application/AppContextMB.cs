@@ -1,12 +1,12 @@
 ﻿using MehokBrowser.Configs.Cfg;
 using MehokBrowser.Configs.Forms;
-using LB.Libs;
 using CfgApp = LB.Libs.CfgApp;
 using CfgCoreConnection = LB.Libs.CfgCoreConnection;
 using IniHelper = LB.Libs.IniHelper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Windows.Forms;
+using LB.Libs.Utils;
 
 namespace MeshokBrowser;
 
@@ -51,7 +51,7 @@ public class AppContextMB : AppContext<AppContextMB>
         try
         {
             // Первый запуск собирает старые разрозненные INI в один файл рядом с exe.
-            LB.Libs.IniFile.MigrateLegacyFiles();
+            IniFile.MigrateLegacyFiles();
             logger?.LogInformation("Legacy INI files migration completed");
 
             // WebView2 is initialized by GhBrowser when its handle is created.

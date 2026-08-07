@@ -1,4 +1,5 @@
 ﻿using DevExpress.Utils;
+using LB.Libs.Utils;
 using System.ComponentModel;
 using System.Reflection;
 using System.Xml.Linq;
@@ -223,7 +224,7 @@ public class GridHighLiter<T> : IGridHighLiter where T : BaseEntity
     {
         string file_name = RunContext.GetConfigsPath(this);
         string key = Path.GetFileNameWithoutExtension(file_name);
-        LB.Libs.IniFile ini = LB.Libs.IniFile.DefaultInstance();
+        IniFile ini = IniFile.DefaultInstance();
         string xml = ini.Read("Highlighting", key);
         if (string.IsNullOrEmpty(xml) && File.Exists(file_name))
         {
@@ -292,7 +293,7 @@ public class GridHighLiter<T> : IGridHighLiter where T : BaseEntity
                     new XElement("FontStrikeout", item.FontStrikeout));
             root.Add(element);
         }
-        LB.Libs.IniFile ini = LB.Libs.IniFile.DefaultInstance();
+        IniFile ini = IniFile.DefaultInstance();
         ini.Write("Highlighting", Path.GetFileNameWithoutExtension(file_name), doc.ToString(SaveOptions.DisableFormatting));
         ini.Save();
     }

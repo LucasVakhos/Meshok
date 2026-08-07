@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 
-namespace LB.Libs;
+namespace LB.Libs.Utils;
 
 [AttributeUsage(AttributeTargets.Property)]
 public sealed class SavedAttribute : Attribute
