@@ -1,4 +1,6 @@
-﻿namespace LB.Libs;
+﻿using LB.Libs.Utils;
+
+namespace LB.Libs;
 
 /// <summary>
 /// Keeps one configuration instance per concrete type. Persistence is handled

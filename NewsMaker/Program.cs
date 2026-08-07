@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LB.Libs.Utils;
+using System;
 namespace NewsMaker;
 
 internal static class Program
@@ -7,7 +8,7 @@ internal static class Program
     private static void Main(string[] args)
     {
         // Первый запуск собирает старые разрозненные INI в один файл рядом с exe.
-        LB.Libs.IniFile.MigrateLegacyFiles();
+        IniFile.MigrateLegacyFiles();
         AppContextNM.RunInstance();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Registrator;
 using DevExpress.XtraGrid.Views.Base;
+using LB.Libs.Utils;
 using System.ComponentModel;
 namespace LB.Libs;
 
@@ -49,7 +50,7 @@ public class GridGh : GridControl, ISavedControl
             return;
         string file_name = RunContext.GetConfigsPath(this);
         string key = Path.GetFileNameWithoutExtension(file_name);
-        LB.Libs.IniFile ini = LB.Libs.IniFile.DefaultInstance();
+        IniFile ini = IniFile.DefaultInstance();
         string layout = ini.Read("Layouts", key);
         if (string.IsNullOrEmpty(layout) && File.Exists(file_name))
         {
@@ -71,7 +72,7 @@ public class GridGh : GridControl, ISavedControl
         string key = Path.GetFileNameWithoutExtension(file_name);
         using MemoryStream stream = new MemoryStream();
         MainView.SaveLayoutToStream(stream);
-        LB.Libs.IniFile ini = LB.Libs.IniFile.DefaultInstance();
+        IniFile ini = IniFile.DefaultInstance();
         ini.Write("Layouts", key, Convert.ToBase64String(stream.ToArray()));
         ini.Save();
     }

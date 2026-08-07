@@ -1,5 +1,6 @@
 ﻿using DevExpress.Skins;
 using DevExpress.XtraSplashScreen;
+using LB.Libs.Utils;
 using System.Diagnostics;
 using System.Reflection;
 namespace LB.Libs;
@@ -29,7 +30,7 @@ public class AppContext<T> : RunContext where T : RunContext
     public static void RunInstance()
     {
         // Защитный вызов для любого приложения, использующего LB.Libs.
-        LB.Libs.IniFile.MigrateLegacyFiles();
+        IniFile.MigrateLegacyFiles();
         FileVersionInfo.GetVersionInfo(ExeFullName);
         string m_name = "Mutex_" + Path.GetFileNameWithoutExtension(Application.ExecutablePath);
         _mutex = new Mutex(true, m_name, out bool RuningNow);
