@@ -29,387 +29,353 @@ partial class MainMeshok
     /// </summary>
     private void InitializeComponent()
     {
-        this.components = new System.ComponentModel.Container();
+        components = new System.ComponentModel.Container();
         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMeshok));
-        this.barExit = new DevExpress.XtraBars.BarButtonItem();
-        this.ribbonControl1 = new DevExpress.XtraBars.Ribbon.RibbonControl();
-        this.appMenu = new DevExpress.XtraBars.Ribbon.ApplicationMenu(this.components);
-        this.skinGallery = new DevExpress.XtraBars.SkinRibbonGalleryBarItem();
-        this.btnProcessOrders = new DevExpress.XtraBars.BarButtonItem();
-        this.btnDeleteLots = new DevExpress.XtraBars.BarButtonItem();
-        this.btnCreateLots = new DevExpress.XtraBars.BarButtonItem();
-        this.btnLoadLots = new DevExpress.XtraBars.BarButtonItem();
-        this.btnProgramSetting = new DevExpress.XtraBars.BarButtonItem();
-        this.btnMessageSetting = new DevExpress.XtraBars.BarButtonItem();
-        this.btnDeleteSold = new DevExpress.XtraBars.BarButtonItem();
-        this.btnAddPrix = new DevExpress.XtraBars.BarButtonItem();
-        this.pageProcess = new DevExpress.XtraBars.Ribbon.RibbonPage();
-        this.orderGroup = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-        this.goodsGroupLight = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-        this.pageGlobalOp = new DevExpress.XtraBars.Ribbon.RibbonPage();
-        this.goodsGroup = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-        this.pageSettigs = new DevExpress.XtraBars.Ribbon.RibbonPage();
-        this.ribbonPageGroup4 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-        this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-        this.ribbonStatusBar1 = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
-        this.popupMenu1 = new DevExpress.XtraBars.PopupMenu(this.components);
-        this.dockManager = new DevExpress.XtraBars.Docking.DockManager(this.components);
-        this.documentManager = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
-        this.tabbedView = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
-        this.noDocumentsView1 = new DevExpress.XtraBars.Docking2010.Views.NoDocuments.NoDocumentsView(this.components);
-        this.aclMain = new LB.Libs.ActionList();
-        this.actProcessOrders = new LB.Libs.ActionGh();
-        this.actDeleteLots = new LB.Libs.ActionGh();
-        this.actCreateLots = new LB.Libs.ActionGh();
-        this.actLoadLots = new LB.Libs.ActionGh();
-        this.actProgramSetting = new LB.Libs.ActionGh();
-        this.actMessageSetting = new LB.Libs.ActionGh();
-        this.actRemoveRasx = new LB.Libs.ActionGh();
-        this.actAddPrix = new LB.Libs.ActionGh();
-        this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-        ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)(this.appMenu)).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)(this.dockManager)).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)(this.documentManager)).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)(this.tabbedView)).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)(this.noDocumentsView1)).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)(this.aclMain)).BeginInit();
-        this.SuspendLayout();
-        //
+        barExit = new DevExpress.XtraBars.BarButtonItem();
+        ribbonControl1 = new DevExpress.XtraBars.Ribbon.RibbonControl();
+        appMenu = new DevExpress.XtraBars.Ribbon.ApplicationMenu(components);
+        skinGallery = new DevExpress.XtraBars.SkinRibbonGalleryBarItem();
+        btnProcessOrders = new DevExpress.XtraBars.BarButtonItem();
+        btnDeleteLots = new DevExpress.XtraBars.BarButtonItem();
+        btnCreateLots = new DevExpress.XtraBars.BarButtonItem();
+        btnLoadLots = new DevExpress.XtraBars.BarButtonItem();
+        btnProgramSetting = new DevExpress.XtraBars.BarButtonItem();
+        btnMessageSetting = new DevExpress.XtraBars.BarButtonItem();
+        btnDeleteSold = new DevExpress.XtraBars.BarButtonItem();
+        btnAddPrix = new DevExpress.XtraBars.BarButtonItem();
+        pageProcess = new DevExpress.XtraBars.Ribbon.RibbonPage();
+        orderGroup = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+        goodsGroupLight = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+        pageGlobalOp = new DevExpress.XtraBars.Ribbon.RibbonPage();
+        goodsGroup = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+        pageSettigs = new DevExpress.XtraBars.Ribbon.RibbonPage();
+        ribbonPageGroup4 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+        ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+        ribbonStatusBar1 = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
+        popupMenu1 = new DevExpress.XtraBars.PopupMenu(components);
+        dockManager = new DevExpress.XtraBars.Docking.DockManager(components);
+        documentManager = new DevExpress.XtraBars.Docking2010.DocumentManager(components);
+        tabbedView = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(components);
+        noDocumentsView1 = new DevExpress.XtraBars.Docking2010.Views.NoDocuments.NoDocumentsView(components);
+        aclMain = new ActionList();
+        actProcessOrders = new ActionGh();
+        actDeleteLots = new ActionGh();
+        actCreateLots = new ActionGh();
+        actLoadLots = new ActionGh();
+        actProgramSetting = new ActionGh();
+        actMessageSetting = new ActionGh();
+        actRemoveRasx = new ActionGh();
+        actAddPrix = new ActionGh();
+        ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+        ((System.ComponentModel.ISupportInitialize)ribbonControl1).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)appMenu).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)popupMenu1).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)dockManager).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)documentManager).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)tabbedView).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)noDocumentsView1).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)aclMain).BeginInit();
+        SuspendLayout();
+        // 
         // barExit
-        //
-        this.aclMain.SetAction(this.barExit, null);
-        this.barExit.Caption = "Выход из програмы";
-        this.barExit.CategoryGuid = new System.Guid("da008c6e-dd35-439e-b400-55f9f2b58ef7");
-        this.barExit.Id = 2;
-        this.barExit.ImageOptions.ImageUri.Uri = "Close;Size32x32";
-        this.barExit.Name = "barExit";
-        this.barExit.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barExit_ItemClick);
-        //
+        // 
+        aclMain.SetAction(barExit, null);
+        barExit.Caption = "Выход из програмы";
+        barExit.CategoryGuid = new Guid("da008c6e-dd35-439e-b400-55f9f2b58ef7");
+        barExit.Id = 2;
+        barExit.ImageOptions.ImageUri.Uri = "Close;Size32x32";
+        barExit.Name = "barExit";
+        barExit.ItemClick += barExit_ItemClick;
+        // 
         // ribbonControl1
-        //
-        this.ribbonControl1.ApplicationButtonDropDownControl = this.appMenu;
-        this.ribbonControl1.Categories.AddRange(new DevExpress.XtraBars.BarManagerCategory[] {
-        new DevExpress.XtraBars.BarManagerCategory("menu", new System.Guid("b6ded52f-7f26-4ed3-b22e-05448cf20569")),
-        new DevExpress.XtraBars.BarManagerCategory("status", new System.Guid("55328c65-9a01-4f8b-ae8c-e97b57ca5785")),
-        new DevExpress.XtraBars.BarManagerCategory("m_file", new System.Guid("da008c6e-dd35-439e-b400-55f9f2b58ef7")),
-        new DevExpress.XtraBars.BarManagerCategory("m_service", new System.Guid("858553f9-34ad-43d3-8eb9-e3d545b81905"))});
-        this.ribbonControl1.ExpandCollapseItem.Id = 0;
-        this.ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
-        this.ribbonControl1.ExpandCollapseItem,
-        this.barExit,
-        this.skinGallery,
-        this.btnProcessOrders,
-        this.btnDeleteLots,
-        this.btnCreateLots,
-        this.btnLoadLots,
-        this.btnProgramSetting,
-        this.btnMessageSetting,
-        this.btnDeleteSold,
-        this.btnAddPrix});
-        this.ribbonControl1.Location = new System.Drawing.Point(0, 0);
-        this.ribbonControl1.MaxItemId = 4;
-        this.ribbonControl1.MdiMergeStyle = DevExpress.XtraBars.Ribbon.RibbonMdiMergeStyle.Always;
-        this.ribbonControl1.Name = "ribbonControl1";
-        this.ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
-        this.pageProcess,
-        this.pageGlobalOp,
-        this.pageSettigs});
-        this.ribbonControl1.ShowToolbarCustomizeItem = false;
-        this.ribbonControl1.Size = new System.Drawing.Size(978, 116);
-        this.ribbonControl1.StatusBar = this.ribbonStatusBar1;
-        this.ribbonControl1.Toolbar.ShowCustomizeItem = false;
-        this.ribbonControl1.ToolbarLocation = DevExpress.XtraBars.Ribbon.RibbonQuickAccessToolbarLocation.Hidden;
-        //
+        // 
+        ribbonControl1.ApplicationButtonDropDownControl = appMenu;
+        ribbonControl1.Categories.AddRange(new DevExpress.XtraBars.BarManagerCategory[] { new DevExpress.XtraBars.BarManagerCategory("menu", new Guid("b6ded52f-7f26-4ed3-b22e-05448cf20569")), new DevExpress.XtraBars.BarManagerCategory("status", new Guid("55328c65-9a01-4f8b-ae8c-e97b57ca5785")), new DevExpress.XtraBars.BarManagerCategory("m_file", new Guid("da008c6e-dd35-439e-b400-55f9f2b58ef7")), new DevExpress.XtraBars.BarManagerCategory("m_service", new Guid("858553f9-34ad-43d3-8eb9-e3d545b81905")) });
+        ribbonControl1.ExpandCollapseItem.Id = 0;
+        ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, barExit, skinGallery, btnProcessOrders, btnDeleteLots, btnCreateLots, btnLoadLots, btnProgramSetting, btnMessageSetting, btnDeleteSold, btnAddPrix });
+        ribbonControl1.Location = new Point(0, 0);
+        ribbonControl1.MaxItemId = 4;
+        ribbonControl1.MdiMergeStyle = DevExpress.XtraBars.Ribbon.RibbonMdiMergeStyle.Always;
+        ribbonControl1.Name = "ribbonControl1";
+        ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { pageProcess, pageGlobalOp, pageSettigs });
+        ribbonControl1.ShowToolbarCustomizeItem = false;
+        ribbonControl1.Size = new Size(978, 126);
+        ribbonControl1.StatusBar = ribbonStatusBar1;
+        ribbonControl1.Toolbar.ShowCustomizeItem = false;
+        ribbonControl1.ToolbarLocation = DevExpress.XtraBars.Ribbon.RibbonQuickAccessToolbarLocation.Hidden;
+        // 
         // appMenu
-        //
-        this.appMenu.ItemLinks.Add(this.barExit);
-        this.appMenu.Name = "appMenu";
-        this.appMenu.Ribbon = this.ribbonControl1;
-        //
+        // 
+        appMenu.ItemLinks.Add(barExit);
+        appMenu.Name = "appMenu";
+        appMenu.Ribbon = ribbonControl1;
+        // 
         // skinGallery
-        //
-        this.aclMain.SetAction(this.skinGallery, null);
-        this.skinGallery.Caption = "Галерея";
-        this.skinGallery.Id = 2;
-        this.skinGallery.Name = "skinGallery";
-        //
+        // 
+        aclMain.SetAction(skinGallery, null);
+        skinGallery.Caption = "Галерея";
+        skinGallery.Id = 2;
+        skinGallery.Name = "skinGallery";
+        // 
         // btnProcessOrders
-        //
-        this.aclMain.SetAction(this.btnProcessOrders, this.actProcessOrders);
-        this.btnProcessOrders.Caption = "Обработка заказов";
-        this.btnProcessOrders.Id = 2;
-        this.btnProcessOrders.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnProcessOrders.ImageOptions.Image")));
-        this.btnProcessOrders.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnProcessOrders.ImageOptions.LargeImage")));
-        this.btnProcessOrders.Name = "btnProcessOrders";
-        //
+        // 
+        aclMain.SetAction(btnProcessOrders, actProcessOrders);
+        btnProcessOrders.Caption = "Обработка заказов";
+        btnProcessOrders.Id = 2;
+        btnProcessOrders.ImageOptions.Image = (Image)resources.GetObject("btnProcessOrders.ImageOptions.Image");
+        btnProcessOrders.ImageOptions.LargeImage = (Image)resources.GetObject("btnProcessOrders.ImageOptions.LargeImage");
+        btnProcessOrders.Name = "btnProcessOrders";
+        // 
         // btnDeleteLots
-        //
-        this.aclMain.SetAction(this.btnDeleteLots, this.actDeleteLots);
-        this.btnDeleteLots.Caption = "Снять все лоты";
-        this.btnDeleteLots.Hint = "Снять весь непроданный товар";
-        this.btnDeleteLots.Id = 3;
-        this.btnDeleteLots.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnDeleteLots.ImageOptions.Image")));
-        this.btnDeleteLots.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnDeleteLots.ImageOptions.LargeImage")));
-        this.btnDeleteLots.Name = "btnDeleteLots";
-        //
+        // 
+        aclMain.SetAction(btnDeleteLots, actDeleteLots);
+        btnDeleteLots.Caption = "Снять все лоты";
+        btnDeleteLots.Hint = "Снять весь непроданный товар";
+        btnDeleteLots.Id = 3;
+        btnDeleteLots.ImageOptions.Image = (Image)resources.GetObject("btnDeleteLots.ImageOptions.Image");
+        btnDeleteLots.ImageOptions.LargeImage = (Image)resources.GetObject("btnDeleteLots.ImageOptions.LargeImage");
+        btnDeleteLots.Name = "btnDeleteLots";
+        // 
         // btnCreateLots
-        //
-        this.aclMain.SetAction(this.btnCreateLots, this.actCreateLots);
-        this.btnCreateLots.Caption = "Создать CSV-файлы";
-        this.btnCreateLots.Hint = "Создать CSV-файлы для импорта лотов";
-        this.btnCreateLots.Id = 4;
-        this.btnCreateLots.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnCreateLots.ImageOptions.Image")));
-        this.btnCreateLots.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnCreateLots.ImageOptions.LargeImage")));
-        this.btnCreateLots.Name = "btnCreateLots";
-        //
+        // 
+        aclMain.SetAction(btnCreateLots, actCreateLots);
+        btnCreateLots.Caption = "Создать CSV-файлы";
+        btnCreateLots.Hint = "Создать CSV-файлы для импорта лотов";
+        btnCreateLots.Id = 4;
+        btnCreateLots.ImageOptions.Image = (Image)resources.GetObject("btnCreateLots.ImageOptions.Image");
+        btnCreateLots.ImageOptions.LargeImage = (Image)resources.GetObject("btnCreateLots.ImageOptions.LargeImage");
+        btnCreateLots.Name = "btnCreateLots";
+        // 
         // btnLoadLots
-        //
-        this.aclMain.SetAction(this.btnLoadLots, this.actLoadLots);
-        this.btnLoadLots.Caption = "Загрузить лоты";
-        this.btnLoadLots.Hint = "Загрузить лоты из CSV-файлов";
-        this.btnLoadLots.Id = 5;
-        this.btnLoadLots.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnLoadLots.ImageOptions.Image")));
-        this.btnLoadLots.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnLoadLots.ImageOptions.LargeImage")));
-        this.btnLoadLots.Name = "btnLoadLots";
-        //
+        // 
+        aclMain.SetAction(btnLoadLots, actLoadLots);
+        btnLoadLots.Caption = "Загрузить лоты";
+        btnLoadLots.Hint = "Загрузить лоты из CSV-файлов";
+        btnLoadLots.Id = 5;
+        btnLoadLots.ImageOptions.Image = (Image)resources.GetObject("btnLoadLots.ImageOptions.Image");
+        btnLoadLots.ImageOptions.LargeImage = (Image)resources.GetObject("btnLoadLots.ImageOptions.LargeImage");
+        btnLoadLots.Name = "btnLoadLots";
+        // 
         // btnProgramSetting
-        //
-        this.aclMain.SetAction(this.btnProgramSetting, this.actProgramSetting);
-        this.btnProgramSetting.Caption = "Настройки среды";
-        this.btnProgramSetting.Hint = "Настройки подключения и прочие установки";
-        this.btnProgramSetting.Id = 6;
-        this.btnProgramSetting.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnProgramSetting.ImageOptions.Image")));
-        this.btnProgramSetting.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnProgramSetting.ImageOptions.LargeImage")));
-        this.btnProgramSetting.Name = "btnProgramSetting";
-        //
+        // 
+        aclMain.SetAction(btnProgramSetting, actProgramSetting);
+        btnProgramSetting.Caption = "Настройки среды";
+        btnProgramSetting.Hint = "Настройки подключения и прочие установки";
+        btnProgramSetting.Id = 6;
+        btnProgramSetting.ImageOptions.Image = (Image)resources.GetObject("btnProgramSetting.ImageOptions.Image");
+        btnProgramSetting.ImageOptions.LargeImage = (Image)resources.GetObject("btnProgramSetting.ImageOptions.LargeImage");
+        btnProgramSetting.Name = "btnProgramSetting";
+        // 
         // btnMessageSetting
-        //
-        this.aclMain.SetAction(this.btnMessageSetting, this.actMessageSetting);
-        this.btnMessageSetting.Caption = "Настройки сообшений";
-        this.btnMessageSetting.Hint = "Настройки сообшений для личного кабинета покупателей";
-        this.btnMessageSetting.Id = 7;
-        this.btnMessageSetting.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnMessageSetting.ImageOptions.Image")));
-        this.btnMessageSetting.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnMessageSetting.ImageOptions.LargeImage")));
-        this.btnMessageSetting.Name = "btnMessageSetting";
-        //
+        // 
+        aclMain.SetAction(btnMessageSetting, actMessageSetting);
+        btnMessageSetting.Caption = "Настройки сообшений";
+        btnMessageSetting.Hint = "Настройки сообшений для личного кабинета покупателей";
+        btnMessageSetting.Id = 7;
+        btnMessageSetting.ImageOptions.Image = (Image)resources.GetObject("btnMessageSetting.ImageOptions.Image");
+        btnMessageSetting.ImageOptions.LargeImage = (Image)resources.GetObject("btnMessageSetting.ImageOptions.LargeImage");
+        btnMessageSetting.Name = "btnMessageSetting";
+        // 
         // btnDeleteSold
-        //
-        this.aclMain.SetAction(this.btnDeleteSold, this.actRemoveRasx);
-        this.btnDeleteSold.Caption = "Снять проданные";
-        this.btnDeleteSold.Hint = "Снять лоты проданные в базе";
-        this.btnDeleteSold.Id = 2;
-        this.btnDeleteSold.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnDeleteSold.ImageOptions.Image")));
-        this.btnDeleteSold.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnDeleteSold.ImageOptions.LargeImage")));
-        this.btnDeleteSold.Name = "btnDeleteSold";
-        //
+        // 
+        aclMain.SetAction(btnDeleteSold, actRemoveRasx);
+        btnDeleteSold.Caption = "Снять проданные";
+        btnDeleteSold.Hint = "Снять лоты проданные в базе";
+        btnDeleteSold.Id = 2;
+        btnDeleteSold.ImageOptions.Image = (Image)resources.GetObject("btnDeleteSold.ImageOptions.Image");
+        btnDeleteSold.ImageOptions.LargeImage = (Image)resources.GetObject("btnDeleteSold.ImageOptions.LargeImage");
+        btnDeleteSold.Name = "btnDeleteSold";
+        // 
         // btnAddPrix
-        //
-        this.aclMain.SetAction(this.btnAddPrix, this.actAddPrix);
-        this.btnAddPrix.Caption = "Выставить приходы";
-        this.btnAddPrix.Hint = "Выставить поступивший товар";
-        this.btnAddPrix.Id = 3;
-        this.btnAddPrix.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnAddPrix.ImageOptions.Image")));
-        this.btnAddPrix.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnAddPrix.ImageOptions.LargeImage")));
-        this.btnAddPrix.Name = "btnAddPrix";
-        //
+        // 
+        aclMain.SetAction(btnAddPrix, actAddPrix);
+        btnAddPrix.Caption = "Выставить приходы";
+        btnAddPrix.Hint = "Выставить поступивший товар";
+        btnAddPrix.Id = 3;
+        btnAddPrix.ImageOptions.Image = (Image)resources.GetObject("btnAddPrix.ImageOptions.Image");
+        btnAddPrix.ImageOptions.LargeImage = (Image)resources.GetObject("btnAddPrix.ImageOptions.LargeImage");
+        btnAddPrix.Name = "btnAddPrix";
+        // 
         // pageProcess
-        //
-        this.pageProcess.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
-        this.orderGroup,
-        this.goodsGroupLight});
-        this.pageProcess.Name = "pageProcess";
-        this.pageProcess.Text = "ОПЕРАЦИИ";
-        //
+        // 
+        pageProcess.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { orderGroup, goodsGroupLight });
+        pageProcess.Name = "pageProcess";
+        pageProcess.Text = "ОПЕРАЦИИ";
+        // 
         // orderGroup
-        //
-        this.orderGroup.ItemLinks.Add(this.btnProcessOrders);
-        this.orderGroup.Name = "orderGroup";
-        this.orderGroup.Text = "Заказы";
-        //
+        // 
+        orderGroup.ItemLinks.Add(btnProcessOrders);
+        orderGroup.Name = "orderGroup";
+        orderGroup.Text = "Заказы";
+        // 
         // goodsGroupLight
-        //
-        this.goodsGroupLight.ItemLinks.Add(this.btnDeleteSold);
-        this.goodsGroupLight.ItemLinks.Add(this.btnAddPrix);
-        this.goodsGroupLight.Name = "goodsGroupLight";
-        this.goodsGroupLight.Text = "Остатки";
-        //
+        // 
+        goodsGroupLight.ItemLinks.Add(btnDeleteSold);
+        goodsGroupLight.ItemLinks.Add(btnAddPrix);
+        goodsGroupLight.Name = "goodsGroupLight";
+        goodsGroupLight.Text = "Остатки";
+        // 
         // pageGlobalOp
-        //
-        this.pageGlobalOp.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
-        this.goodsGroup});
-        this.pageGlobalOp.Name = "pageGlobalOp";
-        this.pageGlobalOp.Text = "ГЛОБАЛЬНЫЕ ОПЕРАЦИИ";
-        //
+        // 
+        pageGlobalOp.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { goodsGroup });
+        pageGlobalOp.Name = "pageGlobalOp";
+        pageGlobalOp.Text = "ГЛОБАЛЬНЫЕ ОПЕРАЦИИ";
+        // 
         // goodsGroup
-        //
-        this.goodsGroup.ItemLinks.Add(this.btnDeleteLots);
-        this.goodsGroup.ItemLinks.Add(this.btnCreateLots);
-        this.goodsGroup.ItemLinks.Add(this.btnLoadLots);
-        this.goodsGroup.Name = "goodsGroup";
-        this.goodsGroup.Text = "Работа с товарными остатками";
-        //
+        // 
+        goodsGroup.ItemLinks.Add(btnDeleteLots);
+        goodsGroup.ItemLinks.Add(btnCreateLots);
+        goodsGroup.ItemLinks.Add(btnLoadLots);
+        goodsGroup.Name = "goodsGroup";
+        goodsGroup.Text = "Работа с товарными остатками";
+        // 
         // pageSettigs
-        //
-        this.pageSettigs.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
-        this.ribbonPageGroup4,
-        this.ribbonPageGroup1});
-        this.pageSettigs.Name = "pageSettigs";
-        this.pageSettigs.Text = "НАСТРОЙКИ";
-        //
+        // 
+        pageSettigs.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup4, ribbonPageGroup1 });
+        pageSettigs.Name = "pageSettigs";
+        pageSettigs.Text = "НАСТРОЙКИ";
+        // 
         // ribbonPageGroup4
-        //
-        this.ribbonPageGroup4.ItemLinks.Add(this.btnProgramSetting);
-        this.ribbonPageGroup4.ItemLinks.Add(this.btnMessageSetting);
-        this.ribbonPageGroup4.Name = "ribbonPageGroup4";
-        this.ribbonPageGroup4.Text = "Настройки програмы";
-        //
+        // 
+        ribbonPageGroup4.ItemLinks.Add(btnProgramSetting);
+        ribbonPageGroup4.ItemLinks.Add(btnMessageSetting);
+        ribbonPageGroup4.Name = "ribbonPageGroup4";
+        ribbonPageGroup4.Text = "Настройки програмы";
+        // 
         // ribbonPageGroup1
-        //
-        this.ribbonPageGroup1.ItemLinks.Add(this.skinGallery);
-        this.ribbonPageGroup1.Name = "ribbonPageGroup1";
-        this.ribbonPageGroup1.Text = "Внешний вид";
-        //
+        // 
+        ribbonPageGroup1.ItemLinks.Add(skinGallery);
+        ribbonPageGroup1.Name = "ribbonPageGroup1";
+        ribbonPageGroup1.Text = "Внешний вид";
+        // 
         // ribbonStatusBar1
-        //
-        this.ribbonStatusBar1.Location = new System.Drawing.Point(0, 535);
-        this.ribbonStatusBar1.Name = "ribbonStatusBar1";
-        this.ribbonStatusBar1.Ribbon = this.ribbonControl1;
-        this.ribbonStatusBar1.Size = new System.Drawing.Size(978, 27);
-        //
+        // 
+        ribbonStatusBar1.Location = new Point(0, 535);
+        ribbonStatusBar1.Name = "ribbonStatusBar1";
+        ribbonStatusBar1.Ribbon = ribbonControl1;
+        ribbonStatusBar1.Size = new Size(978, 27);
+        // 
         // popupMenu1
-        //
-        this.popupMenu1.Name = "popupMenu1";
-        this.popupMenu1.Ribbon = this.ribbonControl1;
-        //
+        // 
+        popupMenu1.Name = "popupMenu1";
+        popupMenu1.Ribbon = ribbonControl1;
+        // 
         // dockManager
-        //
-        this.dockManager.Form = this;
-        this.dockManager.TopZIndexControls.AddRange(new string[] {
-        "DevExpress.XtraBars.BarDockControl",
-        "DevExpress.XtraBars.StandaloneBarDockControl",
-        "System.Windows.Forms.StatusBar",
-        "System.Windows.Forms.MenuStrip",
-        "System.Windows.Forms.StatusStrip",
-        "DevExpress.XtraBars.Ribbon.RibbonStatusBar",
-        "DevExpress.XtraBars.Ribbon.RibbonControl",
-        "DevExpress.XtraBars.Navigation.OfficeNavigationBar",
-        "DevExpress.XtraBars.Navigation.TileNavPane"});
-        //
+        // 
+        dockManager.Form = this;
+        dockManager.TopZIndexControls.AddRange(new string[] { "DevExpress.XtraBars.BarDockControl", "DevExpress.XtraBars.StandaloneBarDockControl", "System.Windows.Forms.StatusBar", "System.Windows.Forms.MenuStrip", "System.Windows.Forms.StatusStrip", "DevExpress.XtraBars.Ribbon.RibbonStatusBar", "DevExpress.XtraBars.Ribbon.RibbonControl", "DevExpress.XtraBars.Navigation.OfficeNavigationBar", "DevExpress.XtraBars.Navigation.TileNavPane" });
+        // 
         // documentManager
-        //
-        this.documentManager.ContainerControl = this;
-        this.documentManager.RibbonAndBarsMergeStyle = DevExpress.XtraBars.Docking2010.Views.RibbonAndBarsMergeStyle.Always;
-        this.documentManager.View = this.tabbedView;
-        this.documentManager.ViewCollection.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseView[] {
-        this.tabbedView,
-        this.noDocumentsView1});
-        //
+        // 
+        documentManager.ContainerControl = this;
+        documentManager.RibbonAndBarsMergeStyle = DevExpress.XtraBars.Docking2010.Views.RibbonAndBarsMergeStyle.Always;
+        documentManager.View = tabbedView;
+        documentManager.ViewCollection.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseView[] { tabbedView, noDocumentsView1 });
+        // 
         // aclMain
-        //
-        this.aclMain.Actions.Add(this.actProcessOrders);
-        this.aclMain.Actions.Add(this.actDeleteLots);
-        this.aclMain.Actions.Add(this.actCreateLots);
-        this.aclMain.Actions.Add(this.actLoadLots);
-        this.aclMain.Actions.Add(this.actProgramSetting);
-        this.aclMain.Actions.Add(this.actMessageSetting);
-        this.aclMain.Actions.Add(this.actRemoveRasx);
-        this.aclMain.Actions.Add(this.actAddPrix);
-        this.aclMain.Owner = this;
-        //
+        // 
+        aclMain.Actions.Add(actProcessOrders);
+        aclMain.Actions.Add(actDeleteLots);
+        aclMain.Actions.Add(actCreateLots);
+        aclMain.Actions.Add(actLoadLots);
+        aclMain.Actions.Add(actProgramSetting);
+        aclMain.Actions.Add(actMessageSetting);
+        aclMain.Actions.Add(actRemoveRasx);
+        aclMain.Actions.Add(actAddPrix);
+        aclMain.Owner = this;
+        // 
         // actProcessOrders
-        //
-        this.actProcessOrders.Caption = "Обработка заказов";
-        this.actProcessOrders.Image = ((System.Drawing.Image)(resources.GetObject("actProcessOrders.Image")));
-        this.actProcessOrders.LargeImage = ((System.Drawing.Image)(resources.GetObject("actProcessOrders.LargeImage")));
-        this.actProcessOrders.Tag = null;
-        this.actProcessOrders.ToolTipText = "Сканирование раздела (Сделки с покупателями)";
-        //
+        // 
+        actProcessOrders.Caption = "Обработка заказов";
+        actProcessOrders.Image = (Image)resources.GetObject("actProcessOrders.Image");
+        actProcessOrders.LargeImage = (Image)resources.GetObject("actProcessOrders.LargeImage");
+        actProcessOrders.Tag = null;
+        actProcessOrders.ToolTipText = "Сканирование раздела (Сделки с покупателями)";
+        // 
         // actDeleteLots
-        //
-        this.actDeleteLots.Caption = "Снять все лоты";
-        this.actDeleteLots.Image = ((System.Drawing.Image)(resources.GetObject("actDeleteLots.Image")));
-        this.actDeleteLots.LargeImage = ((System.Drawing.Image)(resources.GetObject("actDeleteLots.LargeImage")));
-        this.actDeleteLots.Tag = null;
-        this.actDeleteLots.ToolTipText = "Снять весь непроданный товар";
-        //
+        // 
+        actDeleteLots.Caption = "Снять все лоты";
+        actDeleteLots.Image = (Image)resources.GetObject("actDeleteLots.Image");
+        actDeleteLots.LargeImage = (Image)resources.GetObject("actDeleteLots.LargeImage");
+        actDeleteLots.Tag = null;
+        actDeleteLots.ToolTipText = "Снять весь непроданный товар";
+        // 
         // actCreateLots
-        //
-        this.actCreateLots.Caption = "Создать CSV-файлы";
-        this.actCreateLots.Image = ((System.Drawing.Image)(resources.GetObject("actCreateLots.Image")));
-        this.actCreateLots.LargeImage = ((System.Drawing.Image)(resources.GetObject("actCreateLots.LargeImage")));
-        this.actCreateLots.Tag = null;
-        this.actCreateLots.ToolTipText = "Создать CSV-файлы для импорта лотов";
-        //
+        // 
+        actCreateLots.Caption = "Создать CSV-файлы";
+        actCreateLots.Image = (Image)resources.GetObject("actCreateLots.Image");
+        actCreateLots.LargeImage = (Image)resources.GetObject("actCreateLots.LargeImage");
+        actCreateLots.Tag = null;
+        actCreateLots.ToolTipText = "Создать CSV-файлы для импорта лотов";
+        // 
         // actLoadLots
-        //
-        this.actLoadLots.Caption = "Загрузить лоты";
-        this.actLoadLots.Image = ((System.Drawing.Image)(resources.GetObject("actLoadLots.Image")));
-        this.actLoadLots.LargeImage = ((System.Drawing.Image)(resources.GetObject("actLoadLots.LargeImage")));
-        this.actLoadLots.Tag = null;
-        this.actLoadLots.ToolTipText = "Загрузить лоты из CSV-файлов";
-        //
+        // 
+        actLoadLots.Caption = "Загрузить лоты";
+        actLoadLots.Image = (Image)resources.GetObject("actLoadLots.Image");
+        actLoadLots.LargeImage = (Image)resources.GetObject("actLoadLots.LargeImage");
+        actLoadLots.Tag = null;
+        actLoadLots.ToolTipText = "Загрузить лоты из CSV-файлов";
+        // 
         // actProgramSetting
-        //
-        this.actProgramSetting.Caption = "Настройки среды";
-        this.actProgramSetting.Image = ((System.Drawing.Image)(resources.GetObject("actProgramSetting.Image")));
-        this.actProgramSetting.LargeImage = ((System.Drawing.Image)(resources.GetObject("actProgramSetting.LargeImage")));
-        this.actProgramSetting.Tag = null;
-        this.actProgramSetting.ToolTipText = "Настройки подключения и прочие установки";
-        //
+        // 
+        actProgramSetting.Caption = "Настройки среды";
+        actProgramSetting.Image = (Image)resources.GetObject("actProgramSetting.Image");
+        actProgramSetting.LargeImage = (Image)resources.GetObject("actProgramSetting.LargeImage");
+        actProgramSetting.Tag = null;
+        actProgramSetting.ToolTipText = "Настройки подключения и прочие установки";
+        // 
         // actMessageSetting
-        //
-        this.actMessageSetting.Caption = "Настройки сообшений";
-        this.actMessageSetting.Image = ((System.Drawing.Image)(resources.GetObject("actMessageSetting.Image")));
-        this.actMessageSetting.LargeImage = ((System.Drawing.Image)(resources.GetObject("actMessageSetting.LargeImage")));
-        this.actMessageSetting.Tag = null;
-        this.actMessageSetting.ToolTipText = "Настройки сообшений для личного кабинета покупателей";
-        //
+        // 
+        actMessageSetting.Caption = "Настройки сообшений";
+        actMessageSetting.Image = (Image)resources.GetObject("actMessageSetting.Image");
+        actMessageSetting.LargeImage = (Image)resources.GetObject("actMessageSetting.LargeImage");
+        actMessageSetting.Tag = null;
+        actMessageSetting.ToolTipText = "Настройки сообшений для личного кабинета покупателей";
+        // 
         // actRemoveRasx
-        //
-        this.actRemoveRasx.Caption = "Снять проданный товар";
-        this.actRemoveRasx.Image = ((System.Drawing.Image)(resources.GetObject("actRemoveRasx.Image")));
-        this.actRemoveRasx.LargeImage = ((System.Drawing.Image)(resources.GetObject("actRemoveRasx.LargeImage")));
-        this.actRemoveRasx.Tag = null;
-        this.actRemoveRasx.ToolTipText = "Снять лоты проданные в базе";
-        //
+        // 
+        actRemoveRasx.Caption = "Снять проданный товар";
+        actRemoveRasx.Image = (Image)resources.GetObject("actRemoveRasx.Image");
+        actRemoveRasx.LargeImage = (Image)resources.GetObject("actRemoveRasx.LargeImage");
+        actRemoveRasx.Tag = null;
+        actRemoveRasx.ToolTipText = "Снять лоты проданные в базе";
+        // 
         // actAddPrix
-        //
-        this.actAddPrix.Caption = "Выставить приходы";
-        this.actAddPrix.Image = ((System.Drawing.Image)(resources.GetObject("actAddPrix.Image")));
-        this.actAddPrix.LargeImage = ((System.Drawing.Image)(resources.GetObject("actAddPrix.LargeImage")));
-        this.actAddPrix.Tag = null;
-        this.actAddPrix.ToolTipText = "Выставить поступивший товар";
-        this.actAddPrix.Update += new System.EventHandler(this.ActAddPrix_Update);
-        //
+        // 
+        actAddPrix.Caption = "Выставить приходы";
+        actAddPrix.Image = (Image)resources.GetObject("actAddPrix.Image");
+        actAddPrix.LargeImage = (Image)resources.GetObject("actAddPrix.LargeImage");
+        actAddPrix.Tag = null;
+        actAddPrix.ToolTipText = "Выставить поступивший товар";
+        actAddPrix.Update += ActAddPrix_Update;
+        // 
         // ribbonPageGroup2
-        //
-        this.ribbonPageGroup2.Name = "ribbonPageGroup2";
-        this.ribbonPageGroup2.Text = "ribbonPageGroup2";
-        //
+        // 
+        ribbonPageGroup2.Name = "ribbonPageGroup2";
+        ribbonPageGroup2.Text = "ribbonPageGroup2";
+        // 
         // MainMeshok
-        //
-        this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(978, 562);
-        this.Controls.Add(this.ribbonControl1);
-        this.Controls.Add(this.ribbonStatusBar1);
-        this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-        this.Name = "MainMeshok";
-        this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-        this.Text = "Мой Мешок";
-        this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainMeshok_FormClosing);
-        ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).EndInit();
-        ((System.ComponentModel.ISupportInitialize)(this.appMenu)).EndInit();
-        ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).EndInit();
-        ((System.ComponentModel.ISupportInitialize)(this.dockManager)).EndInit();
-        ((System.ComponentModel.ISupportInitialize)(this.documentManager)).EndInit();
-        ((System.ComponentModel.ISupportInitialize)(this.tabbedView)).EndInit();
-        ((System.ComponentModel.ISupportInitialize)(this.noDocumentsView1)).EndInit();
-        ((System.ComponentModel.ISupportInitialize)(this.aclMain)).EndInit();
-        this.ResumeLayout(false);
-        this.PerformLayout();
+        // 
+        AutoScaleDimensions = new SizeF(6F, 13F);
+        AutoScaleMode = AutoScaleMode.Font;
+        ClientSize = new Size(978, 562);
+        Controls.Add(ribbonControl1);
+        Controls.Add(ribbonStatusBar1);
+        IconOptions.Icon = (Icon)resources.GetObject("MainMeshok.IconOptions.Icon");
+        Name = "MainMeshok";
+        StartPosition = FormStartPosition.Manual;
+        Text = "Мой Мешок";
+        FormClosing += MainMeshok_FormClosing;
+        ((System.ComponentModel.ISupportInitialize)ribbonControl1).EndInit();
+        ((System.ComponentModel.ISupportInitialize)appMenu).EndInit();
+        ((System.ComponentModel.ISupportInitialize)popupMenu1).EndInit();
+        ((System.ComponentModel.ISupportInitialize)dockManager).EndInit();
+        ((System.ComponentModel.ISupportInitialize)documentManager).EndInit();
+        ((System.ComponentModel.ISupportInitialize)tabbedView).EndInit();
+        ((System.ComponentModel.ISupportInitialize)noDocumentsView1).EndInit();
+        ((System.ComponentModel.ISupportInitialize)aclMain).EndInit();
+        ResumeLayout(false);
+        PerformLayout();
     }
     private DevExpress.XtraBars.BarButtonItem barExit;
     private DevExpress.XtraBars.Ribbon.RibbonControl ribbonControl1;

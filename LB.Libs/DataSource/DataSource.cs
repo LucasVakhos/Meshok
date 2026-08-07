@@ -172,7 +172,7 @@ public partial class DataSource : BindingSource, ISupportInitialize
                 if (_entityType == null)
                 {
                     FieldInfo fi = typeof(BindingSource).GetField("itemType", BindingFlags.NonPublic | BindingFlags.Instance);
-                    _entityType = fi.GetValue(this) as Type;
+                    _entityType = fi?.GetValue(this) as Type;
                 }
             return _entityType;
         }

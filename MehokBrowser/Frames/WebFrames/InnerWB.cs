@@ -18,13 +18,28 @@ public partial class InnerWB : BaseFrame
 
     private async void SetBrowser()
     {
-        StatusCode = 0;
-        wbMain.TabIndex = 0;
-        await wbMain.EnsureCoreWebView2Async();
-        wbMain.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
-        wbMain.CoreWebView2.NavigationCompleted += WbMain_NavigationCompleted;
-        wbMain.CoreWebView2.NewWindowRequested += WbMain_NewWindowRequested;
-        wbMain.SourceChanged += WbMain_SourceChanged;
+        try
+        {
+            StatusCode = 0;
+            wbMain.TabIndex = 0;
+            await wbMain.EnsureCoreWebView2Async();
+
+            if (wbMain.CoreWebView2 == null || wbMain.IsDisposed)
+                return;
+
+            wbMain.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+            wbMain.CoreWebView2.NavigationCompleted += WbMain_NavigationCompleted;
+            wbMain.CoreWebView2.NewWindowRequested += WbMain_NewWindowRequested;
+            wbMain.SourceChanged += WbMain_SourceChanged;
+        }
+        catch (ObjectDisposedException)
+        {
+            // Browser was disposed during initialization
+        }
+        catch (InvalidOperationException)
+        {
+            // CoreWebView2 was disposed during initialization
+        }
     }
 
     private void WbMain_NewWindowRequested(object sender, CoreWebView2NewWindowRequestedEventArgs e)
@@ -100,6 +115,9 @@ public partial class InnerWB : BaseFrame
         StatusCode = 0;
         RunContext.Invoke(() =>
         {
+            if (webBrowser.IsDisposed)
+                return;
+
             if (webBrowser.CoreWebView2 != null)
                 webBrowser.CoreWebView2.Navigate(urlString);
             else
@@ -109,7 +127,11 @@ public partial class InnerWB : BaseFrame
 
     public void RefreshBrowser()
     {
-        RunContext.Invoke(() => webBrowser.CoreWebView2?.Reload());
+        RunContext.Invoke(() =>
+        {
+            if (!webBrowser.IsDisposed)
+                webBrowser.CoreWebView2?.Reload();
+        });
     }
 
     private void btnBack_Click(object sender, EventArgs e)

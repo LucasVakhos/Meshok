@@ -42,9 +42,9 @@ public class CfgIShop : CfgCoreConnection
     [DbConnectionProperty(Category = Category.Connection, Caption = "Port", ToolTip = "Порт для подключения. Обычно 3050",
         Default = 3306, SubGroup = "Database")]
     public int Port { get; set; } = 3050;
-    [DataMember]
-    [DbConnectionProperty(Category = Category.Connection, Caption = "Charset", ToolTip = "Язык для подключения. Обычно WIN1251", Default = "WIN1251", EditorType = EditorType.Text, SubGroup = "Database")]
-    public string Charset { get; set; }
+    //[DataMember]
+    //[DbConnectionProperty(Category = Category.Connection, Caption = "Charset", ToolTip = "Язык для подключения. Обычно WIN1251", Default = "WIN1251", EditorType = EditorType.Text, SubGroup = "Database")]
+    //public string Charset { get; set; }
     [DataMember]
     [DbConnectionProperty(Category = Category.Connection, Caption = "Dialect", ToolTip = "Диалект БД. Обычно 3-й", Default = 3, SubGroup = "Database")]
     public int Dialect { get; set; } = 3;
@@ -88,8 +88,8 @@ public class CfgIShop : CfgCoreConnection
                 return false;
             case nameof(Port):
                 return 3050;
-            case nameof(Charset):
-                return "WIN1251";
+            //case nameof(Charset):
+            //    return "WIN1251";
             case nameof(Dialect):
                 return 3;
             case nameof(Database):
@@ -116,7 +116,7 @@ public class CfgIShop : CfgCoreConnection
         csb.Dialect = Dialect;// 3;
         csb.Port = Port;// 3050;
         csb.ServerType = ServerType;
-        csb.Charset = Charset;// "WIN1251"; //TODO: FbCharset.Windows1251.ToString();
+        //csb.Charset = Charset;// "WIN1251"; //TODO: FbCharset.Windows1251.ToString();
         csb.Database = Database;
         csb.UserID = UserID;
         csb.Password = Password;

@@ -18,14 +18,15 @@
   <ItemGroup>
     <!-- Prevent stale, untracked FluentNHibernate sources from reappearing in
          SDK-style builds after git pull. -->
+    <Compile Remove="NewsMaker\**" />
     <Compile Remove="NHibernate\**\*.cs" />
     <EmbeddedResource Remove="NHibernate\**\*.resx" />
-    <Compile Remove="NewsMaker\**\*.cs" />
     <Compile Remove="Frames\SettingFrames\Main\**\*.cs" />
     <EmbeddedResource Remove="Frames\SettingFrames\Main\**\*.resx" />
+    <None Remove="NewsMaker\**" />
+    <Page Remove="NewsMaker\**" />
     <Compile Remove="Frames\SettingFrames\Main\MeshokSetting - Копировать.cs" />
     <Compile Remove="Frames\SettingFrames\Main\MeshokSetting - Копировать.Designer.cs" />
-    <EmbeddedResource Remove="NewsMaker\**\*.resx" />
     <EmbeddedResource Remove="Frames\SettingFrames\Main\MeshokSetting - Копировать.resx" />
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +52,10 @@
     <None Update="appsettings.Development.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DependentUpon>appsettings.json</DependentUpon>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -144,5 +149,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LB.Libs\LB-Libs.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>
