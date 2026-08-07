@@ -43,7 +43,8 @@ public class CfgCoreConnection : CfgCore
                     continue;
                 if (property.Name is nameof(UserLogin) or nameof(UserPassword) or nameof(AutoEntering))
                     continue;
-                if (property.GetValue(this) is null)
+                object? value = property.GetValue(this);
+                if (value is null || value is string text && string.IsNullOrWhiteSpace(text))
                     return false;
             }
 

@@ -6,6 +6,8 @@ using MehokBrowser.Configs.Cfg;
 using IniHelper = LB.Libs.IniHelper;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using MeshokBrowser.Models;
 namespace MeshokBrowser.Data;
 
@@ -77,11 +79,14 @@ public static class DapperLookupRepository
     }
     public static void ImportOrderLine(int siteId, OrderLine line)
     {
+        if (!TryParseDealId(line.deal_id, out long dealId))
+            throw new ArgumentException("Deal ID must be a positive number.", nameof(line));
+
         const string sql = @"select cod_id from z$import_cod(@siteId, @dealId, @co_id, @t_id, @ts_id,
                 @qty, @price, @commition, @price_ru)";
         var parameters = new DynamicParameters(line);
         parameters.Add("siteId", siteId);
-        parameters.Add("dealId", line.deal_id);
+        parameters.Add("dealId", dealId);
         using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
             connection.QueryFirst<int>(sql, parameters);
     }
@@ -94,26 +99,35 @@ public static class DapperLookupRepository
     }
     public static List<CheckMesage> FindMessages(int siteId, string dealId, int messageCase)
     {
+        if (!TryParseDealId(dealId, out long numericDealId))
+            return new List<CheckMesage>();
+
         const string sql = @"select cod_id as id, c_id, c_name, c_email, md_id, md_name, mp_id, mp_name,
                 cs_id, cs_name, dp_totalsumm, dp_totalsumm_info, dp_packed, md_address, md_treck_num,
                 md_tracking_url, zsc_case, zsc_message as mess_text
                 from z$check_message(@siteId, @dealId, @messageCase)";
         using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
-            return connection.Query<CheckMesage>(sql, new { siteId, dealId, messageCase }).ToList();
+            return connection.Query<CheckMesage>(sql, new { siteId, dealId = numericDealId, messageCase }).ToList();
     }
     public static CheckOrder FindOrder(int siteId, string dealId)
     {
+        if (!TryParseDealId(dealId, out long numericDealId))
+            return null;
+
         const string sql = @"select cod_id as id, co_id, co_c_id, co_creation_date, co_md_id, co_mp_id, co_status,
                 dp_id, dp_c_id, dp_md_id, dp_mp_id, dp_totalsumm, dp_status, dp_packed, dp_creation_date
                 from z$check_order(@siteId, @dealId)";
         using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
-            return connection.QueryFirstOrDefault<CheckOrder>(sql, new { siteId, dealId });
+            return connection.QueryFirstOrDefault<CheckOrder>(sql, new { siteId, dealId = numericDealId });
     }
     public static bool HasOrder(int siteId, string dealId)
     {
+        if (!TryParseDealId(dealId, out long numericDealId))
+            return false;
+
         const string sql = "select z$s_id from z$site_id_s(@siteId, @dealId)";
         using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
-            return connection.QueryFirstOrDefault<int?>(sql, new { siteId, dealId }).GetValueOrDefault() > 0;
+            return connection.QueryFirstOrDefault<int?>(sql, new { siteId, dealId = numericDealId }).GetValueOrDefault() > 0;
     }
     public static List<BaseStatus> BaseStatusEntities()
     {
@@ -145,5 +159,138 @@ public static class DapperLookupRepository
         using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
             return connection.Query<LookupRow>(sql).Select(x => new KeyValuePair<int, string>(x.Id, x.Name)).ToArray();
     }
+    private static bool TryParseDealId(string dealId, out long value) =>
+        long.TryParse(dealId, out value) && value > 0;
+
     private sealed class LookupRow { public int Id { get; set; } public string Name { get; set; } }
+
+    #region Async Methods
+
+    /// <summary>
+    /// Асинхронная загрузка активных пользователей
+    /// </summary>
+    public static async Task<List<User>> LoadActiveUsersAsync(CancellationToken cancellationToken = default)
+    {
+        const string sql = @"select mn_id as id, mn_name as Name, mn_password as Password, mn_active as Active
+                from managers where mn_active = @active order by mn_name";
+        await using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
+        {
+            var result = await connection.QueryAsync<User>(sql, new { active = true });
+            return result.ToList();
+        }
+    }
+
+    /// <summary>
+    /// Асинхронная загрузка настроек сообщений
+    /// </summary>
+    public static async Task<List<MessagesSet>> LoadMessageSettingsAsync(CancellationToken cancellationToken = default)
+    {
+        const string sql = @"select zsc_id as id, zsc_cs_id, zsc_zs_id, zsc_md_id, zsc_case, zsc_message
+                from z$statuses_cod order by zsc_id";
+        await using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
+        {
+            var result = await connection.QueryAsync<MessagesSet>(sql);
+            return result.ToList();
+        }
+    }
+
+    /// <summary>
+    /// Асинхронное сохранение настройки сообщения
+    /// </summary>
+    public static async Task SaveMessageSettingAsync(MessagesSet item, CancellationToken cancellationToken = default)
+    {
+        await using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
+        {
+            if (item.id <= 0)
+            {
+                const string insert = @"insert into z$statuses_cod
+                        (zsc_cs_id, zsc_zs_id, zsc_md_id, zsc_case, zsc_message)
+                        values (@zsc_cs_id, @zsc_zs_id, @zsc_md_id, @zsc_case, @zsc_message)
+                        returning zsc_id";
+                item.id = await connection.QueryFirstAsync<int>(insert, item);
+            }
+            else
+            {
+                const string update = @"update z$statuses_cod set zsc_cs_id=@zsc_cs_id, zsc_zs_id=@zsc_zs_id,
+                        zsc_md_id=@zsc_md_id, zsc_case=@zsc_case, zsc_message=@zsc_message where zsc_id=@id";
+                await connection.ExecuteAsync(update, item);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Асинхронное удаление настройки сообщения
+    /// </summary>
+    public static async Task DeleteMessageSettingAsync(int id, CancellationToken cancellationToken = default)
+    {
+        await using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
+            await connection.ExecuteAsync("delete from z$statuses_cod where zsc_id=@id", new { id });
+    }
+
+    /// <summary>
+    /// Асинхронный поиск клиента
+    /// </summary>
+    public static async Task<CheckClient?> FindClientAsync(int siteId, int clientSiteId, CancellationToken cancellationToken = default)
+    {
+        const string sql = @"select c_id as id, c_name as Name, c_md_id, c_mp_id, c_email, c_enabled,
+                c_phone, c_zipcode, c_address from z$import_clients_inf(@siteId, @clientSiteId)";
+        await using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
+            return await connection.QueryFirstOrDefaultAsync<CheckClient>(sql, new { siteId, clientSiteId });
+    }
+
+    /// <summary>
+    /// Асинхронный поиск заказа
+    /// </summary>
+    public static async Task<CheckOrder?> FindOrderAsync(int siteId, string dealId, CancellationToken cancellationToken = default)
+    {
+        if (!TryParseDealId(dealId, out long numericDealId))
+            return null;
+
+        const string sql = @"select cod_id as id, co_id, co_c_id, co_creation_date, co_md_id, co_mp_id, co_status,
+                dp_id, dp_c_id, dp_md_id, dp_mp_id, dp_totalsumm, dp_status, dp_packed, dp_creation_date
+                from z$check_order(@siteId, @dealId)";
+        await using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
+            return await connection.QueryFirstOrDefaultAsync<CheckOrder>(sql, new { siteId, dealId = numericDealId });
+    }
+
+    /// <summary>
+    /// Асинхронная проверка существования заказа
+    /// </summary>
+    public static async Task<bool> HasOrderAsync(int siteId, string dealId, CancellationToken cancellationToken = default)
+    {
+        if (!TryParseDealId(dealId, out long numericDealId))
+            return false;
+
+        const string sql = "select z$s_id from z$site_id_s(@siteId, @dealId)";
+        await using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
+        {
+            var result = await connection.QueryFirstOrDefaultAsync<int?>(sql, new { siteId, dealId = numericDealId });
+            return result.GetValueOrDefault() > 0;
+        }
+    }
+
+    /// <summary>
+    /// Асинхронный импорт клиента
+    /// </summary>
+    public static async Task<int> ImportClientAsync(int siteId, Client client, CancellationToken cancellationToken = default)
+    {
+        const string sql = @"select c_id from z$import_clients(@siteId, @site_id, @md_id, @mp_id, @c_name,
+                @c_phone, @c_email, @c_zipcode, @site_address, @change_address)";
+        var parameters = new DynamicParameters(client);
+        parameters.Add("siteId", siteId);
+        await using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
+            return await connection.QueryFirstAsync<int>(sql, parameters);
+    }
+
+    /// <summary>
+    /// Асинхронный импорт заказа
+    /// </summary>
+    public static async Task<int> ImportOrderAsync(Order order, CancellationToken cancellationToken = default)
+    {
+        const string sql = "select co_id from z$import_co(@c_id, @co_date, @md_id, @mp_id, @co_curs)";
+        await using (var connection = new FbConnection(IniHelper.Cfg<CfgIShop>().ConnectionString()))
+            return await connection.QueryFirstAsync<int>(sql, order);
+    }
+
+    #endregion
 }

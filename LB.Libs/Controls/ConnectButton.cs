@@ -155,8 +155,16 @@ public class ConnectButton : SimpleButton
                     string? error = null;
                     try
                     {
-                        testOk = config.TestConnection();
-                        error = config.LastConnectionError;
+                        if (!config.IsComplete)
+                        {
+                            testOk = false;
+                            error = "Заполните обязательные параметры подключения";
+                        }
+                        else
+                        {
+                            testOk = config.TestConnection();
+                            error = config.LastConnectionError;
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -164,8 +172,6 @@ public class ConnectButton : SimpleButton
                         error = ex.Message;
                         Logger.Error(ex);
                     }
-                    if (config.IsComplete && testOk)
-                        config.Save();
                     tested = true;
                     LastError = error;
                     ConnectionTested?.Invoke(this, new ConnectionTestedEventArgs(testOk, error));

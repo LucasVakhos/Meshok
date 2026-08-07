@@ -8,6 +8,8 @@ public class AppContext<T> : RunContext where T : RunContext
 {
     internal static Mutex _mutex;
     static NamedPipeManager namedPipe;
+
+
     private static void NamedPipeManager_ReceiveString(string obj)
     {
         switch (obj)
@@ -91,7 +93,12 @@ public class AppContext<T> : RunContext where T : RunContext
         if (CfgConnection != null)
         {
             if (!EnsureConnection())
-                throw new UserWantExit();
+            {
+                ConnectionFailed = true;
+                MainForm = GetMainForm();
+                return;
+            }
+            else
             if (!LogIn())
                 throw new UserWantExit();
             MainForm = GetMainForm();
@@ -100,15 +107,8 @@ public class AppContext<T> : RunContext where T : RunContext
 
     private bool EnsureConnection()
     {
-        try
-        {
-            if (CfgConnection.TestConnection())
-                return true;
-        }
-        catch (Exception ex)
-        {
-            Logger.Error(ex);
-        }
+        if (TestConnection(CfgConnection))
+            return true;
 
         SplashScreenManager.CloseForm(false);
         using CfgForm form = CreateConnectForm();
@@ -116,7 +116,23 @@ public class AppContext<T> : RunContext where T : RunContext
             return false;
 
         CfgConnection = GetConnectionSetting();
-        return CfgConnection != null && CfgConnection.TestConnection();
+        return TestConnection(CfgConnection);
+    }
+
+    private static bool TestConnection(CfgCoreConnection? connection)
+    {
+        if (connection is null)
+            return false;
+
+        try
+        {
+            return connection.TestConnection();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            return false;
+        }
     }
 
     protected bool LogIn()

@@ -15,6 +15,8 @@ public class CfgFormType<T> : CfgForm where T : CfgBaseFrame
                 return;
             if (value != _cfgFrame)
             {
+                if (_cfgFrame is not null)
+                    _cfgFrame.dataSource.CurrentItemChanged -= DataSource_CurrentItemChanged;
                 actEnter.Update -= ActEnter_Update;
                 actEnter.Execute -= ActEnter_Execute;
                 actCancel.Execute -= ActCancel_Execute;
@@ -51,8 +53,15 @@ public class CfgFormType<T> : CfgForm where T : CfgBaseFrame
                 actEnter.Update += ActEnter_Update;
                 actEnter.Execute += ActEnter_Execute;
                 actCancel.Execute += ActCancel_Execute;
+                value.dataSource.CurrentItemChanged += DataSource_CurrentItemChanged;
             }
         }
+    }
+
+    private void DataSource_CurrentItemChanged(object? sender, EventArgs e)
+    {
+        IsConnect = false;
+        actEnter.DoUpdate();
     }
 
     private void ConnectButton_ConnectionTested(object? sender, ConnectionTestedEventArgs e)
@@ -112,6 +121,14 @@ public class CfgFormType<T> : CfgForm where T : CfgBaseFrame
     }
     private void ActCancel_Execute(object sender, System.EventArgs e)
     {
+        CfgFrame.dataSource.Cancel();
         DialogResult = DialogResult.Cancel;
+    }
+
+    protected override void OnFormClosing(FormClosingEventArgs e)
+    {
+        if (DialogResult != DialogResult.OK)
+            CfgFrame?.dataSource.Cancel();
+        base.OnFormClosing(e);
     }
 }

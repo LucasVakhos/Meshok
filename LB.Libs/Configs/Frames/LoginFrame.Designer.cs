@@ -115,6 +115,7 @@ partial class LoginFrame
         this.userPassword.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.dataSource, "UserPassword", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
         this.userPassword.Location = new System.Drawing.Point(55, 38);
         this.userPassword.Name = "userPassword";
+        this.userPassword.Properties.UseSystemPasswordChar = true;
         this.userPassword.Size = new System.Drawing.Size(289, 20);
         this.userPassword.StyleController = this.layoutControl;
         this.userPassword.TabIndex = 9;

@@ -5,8 +5,39 @@ using System.Net;
 using System.Security.Claims;
 using NewsWave.Data;
 using NewsWave.NewsMaker;
+using NewsWave.Configuration;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+// Настройка Serilog для structured logging
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings json", optional: false, reloadOnChange: true)
+        .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+        .Build())
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("logs/newswave-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+try
+{
+    Log.Information("Starting NewsWave application");
+
+    var builder = WebApplication.CreateBuilder(args);
+
+    // Использовать Serilog вместо встроенного логирования
+    builder.Host.UseSerilog();
+
+    // Регистрация typed configuration с валидацией
+    builder.Services.AddNewsMakerConfiguration(builder.Configuration);
+
+// Регистрация Dapper repositories
+builder.Services.AddRepositories();
+
+// Регистрация email сервисов
+builder.Services.AddEmailServices();
+
 builder.Services.AddRazorPages();
 builder.Services.AddDataProtection().SetApplicationName("NewsWave");
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -64,4 +95,16 @@ app.Use(async (context, next) =>
 app.UseAuthorization();
 app.MapHealthChecks("/health").AllowAnonymous();
 app.MapRazorPages();
+
+Log.Information("NewsWave application started successfully");
 app.Run();
+
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "NewsWave application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
