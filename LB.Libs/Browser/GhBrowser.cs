@@ -1,8 +1,6 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
 using System;
-using System.ComponentModel;
-using System.Threading.Tasks;
 
 namespace LB.Libs;
 

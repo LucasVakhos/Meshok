@@ -1,20 +1,16 @@
 ﻿#define old_version
+using DevExpress.XtraBars.Docking2010.Views;
+using MehokBrowser.Configs.Cfg;
+using MehokBrowser.Configs.Forms;
+using MeshokBrowser.Workers;
 using System;
 using System.Diagnostics;
-using System.Windows.Forms;
 using System.IO;
-using MeshokBrowser.Workers;
-using DevExpress.XtraBars;
-using DevExpress.XtraBars.Docking2010.Views;
 using System.Linq;
-using LB.Libs;
 using GhDocument = LB.Libs.GhDocument;
 using GhFormElement = LB.Libs.GhFormElement;
 using GhInputElement = LB.Libs.GhInputElement;
 using IniHelper = LB.Libs.IniHelper;
-using MehokBrowser.Configs.Cfg;
-using MehokBrowser.Configs.Frames;
-using MehokBrowser.Configs.Forms;
 namespace MeshokBrowser;
 
 public interface IMainForm : IAppForm
@@ -92,18 +88,6 @@ public partial class MainMeshok : MainForm, IMainForm
         {
             return false;
         }
-        return true;
-    }
-    private bool BeginScanLots()
-    {
-        if (!IniHelper.Cfg<CfgBridgeNote>().TestConnection())
-        {
-            ShowBridgeSettings();
-            DlgHelper.DlgWarning("Проверьте подключение к сайту!");
-            return false;
-        }
-        var worker = new WorkerRelistLots(this);
-        worker.Execute();
         return true;
     }
     private bool CheckBridgenoteConnection()
@@ -362,11 +346,6 @@ public partial class MainMeshok : MainForm, IMainForm
     private void barExit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
     {
         this.Close();
-    }
-    private void MainSettings_Accept(object sender, EventArgs e)
-    {
-        if (!auth_success)
-            mainBrowser.Navigate(cfgMeshok.Base_Url);
     }
     private void MainMeshok_FormClosing(object sender, FormClosingEventArgs e)
     {
